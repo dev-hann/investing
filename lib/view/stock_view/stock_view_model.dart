@@ -27,4 +27,7 @@ class StockViewModel extends ViewModel<StockController> {
     // );
     // return;
   }
+  Future removeStock(Stock stock) {
+    return controller.removeStock(stock.index);
+  }
 }

@@ -6,8 +6,10 @@ class StockCard extends StatelessWidget {
   const StockCard({
     super.key,
     required this.stock,
+    required this.onTapRemove,
   });
   final Stock stock;
+  final VoidCallback onTapRemove;
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +27,9 @@ class StockCard extends StatelessWidget {
               label: 'Share',
             ),
             SlidableAction(
-              onPressed: (context) {},
+              onPressed: (context) {
+                onTapRemove();
+              },
               backgroundColor: const Color(0xFFFE4A49),
               foregroundColor: Colors.white,
               icon: Icons.delete,
@@ -34,8 +38,20 @@ class StockCard extends StatelessWidget {
           ],
         ),
         child: ListTile(
-          title: Text(stock.name),
-          subtitle: Text(stock.tickerID),
+          title: Text(
+            stock.name,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+          subtitle: Text("${stock.tickerID} • ${stock.count}주"),
+          trailing: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Text("${stock.price}원"),
+              Text("예상 배당률 ${stock.dividendYield}%"),
+            ],
+          ),
         ),
       ),
     );
