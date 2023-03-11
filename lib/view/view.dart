@@ -14,8 +14,20 @@ abstract class View<T extends ViewModel, S extends Controller>
   final T viewModel;
 
   Widget body();
-  Widget loadingView() {
+  Widget _loadingView() {
     return const CircularProgressIndicator();
+  }
+
+  Widget _overlayLoadingView() {
+    if (!viewModel.isOverlayLoading) {
+      return const SizedBox();
+    }
+    return ColoredBox(
+      color: Colors.black.withOpacity(0.4),
+      child: const Center(
+        child: CircularProgressIndicator(),
+      ),
+    );
   }
 
   @override
@@ -26,13 +38,21 @@ abstract class View<T extends ViewModel, S extends Controller>
         initState: (state) {
           viewModel._init();
         },
+        dispose: (state) {
+          viewModel.dispose();
+        },
         builder: (controller) {
           if (viewModel.isLoading) {
             return Center(
-              child: loadingView(),
+              child: _loadingView(),
             );
           }
-          return body();
+          return Stack(
+            children: [
+              body(),
+              _overlayLoadingView(),
+            ],
+          );
         },
       ),
     );

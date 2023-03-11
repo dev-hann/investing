@@ -17,6 +17,9 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         brightness: Brightness.dark,
+        appBarTheme: const AppBarTheme(
+          centerTitle: true,
+        ),
         cardTheme: CardTheme(
           margin: EdgeInsets.zero,
           shape: RoundedRectangleBorder(

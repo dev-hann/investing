@@ -1,5 +1,6 @@
 import 'package:dividends_manager/controller/stock_controller.dart';
-import 'package:dividends_manager/model/stock.dart';
+import 'package:dividends_manager/view/stock_view/detail_view/stock_detail_view.dart';
+import 'package:dividends_manager/view/stock_view/search_view/stock_search_view.dart';
 import 'package:dividends_manager/view/stock_view/stock_view_model.dart';
 import 'package:dividends_manager/view/stock_view/widget/stock_card.dart';
 import 'package:dividends_manager/view/view.dart';
@@ -13,7 +14,9 @@ class StockView extends View<StockViewModel, StockController> {
   }) : super(viewModel: StockViewModel());
 
   AppBar appBar() {
-    return AppBar();
+    return AppBar(
+      title: const Text("배당 관리"),
+    );
   }
 
 //  월 평균 배당율
@@ -40,19 +43,22 @@ class StockView extends View<StockViewModel, StockController> {
           const Expanded(child: Text("종목")),
           GestureDetector(
             onTap: () {
-              final index = int.parse(DateTime.now()
-                  .millisecondsSinceEpoch
-                  .toString()
-                  .substring(10));
-              final tmpStock = Stock(
-                index: index.toString(),
-                name: "TestName$index",
-                tickerID: "ID$index",
-                count: index * 12,
-                price: index * 23,
-                dividendYield: index / 2,
+              Get.to(
+                StockSearchView(),
               );
-              viewModel.updateStock(tmpStock);
+              // final index = int.parse(
+              //   DateTime.now().millisecondsSinceEpoch.toString().substring(10),
+              // );
+              // final tmpStock = Stock(
+              //   index: index.toString(),
+              //   stockTypeIndex: StockType.values[index % 2].index,
+              //   name: "TestName$index",
+              //   tickerID: "ID$index",
+              //   count: index * 12,
+              //   price: index * 23,
+              //   dividendYield: index / 2,
+              // );
+              // viewModel.updateStock(tmpStock);
             },
             child: Row(
               children: const [
@@ -72,28 +78,31 @@ class StockView extends View<StockViewModel, StockController> {
           ),
         ],
       ),
-      child: Obx(() {
-        return ReorderableListView.builder(
-          reverse: true,
-          physics: const NeverScrollableScrollPhysics(),
-          shrinkWrap: true,
-          itemCount: list.length,
-          itemBuilder: (context, index) {
-            final item = list[index];
-            return Padding(
-              key: ValueKey(index),
-              padding: const EdgeInsets.symmetric(vertical: 8.0),
-              child: StockCard(
-                stock: item,
-                onTapRemove: () {
-                  viewModel.removeStock(item);
-                },
-              ),
-            );
-          },
-          onReorder: viewModel.reorder,
-        );
-      }),
+      child: ReorderableListView.builder(
+        reverse: true,
+        physics: const NeverScrollableScrollPhysics(),
+        shrinkWrap: true,
+        itemCount: list.length,
+        itemBuilder: (context, index) {
+          final stock = list[index];
+          return Padding(
+            key: ValueKey(index),
+            padding: const EdgeInsets.symmetric(vertical: 8.0),
+            child: StockCard(
+              stock: stock,
+              onTap: () {
+                Get.to(
+                  StockDetailView(stock: stock),
+                );
+              },
+              onTapRemove: () {
+                viewModel.removeStock(stock);
+              },
+            ),
+          );
+        },
+        onReorder: viewModel.reorder,
+      ),
     );
   }
 

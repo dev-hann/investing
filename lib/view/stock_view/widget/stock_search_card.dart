@@ -1,40 +1,27 @@
-import 'package:dividends_manager/model/stock.dart';
+import 'package:dividends_manager/view/stock_view/widget/stock_card.dart';
+import 'package:dividends_manager/widget/book_mark.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
-class StockCard extends StatelessWidget {
-  const StockCard({
+class StockSearchCard extends StockCard {
+  StockSearchCard({
     super.key,
-    required this.stock,
-    required this.onTap,
-    required this.onTapRemove,
-    this.enableSlide = true,
-  });
-  final Stock stock;
-  final VoidCallback onTap;
-  final VoidCallback onTapRemove;
-  final bool enableSlide;
+    required super.stock,
+    required super.onTap,
+    required this.isBookmark,
+    required this.onTapBookmark,
+  }) : super(
+          enableSlide: false,
+          onTapRemove: () {},
+        );
+  final VoidCallback onTapBookmark;
+  final bool isBookmark;
 
-  Widget titleText() {
-    return Text(
-      stock.name,
-      maxLines: 1,
-      overflow: TextOverflow.ellipsis,
-    );
-  }
-
-  Widget subtitleText() {
-    return Text(stock.symbol);
-  }
-
+  @override
   Widget trailingText() {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.end,
-      children: [
-        Text("${stock.count}원"),
-        Text("예상 배당률 ${stock.dividendYield}%"),
-      ],
+    return BookMarkWidget(
+      onTap: onTapBookmark,
+      isBookmark: isBookmark,
     );
   }
 
