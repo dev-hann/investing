@@ -4,27 +4,28 @@ import 'package:dividends_manager/data/service/stock_service.dart';
 import 'package:dividends_manager/model/stock.dart';
 import 'package:get/get.dart';
 
-class StockController extends Controller {
-  static StockController find() => Get.find<StockController>();
+class WatchListController extends Controller {
+  static WatchListController find() => Get.find<WatchListController>();
 
-  final List<Stock> stockList = <Stock>[];
+  final List<Stock> watchList = <Stock>[];
 
-  final DataBase stcokDB = DataBase("Stock");
+  final DataBase watchListDB = DataBase("WatchList");
   final StockService stockService = StockService();
   @override
   void onReady() async {
-    await stcokDB.init();
-    stcokDB.stream.listen((event) {
+    await watchListDB.init();
+    watchListDB.stream.listen((event) {
       refreshState();
     });
     super.onReady();
   }
 
   void _loadStockList() {
-    final list = stcokDB.loadStockList().map((e) => Stock.fromMap(e)).toList();
+    final list =
+        watchListDB.loadStockList().map((e) => Stock.fromMap(e)).toList();
     list.sort();
-    stockList.clear();
-    stockList.addAll(list);
+    watchList.clear();
+    watchList.addAll(list);
     update();
   }
 
@@ -33,15 +34,15 @@ class StockController extends Controller {
   }
 
   Future updateStock(Stock stock) {
-    return stcokDB.updateStock(stock);
+    return watchListDB.updateStock(stock);
   }
 
   Future removeStock(String stockIndex) {
-    return stcokDB.removeStock(stockIndex);
+    return watchListDB.removeStock(stockIndex);
   }
 
   Future toggleBookmark(Stock stock) async {
-    if (stockList.contains(stock)) {
+    if (watchList.contains(stock)) {
       await removeStock(stock.index);
     } else {
       await updateStock(stock);

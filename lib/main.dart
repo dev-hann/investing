@@ -1,3 +1,5 @@
+import 'package:dividends_manager/controller/controller.dart';
+import 'package:dividends_manager/controller/home_controller.dart';
 import 'package:dividends_manager/view/home_view/home_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
@@ -27,7 +29,10 @@ class MyApp extends StatelessWidget {
           ),
         ),
       ),
-      home: const HomeView(),
+      home: Builder(builder: (context) {
+        Controller.put<HomeController>(HomeController());
+        return HomeView();
+      }),
     );
   }
 }

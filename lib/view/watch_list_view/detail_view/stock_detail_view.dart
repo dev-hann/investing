@@ -1,11 +1,11 @@
-import 'package:dividends_manager/controller/stock_controller.dart';
+import 'package:dividends_manager/controller/watch_list_controller.dart';
 import 'package:dividends_manager/model/stock.dart';
-import 'package:dividends_manager/view/stock_view/detail_view/stock_detail_view_model.dart';
+import 'package:dividends_manager/view/watch_list_view/detail_view/stock_detail_view_model.dart';
 import 'package:dividends_manager/view/view.dart';
 import 'package:dividends_manager/widget/book_mark.dart';
 import 'package:flutter/material.dart';
 
-class StockDetailView extends View<StockDetailViewModel, StockController> {
+class StockDetailView extends View<StockDetailViewModel, WatchListController> {
   StockDetailView({super.key, required Stock stock})
       : super(
           viewModel: StockDetailViewModel(stock),

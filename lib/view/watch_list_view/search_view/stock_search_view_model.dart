@@ -1,11 +1,11 @@
-import 'package:dividends_manager/controller/stock_controller.dart';
+import 'package:dividends_manager/controller/watch_list_controller.dart';
 import 'package:dividends_manager/model/stock.dart';
 import 'package:dividends_manager/view/view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class StockSearchViewModel extends ViewModel<StockController> {
-  List<Stock> get stockList => controller.stockList;
+class StockSearchViewModel extends ViewModel<WatchListController> {
+  List<Stock> get stockList => controller.watchList;
   final List<Stock> searchedList = [];
   final TextEditingController queryCntroller = TextEditingController();
   final RxString queryValue = RxString("");

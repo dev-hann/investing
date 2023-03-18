@@ -1,26 +1,24 @@
-import 'package:dividends_manager/controller/stock_controller.dart';
-import 'package:dividends_manager/view/stock_view/detail_view/stock_detail_view.dart';
-import 'package:dividends_manager/view/stock_view/search_view/stock_search_view.dart';
-import 'package:dividends_manager/view/stock_view/stock_view_model.dart';
-import 'package:dividends_manager/view/stock_view/widget/stock_card.dart';
+import 'package:dividends_manager/controller/watch_list_controller.dart';
+import 'package:dividends_manager/view/watch_list_view/detail_view/stock_detail_view.dart';
+import 'package:dividends_manager/view/watch_list_view/search_view/stock_search_view.dart';
+import 'package:dividends_manager/view/watch_list_view/watch_list_view_model.dart';
+import 'package:dividends_manager/view/watch_list_view/widget/stock_card.dart';
 import 'package:dividends_manager/view/view.dart';
 import 'package:dividends_manager/widget/title_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class StockView extends View<StockViewModel, StockController> {
-  StockView({
+class WatchListView extends View<WatchListViewModel, WatchListController> {
+  WatchListView({
     super.key,
-  }) : super(viewModel: StockViewModel());
+  }) : super(viewModel: WatchListViewModel());
 
   AppBar appBar() {
     return AppBar(
-      title: const Text("배당 관리"),
+      title: const Text("WatchList"),
     );
   }
 
-//  월 평균 배당율
-//  월 평균 배당액
   Widget monthlyDividendsWidget() {
     return const TitleWidget(
       title: Text("배당 정보"),
@@ -40,25 +38,12 @@ class StockView extends View<StockViewModel, StockController> {
     return TitleWidget(
       title: Row(
         children: [
-          const Expanded(child: Text("종목")),
+          const Expanded(child: Text("Favorites")),
           GestureDetector(
             onTap: () {
               Get.to(
                 StockSearchView(),
               );
-              // final index = int.parse(
-              //   DateTime.now().millisecondsSinceEpoch.toString().substring(10),
-              // );
-              // final tmpStock = Stock(
-              //   index: index.toString(),
-              //   stockTypeIndex: StockType.values[index % 2].index,
-              //   name: "TestName$index",
-              //   tickerID: "ID$index",
-              //   count: index * 12,
-              //   price: index * 23,
-              //   dividendYield: index / 2,
-              // );
-              // viewModel.updateStock(tmpStock);
             },
             child: Row(
               children: const [
@@ -78,7 +63,7 @@ class StockView extends View<StockViewModel, StockController> {
           ),
         ],
       ),
-      child: ReorderableListView.builder(
+      child: ListView.builder(
         reverse: true,
         physics: const NeverScrollableScrollPhysics(),
         shrinkWrap: true,
@@ -101,7 +86,7 @@ class StockView extends View<StockViewModel, StockController> {
             ),
           );
         },
-        onReorder: viewModel.reorder,
+        // onReorder: viewModel.reorder,
       ),
     );
   }
@@ -117,8 +102,6 @@ class StockView extends View<StockViewModel, StockController> {
         ),
         physics: const BouncingScrollPhysics(),
         children: [
-          monthlyDividendsWidget(),
-          const SizedBox(height: 16.0),
           stockListWidget(),
         ],
       ),

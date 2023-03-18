@@ -12,6 +12,7 @@ dependencies:
 
   reorderables:
   flutter_slidable:
+  table_calendar:
 
   # DataBase
   hive_flutter:

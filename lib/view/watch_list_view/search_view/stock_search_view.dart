@@ -1,13 +1,13 @@
-import 'package:dividends_manager/controller/stock_controller.dart';
-import 'package:dividends_manager/view/stock_view/detail_view/stock_detail_view.dart';
-import 'package:dividends_manager/view/stock_view/search_view/stock_search_view_model.dart';
-import 'package:dividends_manager/view/stock_view/widget/stock_search_card.dart';
+import 'package:dividends_manager/controller/watch_list_controller.dart';
+import 'package:dividends_manager/view/watch_list_view/detail_view/stock_detail_view.dart';
+import 'package:dividends_manager/view/watch_list_view/search_view/stock_search_view_model.dart';
+import 'package:dividends_manager/view/watch_list_view/widget/stock_search_card.dart';
 import 'package:dividends_manager/view/view.dart';
 import 'package:dividends_manager/widget/text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class StockSearchView extends View<StockSearchViewModel, StockController> {
+class StockSearchView extends View<StockSearchViewModel, WatchListController> {
   StockSearchView({super.key})
       : super(
           viewModel: StockSearchViewModel(),

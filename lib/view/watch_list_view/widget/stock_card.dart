@@ -70,7 +70,7 @@ class StockCard extends StatelessWidget {
           child: ListTile(
             title: titleText(),
             subtitle: subtitleText(),
-            trailing: trailingText(),
+            // trailing: trailingText(),
           ),
         ),
       ),

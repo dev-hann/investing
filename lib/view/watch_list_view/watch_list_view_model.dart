@@ -1,9 +1,9 @@
-import 'package:dividends_manager/controller/stock_controller.dart';
+import 'package:dividends_manager/controller/watch_list_controller.dart';
 import 'package:dividends_manager/model/stock.dart';
 import 'package:dividends_manager/view/view.dart';
 
-class StockViewModel extends ViewModel<StockController> {
-  List<Stock> get stockList => controller.stockList;
+class WatchListViewModel extends ViewModel<WatchListController> {
+  List<Stock> get stockList => controller.watchList;
 
   @override
   Future init() async {
