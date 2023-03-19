@@ -31,4 +31,8 @@ abstract class ViewModel<T extends Controller> {
     _overlayLoading = false;
     controller.update();
   }
+
+  void updateView() {
+    controller.update();
+  }
 }

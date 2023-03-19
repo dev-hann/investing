@@ -1,8 +1,8 @@
 import 'package:dividends_manager/controller/calendar_controller.dart';
-import 'package:dividends_manager/model/calendar_event.dart';
 import 'package:dividends_manager/view/calendar_view/calendar_view_model.dart';
 import 'package:dividends_manager/view/view.dart';
 import 'package:dividends_manager/widget/calendar_widget.dart';
+import 'package:dividends_manager/widget/title_widget.dart';
 import 'package:flutter/material.dart';
 
 class CalendarView extends View<CalendarViewModel, CalendarController> {
@@ -43,15 +43,27 @@ class CalendarView extends View<CalendarViewModel, CalendarController> {
 
   Widget economicView() {
     return CalendarWidget(
-      eventList: List.generate(
-        20,
-        (index) {
-          return EconomicEvent(
-            dateTime: DateTime.now().add(Duration(days: index)),
-          );
-        },
-      ),
+      scrollController: viewModel.scrollController,
+      eventData: viewModel.eventData,
+      focusedDateTime: viewModel.focusedDateTime,
       onChangedPage: (dateTme) {},
+      onChangedDateTime: (dateTime) {
+        viewModel.onTapCalendarDateTime(dateTime);
+      },
+      eventBuilder: (key, eventList) {
+        return TitleWidget(
+          title: Text(key.dateTime.toString()),
+          child: Column(
+            children: eventList.map((event) {
+              return Card(
+                child: ListTile(
+                  title: Text(event.toString()),
+                ),
+              );
+            }).toList(),
+          ),
+        );
+      },
     );
   }
 

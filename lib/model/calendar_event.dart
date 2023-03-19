@@ -1,28 +1,26 @@
 import 'package:equatable/equatable.dart';
 
-abstract class CalendarEvent extends Equatable {
-  const CalendarEvent({
-    required this.dateTime,
-  });
+class CalendarEventKey extends Equatable {
+  const CalendarEventKey(this.dateTime);
   final DateTime dateTime;
+  String get key => "${dateTime.month}-${dateTime.day}";
 
-  String get key {
-    return "${dateTime.month}-${dateTime.day}";
-  }
+  @override
+  List<Object?> get props => [key];
+}
 
-  bool isSameDate(CalendarEvent other) {
-    final otherDateTime = other.dateTime;
-    return dateTime.year == otherDateTime.year &&
-        dateTime.month == otherDateTime.month &&
-        dateTime.day == otherDateTime.day;
-  }
+abstract class CalendarEvent extends Equatable {
+  CalendarEvent({
+    required DateTime dateTime,
+  }) : eventKey = CalendarEventKey(dateTime);
+  final CalendarEventKey eventKey;
 
   @override
   List<Object?> get props => [
-        dateTime,
+        eventKey,
       ];
 }
 
 class EconomicEvent extends CalendarEvent {
-  const EconomicEvent({required super.dateTime});
+  EconomicEvent({required super.dateTime});
 }
