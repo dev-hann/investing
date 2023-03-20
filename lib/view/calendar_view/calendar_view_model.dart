@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 class CalendarViewModel extends ViewModel<CalendarController> {
   final ScrollController scrollController = ScrollController();
   final CalendarEventData eventData = {};
-  final List<GlobalKey> _keyList = [];
+  final Map<CalendarEventKey, GlobalKey> _keyData = {};
   DateTime focusedDateTime = DateTime.now();
 
   @override
@@ -41,8 +41,36 @@ class CalendarViewModel extends ViewModel<CalendarController> {
     return super.init();
   }
 
+  GlobalKey eventKey(CalendarEventKey key) {
+    if (_keyData[key] == null) {
+      _keyData[key] = GlobalKey();
+    }
+    return _keyData[key]!;
+  }
+
   void onTapCalendarDateTime(DateTime dateTime) {
     focusedDateTime = dateTime;
+
+    GlobalKey? key;
+    for (final entry in _keyData.entries) {
+      if (entry.key.isSameDay(dateTime)) {
+        key = entry.value;
+        break;
+      }
+    }
+    if (key == null) {
+      return;
+    }
+    final context = key.currentContext;
+    if (context == null) {
+      return;
+    }
+    Scrollable.ensureVisible(
+      context,
+      duration: const Duration(
+        milliseconds: 300,
+      ),
+    );
     updateView();
   }
 }

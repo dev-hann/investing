@@ -1,6 +1,6 @@
 import 'package:dividends_manager/controller/controller.dart';
 import 'package:dividends_manager/data/db/data_base.dart';
-import 'package:dividends_manager/data/service/stock_service.dart';
+import 'package:dividends_manager/data/service/service.dart';
 import 'package:dividends_manager/model/stock.dart';
 import 'package:get/get.dart';
 
@@ -50,10 +50,7 @@ class WatchListController extends Controller {
   }
 
   Future<List<Stock>> searchStock(String query) async {
-    final res = await stockService.search(query);
-    final list = List<Map<String, dynamic>>.from(
-      res["data"]["symbol"]["value"],
-    );
+    final list = await stockService.searchStock(query);
     final searchedList = <Stock>[];
     for (int index = 0; index < list.length; ++index) {
       final item = Stock.dto(list[index]);

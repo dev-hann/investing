@@ -5,6 +5,12 @@ class CalendarEventKey extends Equatable {
   final DateTime dateTime;
   String get key => "${dateTime.month}-${dateTime.day}";
 
+  bool isSameDay(DateTime other) {
+    return dateTime.year == other.year &&
+        dateTime.month == other.month &&
+        dateTime.day == other.day;
+  }
+
   @override
   List<Object?> get props => [key];
 }

@@ -51,14 +51,15 @@ class CalendarWidget extends StatelessWidget {
   }
 
   Widget eventListView() {
-    //TODO:  Cannot Scroll? FIX HERE
-    return ListView(
+    return SingleChildScrollView(
       controller: scrollController,
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       physics: const BouncingScrollPhysics(),
-      children: eventData.keys.map((key) {
-        return eventBuilder(key, eventData[key] ?? []);
-      }).toList(),
+      child: Column(
+        children: eventData.keys.map((key) {
+          return eventBuilder(key, eventData[key] ?? []);
+        }).toList(),
+      ),
     );
   }
 

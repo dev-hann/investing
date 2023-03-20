@@ -1,21 +1,16 @@
-import 'package:dividends_manager/controller/watch_list_controller.dart';
-import 'package:dividends_manager/view/watch_list_view/detail_view/stock_detail_view.dart';
-import 'package:dividends_manager/view/watch_list_view/search_view/stock_search_view_model.dart';
-import 'package:dividends_manager/widget/stock_search_card.dart';
+import 'package:dividends_manager/controller/news_controller.dart';
+import 'package:dividends_manager/view/news_view/search_view.dart/news_search_view_model.dart';
 import 'package:dividends_manager/view/view.dart';
+import 'package:dividends_manager/widget/news_card.dart';
 import 'package:dividends_manager/widget/text_field.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
-class StockSearchView extends View<StockSearchViewModel, WatchListController> {
-  StockSearchView({super.key})
-      : super(
-          viewModel: StockSearchViewModel(),
-        );
+class NewsSearchView extends View<NewsSearchViewModel, NewsController> {
+  NewsSearchView({super.key}) : super(viewModel: NewsSearchViewModel());
 
   AppBar appBar() {
     return AppBar(
-      title: const Text("Search Stock"),
+      title: const Text("Search News"),
     );
   }
 
@@ -25,7 +20,7 @@ class StockSearchView extends View<StockSearchViewModel, WatchListController> {
         controller: viewModel.queryCntroller,
         onChanged: viewModel.queryValue,
         onSubmitted: (text) {
-          viewModel.searchStock(text);
+          viewModel.searchNews(text);
         },
         hintText: "Aa",
       ),
@@ -34,25 +29,19 @@ class StockSearchView extends View<StockSearchViewModel, WatchListController> {
 
   Widget searchedListWidget() {
     final searchedList = viewModel.searchedList;
-    final stockList = viewModel.stockList;
     return ListView.separated(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       itemCount: searchedList.length,
       itemBuilder: (context, index) {
-        final stock = searchedList[index];
-        final isBookmark = stockList.contains(stock);
-        return StockSearchCard(
-          stock: stock,
+        final news = searchedList[index];
+        return NewsCard(
+          news: news,
           onTap: () async {
-            Get.to(
-              StockDetailView(stock: stock),
-            );
+            // Get.to(
+            //   StockDetailView(stock: news),
+            // );
           },
-          onTapBookmark: () async {
-            await viewModel.toggleBookmark(stock);
-          },
-          isBookmark: isBookmark,
         );
       },
       separatorBuilder: (context, index) {

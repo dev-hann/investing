@@ -13,6 +13,10 @@ dependencies:
   reorderables:
   flutter_slidable:
   table_calendar:
+  pull_to_refresh:
+  html:
+  flutter_html:
+  http:
 
   # DataBase
   hive_flutter:
