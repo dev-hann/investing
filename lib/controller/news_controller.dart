@@ -1,6 +1,6 @@
-import 'package:dividends_manager/controller/controller.dart';
-import 'package:dividends_manager/data/service/service.dart';
-import 'package:dividends_manager/model/news.dart';
+import 'package:investing/controller/controller.dart';
+import 'package:investing/data/service/service.dart';
+import 'package:investing/model/news.dart';
 
 class NewsController extends Controller {
   final NewsService newsService = NewsService();

@@ -1,6 +1,6 @@
-import 'package:dividends_manager/controller/news_controller.dart';
-import 'package:dividends_manager/model/news.dart';
-import 'package:dividends_manager/view/view.dart';
+import 'package:investing/controller/news_controller.dart';
+import 'package:investing/model/news.dart';
+import 'package:investing/view/view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

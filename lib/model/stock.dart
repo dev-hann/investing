@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:equatable/equatable.dart';
 
-import 'package:dividends_manager/data/db/data_base_model.dart';
+import 'package:investing/data/db/data_base_model.dart';
 
 enum StockType {
   etf,

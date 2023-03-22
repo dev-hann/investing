@@ -1,6 +1,6 @@
 {
-    "name": "dividends_manager",
-    "short_name": "dividends_manager",
+    "name": "investing",
+    "short_name": "investing",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

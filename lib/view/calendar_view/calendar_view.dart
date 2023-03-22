@@ -1,9 +1,9 @@
-import 'package:dividends_manager/controller/calendar_controller.dart';
-import 'package:dividends_manager/view/calendar_view/detail_view/calendar_detail_view.dart';
-import 'package:dividends_manager/view/calendar_view/calendar_view_model.dart';
-import 'package:dividends_manager/view/view.dart';
-import 'package:dividends_manager/widget/calendar_widget.dart';
-import 'package:dividends_manager/widget/title_widget.dart';
+import 'package:investing/controller/calendar_controller.dart';
+import 'package:investing/view/calendar_view/detail_view/calendar_detail_view.dart';
+import 'package:investing/view/calendar_view/calendar_view_model.dart';
+import 'package:investing/view/view.dart';
+import 'package:investing/widget/calendar_widget.dart';
+import 'package:investing/widget/title_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

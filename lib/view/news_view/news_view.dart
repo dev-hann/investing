@@ -1,8 +1,8 @@
-import 'package:dividends_manager/controller/news_controller.dart';
-import 'package:dividends_manager/view/news_view/detail_view/news_detail_view.dart';
-import 'package:dividends_manager/view/news_view/news_view_model.dart';
-import 'package:dividends_manager/view/view.dart';
-import 'package:dividends_manager/widget/news_card.dart';
+import 'package:investing/controller/news_controller.dart';
+import 'package:investing/view/news_view/detail_view/news_detail_view.dart';
+import 'package:investing/view/news_view/news_view_model.dart';
+import 'package:investing/view/view.dart';
+import 'package:investing/widget/news_card.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';

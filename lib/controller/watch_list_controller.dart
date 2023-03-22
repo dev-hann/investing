@@ -1,7 +1,7 @@
-import 'package:dividends_manager/controller/controller.dart';
-import 'package:dividends_manager/data/db/data_base.dart';
-import 'package:dividends_manager/data/service/service.dart';
-import 'package:dividends_manager/model/stock.dart';
+import 'package:investing/controller/controller.dart';
+import 'package:investing/data/db/data_base.dart';
+import 'package:investing/data/service/service.dart';
+import 'package:investing/model/stock.dart';
 import 'package:get/get.dart';
 
 class WatchListController extends Controller {

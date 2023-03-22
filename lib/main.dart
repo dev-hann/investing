@@ -1,6 +1,6 @@
-import 'package:dividends_manager/controller/controller.dart';
-import 'package:dividends_manager/controller/home_controller.dart';
-import 'package:dividends_manager/view/home_view/home_view.dart';
+import 'package:investing/controller/controller.dart';
+import 'package:investing/controller/home_controller.dart';
+import 'package:investing/view/home_view/home_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
 import 'package:hive_flutter/hive_flutter.dart';

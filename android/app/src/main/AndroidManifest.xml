@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.dividends_manager">
+    package="com.investing">
    <application
-        android:label="dividends_manager"
+        android:label="investing"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

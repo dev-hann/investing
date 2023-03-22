@@ -1,6 +1,6 @@
-import 'package:dividends_manager/controller/watch_list_controller.dart';
-import 'package:dividends_manager/model/stock.dart';
-import 'package:dividends_manager/view/view.dart';
+import 'package:investing/controller/watch_list_controller.dart';
+import 'package:investing/model/stock.dart';
+import 'package:investing/view/view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

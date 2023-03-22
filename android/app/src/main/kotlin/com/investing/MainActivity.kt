@@ -1,4 +1,4 @@
-package com.example.dividends_manager
+package com.investing
 
 import io.flutter.embedding.android.FlutterActivity
 

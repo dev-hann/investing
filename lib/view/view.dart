@@ -1,6 +1,6 @@
 library view;
 
-import 'package:dividends_manager/controller/controller.dart';
+import 'package:investing/controller/controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 part './view_model.dart';

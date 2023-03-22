@@ -90,12 +90,12 @@ BEGIN
         BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "com.example" "\0"
-            VALUE "FileDescription", "dividends_manager" "\0"
+            VALUE "FileDescription", "investing" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "dividends_manager" "\0"
+            VALUE "InternalName", "investing" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2023 com.example. All rights reserved." "\0"
-            VALUE "OriginalFilename", "dividends_manager.exe" "\0"
-            VALUE "ProductName", "dividends_manager" "\0"
+            VALUE "OriginalFilename", "investing.exe" "\0"
+            VALUE "ProductName", "investing" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

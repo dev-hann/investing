@@ -1,4 +1,4 @@
-import 'package:dividends_manager/model/news.dart';
+import 'package:investing/model/news.dart';
 import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
 

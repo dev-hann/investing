@@ -1,5 +1,5 @@
-import 'package:dividends_manager/widget/stock_card.dart';
-import 'package:dividends_manager/widget/book_mark.dart';
+import 'package:investing/widget/stock_card.dart';
+import 'package:investing/widget/book_mark.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 

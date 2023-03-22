@@ -1,9 +1,9 @@
-import 'package:dividends_manager/controller/calendar_controller.dart';
-import 'package:dividends_manager/controller/controller.dart';
-import 'package:dividends_manager/controller/home_controller.dart';
-import 'package:dividends_manager/controller/news_controller.dart';
-import 'package:dividends_manager/controller/watch_list_controller.dart';
-import 'package:dividends_manager/view/view.dart';
+import 'package:investing/controller/calendar_controller.dart';
+import 'package:investing/controller/controller.dart';
+import 'package:investing/controller/home_controller.dart';
+import 'package:investing/controller/news_controller.dart';
+import 'package:investing/controller/watch_list_controller.dart';
+import 'package:investing/view/view.dart';
 import 'package:flutter/material.dart';
 
 class HomeViewModel extends ViewModel<HomeController> {

@@ -1,8 +1,8 @@
-import 'package:dividends_manager/controller/news_controller.dart';
-import 'package:dividends_manager/view/news_view/search_view.dart/news_search_view_model.dart';
-import 'package:dividends_manager/view/view.dart';
-import 'package:dividends_manager/widget/news_card.dart';
-import 'package:dividends_manager/widget/text_field.dart';
+import 'package:investing/controller/news_controller.dart';
+import 'package:investing/view/news_view/search_view.dart/news_search_view_model.dart';
+import 'package:investing/view/view.dart';
+import 'package:investing/widget/news_card.dart';
+import 'package:investing/widget/text_field.dart';
 import 'package:flutter/material.dart';
 
 class NewsSearchView extends View<NewsSearchViewModel, NewsController> {

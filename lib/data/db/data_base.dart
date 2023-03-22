@@ -1,4 +1,4 @@
-import 'package:dividends_manager/data/db/data_base_model.dart';
+import 'package:investing/data/db/data_base_model.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 class DataBase {

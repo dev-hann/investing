@@ -1,10 +1,10 @@
-import 'package:dividends_manager/controller/watch_list_controller.dart';
-import 'package:dividends_manager/view/watch_list_view/detail_view/stock_detail_view.dart';
-import 'package:dividends_manager/view/watch_list_view/search_view/stock_search_view.dart';
-import 'package:dividends_manager/view/watch_list_view/watch_list_view_model.dart';
-import 'package:dividends_manager/widget/stock_card.dart';
-import 'package:dividends_manager/view/view.dart';
-import 'package:dividends_manager/widget/title_widget.dart';
+import 'package:investing/controller/watch_list_controller.dart';
+import 'package:investing/view/watch_list_view/detail_view/stock_detail_view.dart';
+import 'package:investing/view/watch_list_view/search_view/stock_search_view.dart';
+import 'package:investing/view/watch_list_view/watch_list_view_model.dart';
+import 'package:investing/widget/stock_card.dart';
+import 'package:investing/view/view.dart';
+import 'package:investing/widget/title_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

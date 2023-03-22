@@ -1,4 +1,4 @@
-import 'package:dividends_manager/model/calendar_event.dart';
+import 'package:investing/model/calendar_event.dart';
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 

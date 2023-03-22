@@ -1,7 +1,7 @@
-import 'package:dividends_manager/controller/calendar_controller.dart';
-import 'package:dividends_manager/model/calendar_event.dart';
-import 'package:dividends_manager/view/calendar_view/detail_view/calendar_detail_view_mode.dart';
-import 'package:dividends_manager/view/view.dart';
+import 'package:investing/controller/calendar_controller.dart';
+import 'package:investing/model/calendar_event.dart';
+import 'package:investing/view/calendar_view/detail_view/calendar_detail_view_mode.dart';
+import 'package:investing/view/view.dart';
 import 'package:flutter/material.dart';
 
 class CalendarDetailView

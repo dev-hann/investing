@@ -1,4 +1,4 @@
-import 'package:dividends_manager/model/stock.dart';
+import 'package:investing/model/stock.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
