@@ -35,6 +35,7 @@ class HomeView extends View<HomeViewModel, HomeController> {
     return Scaffold(
       bottomNavigationBar: bottom(),
       body: PageView(
+        physics: const NeverScrollableScrollPhysics(),
         controller: viewModel.pageController,
         children: [
           WatchListView(),

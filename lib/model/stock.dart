@@ -6,7 +6,12 @@ import 'package:investing/data/db/data_base_model.dart';
 
 enum StockType {
   etf,
-  common,
+  stock,
+}
+
+enum StockListedCompany {
+  nasdaq,
+  nyse,
 }
 
 extension StockTypeExtension on String {
@@ -14,7 +19,7 @@ extension StockTypeExtension on String {
     if (toLowerCase() == "etf") {
       return StockType.etf;
     } else {
-      return StockType.common;
+      return StockType.stock;
     }
   }
 }
