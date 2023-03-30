@@ -14,7 +14,10 @@ class TitleWidget extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        title,
+        DefaultTextStyle(
+          style: Theme.of(context).textTheme.titleLarge!,
+          child: title,
+        ),
         const SizedBox(height: 8.0),
         child,
       ],

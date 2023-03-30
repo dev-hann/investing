@@ -1,3 +1,4 @@
+import 'package:investing/const/color.dart';
 import 'package:investing/controller/home_controller.dart';
 import 'package:investing/view/calendar_view/calendar_view.dart';
 import 'package:investing/view/home_view/home_view_model.dart';
@@ -13,6 +14,7 @@ class HomeView extends View<HomeViewModel, HomeController> {
     return BottomNavigationBar(
       onTap: viewModel.onChangedPage,
       currentIndex: viewModel.currentPage,
+      selectedItemColor: IVColor.orange,
       items: const [
         BottomNavigationBarItem(
           icon: Icon(Icons.star_border),

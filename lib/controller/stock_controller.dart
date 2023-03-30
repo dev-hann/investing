@@ -4,8 +4,8 @@ import 'package:investing/data/service/service.dart';
 import 'package:investing/model/stock.dart';
 import 'package:get/get.dart';
 
-class WatchListController extends Controller {
-  static WatchListController find() => Get.find<WatchListController>();
+class StockController extends Controller {
+  static StockController find() => Get.find<StockController>();
 
   final List<Stock> watchList = <Stock>[];
 

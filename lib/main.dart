@@ -1,3 +1,4 @@
+import 'package:investing/const/color.dart';
 import 'package:investing/controller/controller.dart';
 import 'package:investing/controller/home_controller.dart';
 import 'package:investing/view/home_view/home_view.dart';
@@ -19,6 +20,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         brightness: Brightness.dark,
+        primaryColor: IVColor.orange,
         appBarTheme: const AppBarTheme(
           centerTitle: true,
         ),

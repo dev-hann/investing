@@ -1,4 +1,4 @@
-import 'package:investing/controller/watch_list_controller.dart';
+import 'package:investing/controller/stock_controller.dart';
 import 'package:investing/view/watch_list_view/detail_view/stock_detail_view.dart';
 import 'package:investing/view/watch_list_view/search_view/stock_search_view_model.dart';
 import 'package:investing/widget/stock_search_card.dart';
@@ -7,7 +7,7 @@ import 'package:investing/widget/text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class StockSearchView extends View<StockSearchViewModel, WatchListController> {
+class StockSearchView extends View<StockSearchViewModel, StockController> {
   StockSearchView({super.key})
       : super(
           viewModel: StockSearchViewModel(),

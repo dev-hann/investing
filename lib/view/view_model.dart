@@ -2,6 +2,7 @@ part of view;
 
 abstract class ViewModel<T extends Controller> {
   final T controller = Get.find<T>();
+  dynamic get viewID => hashCode;
 
   bool get isLoading => _loading;
   bool _loading = true;
@@ -14,7 +15,7 @@ abstract class ViewModel<T extends Controller> {
 
   @mustCallSuper
   Future init() async {
-    controller.update();
+    updateView();
   }
 
   @mustCallSuper
@@ -33,6 +34,6 @@ abstract class ViewModel<T extends Controller> {
   }
 
   void updateView() {
-    controller.update();
+    controller.update([viewID]);
   }
 }

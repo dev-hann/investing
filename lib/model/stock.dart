@@ -9,11 +9,6 @@ enum StockType {
   stock,
 }
 
-enum StockListedCompany {
-  nasdaq,
-  nyse,
-}
-
 extension StockTypeExtension on String {
   StockType _toStockType() {
     if (toLowerCase() == "etf") {
@@ -35,7 +30,7 @@ class Stock extends DataBaseModel with EquatableMixin, Comparable<Stock> {
   }) : super(index: symbol);
   final String name;
   final String symbol;
-  final int price;
+  final double price;
   final int count;
   final double dividendYield;
   final int stockTypeIndex;
@@ -73,7 +68,7 @@ class Stock extends DataBaseModel with EquatableMixin, Comparable<Stock> {
     return Stock(
       name: map['name'] as String,
       symbol: map['symbol'] as String,
-      price: map['price'] as int,
+      price: map['price'] as double,
       count: map['count'] as int,
       dividendYield: map['dividendYield'] as double,
       stockTypeIndex: map['stockTypeIndex'],
