@@ -1,6 +1,7 @@
 import 'package:investing/model/stock.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:investing/widget/stock_price_text.dart';
 
 class StockCard extends StatelessWidget {
   const StockCard({
@@ -70,7 +71,10 @@ class StockCard extends StatelessWidget {
           child: ListTile(
             title: titleText(),
             subtitle: subtitleText(),
-            // trailing: trailingText(),
+            trailing: const StockPriceText(
+              closedPrice: 102,
+              currentPrice: 101.1,
+            ),
           ),
         ),
       ),
