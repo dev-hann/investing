@@ -23,6 +23,7 @@ dependencies:
 
   equatable:
   dio:
+  intl:
 
   # StateManager
   get:

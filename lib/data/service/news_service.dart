@@ -8,7 +8,7 @@ part of service;
 // ex) https://api.nasdaq.com/api/news/topic/article?q=field_primary_topic:4226&limit=3
 // https://api.nasdaq.com/api/news/topic/latestnews?offset=0&limit=10
 
-class NewsService extends Service {
+class NewsService extends IVService {
   Future requestLatestNewsList(
     int page, {
     int stride = 20,

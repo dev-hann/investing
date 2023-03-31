@@ -1,5 +1,5 @@
 import 'package:investing/controller/calendar_controller.dart';
-import 'package:investing/model/calendar_event.dart';
+import 'package:investing/model/calendar/calendar_event.dart';
 import 'package:investing/view/calendar_view/detail_view/calendar_detail_view_mode.dart';
 import 'package:investing/view/view.dart';
 import 'package:flutter/material.dart';

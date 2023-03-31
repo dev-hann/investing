@@ -1,8 +1,12 @@
 library view;
 
+import 'dart:async';
+
 import 'package:investing/controller/controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:investing/widget/loading_widget.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 part './view_model.dart';
 
 abstract class View<T extends ViewModel, S extends Controller>
@@ -22,12 +26,7 @@ abstract class View<T extends ViewModel, S extends Controller>
     if (!viewModel.isOverlayLoading) {
       return const SizedBox();
     }
-    return ColoredBox(
-      color: Colors.black.withOpacity(0.4),
-      child: const Center(
-        child: CircularProgressIndicator(),
-      ),
-    );
+    return const IVLoadingWidget();
   }
 
   @override

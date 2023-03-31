@@ -23,7 +23,7 @@ extension SearchTypeExtension on SearchType {
   }
 }
 
-abstract class Service {
+abstract class IVService {
   final _dio = Dio();
 
   Future post(String url, dynamic data) {

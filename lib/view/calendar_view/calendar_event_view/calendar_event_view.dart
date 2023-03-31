@@ -1,29 +1,24 @@
-import 'package:investing/model/calendar_event.dart';
+import 'package:investing/controller/calendar_controller.dart';
+import 'package:investing/model/calendar/calendar_event.dart';
 import 'package:flutter/material.dart';
+import 'package:investing/view/calendar_view/calendar_event_view/calendar_event_view_model.dart';
+import 'package:investing/view/view.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 typedef CalendarEventBuilder = Widget Function(
-    CalendarEventKey eventKey, List<CalendarEvent> eventList);
-typedef CalendarEventData = Map<CalendarEventKey, List<CalendarEvent>>;
+    DateTime dateTime, List<CalendarEvent> eventList);
 
-class CalendarWidget extends StatelessWidget {
-  const CalendarWidget({
+class CalendarEventView
+    extends View<CalendarEventViewModel, CalendarController> {
+  CalendarEventView({
     super.key,
-    required this.scrollController,
-    required this.eventData,
-    required this.onChangedPage,
-    required this.onChangedDateTime,
+    required CalendarEventType type,
     required this.eventBuilder,
-    required this.focusedDateTime,
-  });
-  final ScrollController scrollController;
-  final CalendarEventData eventData;
-  final Function(DateTime dateTime) onChangedPage;
-  final Function(DateTime dateTime) onChangedDateTime;
+  }) : super(viewModel: CalendarEventViewModel(type));
   final CalendarEventBuilder eventBuilder;
-  final DateTime focusedDateTime;
 
   Widget calendarWidget() {
+    final focusedDateTime = viewModel.focusedDateTime;
     return Card(
       child: TableCalendar(
         calendarFormat: CalendarFormat.twoWeeks,
@@ -42,29 +37,34 @@ class CalendarWidget extends StatelessWidget {
         selectedDayPredicate: (dateTime) {
           return isSameDay(dateTime, focusedDateTime);
         },
-        onPageChanged: onChangedPage,
+        onPageChanged: (dateTime) {},
         onDaySelected: (selectedDay, focusedDay) {
-          onChangedDateTime(selectedDay);
+          viewModel.onChangedFoucsedDateTime(selectedDay);
         },
       ),
     );
   }
 
   Widget eventListView() {
+    final eventList = viewModel.loadEventList();
     return SingleChildScrollView(
-      controller: scrollController,
+      controller: viewModel.scrollController,
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       physics: const BouncingScrollPhysics(),
-      child: Column(
-        children: eventData.keys.map((key) {
-          return eventBuilder(key, eventData[key] ?? []);
-        }).toList(),
-      ),
+      child: Builder(builder: (context) {
+        if (eventList == null) {
+          return const SizedBox();
+        }
+        if (eventList.isEmpty) {
+          return const Text("No Result");
+        }
+        return eventBuilder(viewModel.focusedDateTime, eventList);
+      }),
     );
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget body() {
     return Column(
       children: [
         Padding(

@@ -2,7 +2,7 @@ import 'package:investing/controller/controller.dart';
 import 'package:flutter/material.dart';
 
 class HomeController extends Controller {
-  final PageController pageController = PageController();
+  final PageController pageController = PageController(initialPage: 2);
   int _currentPage = 0;
   int get currentPage => _currentPage;
   void _pageControllerListener() {

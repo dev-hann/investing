@@ -1,8 +1,11 @@
 import 'package:investing/controller/calendar_controller.dart';
+import 'package:investing/model/calendar/calendar_event.dart';
+import 'package:investing/util/date_time_format.dart';
+import 'package:investing/view/calendar_view/calendar_event_card/economic_event_card.dart';
 import 'package:investing/view/calendar_view/detail_view/calendar_detail_view.dart';
 import 'package:investing/view/calendar_view/calendar_view_model.dart';
 import 'package:investing/view/view.dart';
-import 'package:investing/widget/calendar_widget.dart';
+import 'package:investing/view/calendar_view/calendar_event_view/calendar_event_view.dart';
 import 'package:investing/widget/title_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -18,45 +21,39 @@ class CalendarView extends View<CalendarViewModel, CalendarController> {
   }
 
   TabBar tabView() {
-    return const TabBar(
+    return TabBar(
       isScrollable: true,
-      tabs: [
-        Tab(text: "Economic"),
-        Tab(text: "Earnings"),
-        Tab(text: "IPO"),
-        Tab(text: "Dividend"),
-        Tab(text: "SPO"),
-        Tab(text: "Holiday"),
-      ],
+      onTap: (index) {},
+      tabs: viewModel.eventTypeList.map((e) {
+        return Tab(text: e.name.capitalize);
+      }).toList(),
     );
   }
 
-  Widget economicView() {
-    return CalendarWidget(
-      scrollController: viewModel.scrollController,
-      eventData: viewModel.eventData,
-      focusedDateTime: viewModel.focusedDateTime,
-      onChangedPage: (dateTme) {},
-      onChangedDateTime: (dateTime) {
-        viewModel.onTapCalendarDateTime(dateTime);
-      },
-      eventBuilder: (key, eventList) {
+  Widget calendarWidget(CalendarEventType eventType) {
+    return CalendarEventView(
+      type: eventType,
+      eventBuilder: (dateTime, eventList) {
         return TitleWidget(
-          key: viewModel.eventKey(key),
-          title: Text(key.dateTime.toString()),
+          title: Text(IVDateTimeFormat(dateTime).dateTimeFormat()),
           child: Column(
             children: eventList.map((event) {
               return Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8.0),
-                child: Card(
-                  child: ListTile(
-                    onTap: () {
-                      Get.to(
-                        CalendarDetailView(event: event),
-                      );
-                    },
-                    title: Text(event.toString()),
-                  ),
+                child: Builder(
+                  builder: (context) {
+                    switch (eventType) {
+                      case CalendarEventType.economics:
+                        return EconomicEventCard(
+                          event: event as EconomicEvent,
+                        );
+                      case CalendarEventType.earnings:
+                        break;
+                      case CalendarEventType.dividends:
+                        break;
+                    }
+                    return const SizedBox();
+                  },
                 ),
               );
             }).toList(),
@@ -68,19 +65,13 @@ class CalendarView extends View<CalendarViewModel, CalendarController> {
 
   @override
   Widget body() {
+    final typeList = viewModel.eventTypeList;
     return DefaultTabController(
-      length: 6,
+      length: typeList.length,
       child: Scaffold(
         appBar: appBar(),
         body: TabBarView(
-          children: [
-            economicView(),
-            economicView(),
-            economicView(),
-            economicView(),
-            economicView(),
-            economicView(),
-          ],
+          children: typeList.map(calendarWidget).toList(),
         ),
       ),
     );
