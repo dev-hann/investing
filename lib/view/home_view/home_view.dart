@@ -1,6 +1,7 @@
 import 'package:investing/const/color.dart';
 import 'package:investing/controller/home_controller.dart';
 import 'package:investing/view/calendar_view/calendar_view.dart';
+import 'package:investing/view/finviz_view/finvix_view.dart';
 import 'package:investing/view/home_view/home_view_model.dart';
 import 'package:investing/view/news_view/news_view.dart';
 import 'package:investing/view/view.dart';
@@ -28,6 +29,10 @@ class HomeView extends View<HomeViewModel, HomeController> {
           icon: Icon(Icons.calendar_month),
           label: "Calendar",
         ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.map),
+          label: "FinViz",
+        ),
       ],
     );
   }
@@ -43,6 +48,7 @@ class HomeView extends View<HomeViewModel, HomeController> {
           WatchListView(),
           NewsView(),
           CalendarView(),
+          FinVizView(),
         ],
       ),
     );
