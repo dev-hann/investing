@@ -24,6 +24,7 @@ dependencies:
   equatable:
   dio:
   intl:
+  flutter_inappwebview:
 
   # StateManager
   get:

@@ -26,9 +26,17 @@ extension SearchTypeExtension on SearchType {
 abstract class IVService {
   final _dio = Dio();
 
-  Future post(String url, dynamic data) {
+  Future<Response> post(
+    String url, {
+    Map<String, dynamic>? data,
+    Map<String, dynamic>? headers,
+  }) {
     return _dio.post(
       url,
+      data: data,
+      options: Options(
+        headers: headers,
+      ),
     );
   }
 
