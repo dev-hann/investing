@@ -1,15 +1,38 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
-import 'package:get/get.dart';
 import 'package:investing/controller/finviz_controller.dart';
 import 'package:investing/view/finviz_view/finvix_view_model.dart';
 import 'package:investing/view/view.dart';
 
-class FinVizView extends View<FinVizViewModel, FinVizController> {
-  FinVizView({super.key}) : super(viewModel: FinVizViewModel());
+class FinVizView extends StatefulWidget {
+  const FinVizView({super.key});
 
+  @override
+  State<FinVizView> createState() => _FinVizViewState();
+}
+
+class _FinVizViewState extends State<FinVizView>
+    with AutomaticKeepAliveClientMixin {
+  late Widget keepAlive;
+
+  @override
+  void initState() {
+    super.initState();
+    keepAlive = _FinVizView();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    super.build(context);
+    return keepAlive;
+  }
+
+  @override
+  bool get wantKeepAlive => true;
+}
+
+class _FinVizView extends View<FinVizViewModel, FinVizController> {
+  _FinVizView() : super(viewModel: FinVizViewModel());
   AppBar appBar() {
     return AppBar(
       title: const Text("FinViz"),

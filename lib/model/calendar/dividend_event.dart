@@ -45,4 +45,16 @@ class DividendEvent extends CalendarEvent {
       announcementDateTime: map['announcement_Date'] as String,
     );
   }
+
+  @override
+  List<Object?> get props => [
+        companyName,
+        symbol,
+        dividendExDateTime,
+        paymentDateTime,
+        recordDateTime,
+        dividendRate,
+        indicatedAnnualDividend,
+        announcementDateTime,
+      ];
 }

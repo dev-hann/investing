@@ -8,7 +8,7 @@ class EarningEvent extends CalendarEvent {
     required this.symbol,
     required this.name,
     required this.marketCap,
-    required this.fiscalQuarterEnding,
+    required this.firscalQuarterEnding,
     required this.epsForecast,
     required this.noOfEsts,
   }) : super(CalendarEventType.earnings);
@@ -19,7 +19,7 @@ class EarningEvent extends CalendarEvent {
   final String symbol;
   final String name;
   final String marketCap;
-  final String fiscalQuarterEnding;
+  final String firscalQuarterEnding;
   final String epsForecast;
   final String noOfEsts;
 
@@ -31,7 +31,7 @@ class EarningEvent extends CalendarEvent {
       'symbol': symbol,
       'name': name,
       'marketCap': marketCap,
-      'fiscalQuarterEnding': fiscalQuarterEnding,
+      'fiscalQuarterEnding': firscalQuarterEnding,
       'epsForecast': epsForecast,
       'noOfEsts': noOfEsts,
     };
@@ -45,9 +45,22 @@ class EarningEvent extends CalendarEvent {
       symbol: map['symbol'] as String,
       name: map['name'] as String,
       marketCap: map['marketCap'] as String,
-      fiscalQuarterEnding: map['fiscalQuarterEnding'] as String,
+      firscalQuarterEnding: map['fiscalQuarterEnding'] as String,
       epsForecast: map['epsForecast'] as String,
       noOfEsts: map['noOfEsts'] as String,
     );
   }
+
+  @override
+  List<Object?> get props => [
+        lastYearEPS,
+        lastYearRptDt,
+        time,
+        symbol,
+        name,
+        marketCap,
+        firscalQuarterEnding,
+        epsForecast,
+        noOfEsts,
+      ];
 }

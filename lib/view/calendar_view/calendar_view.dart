@@ -2,7 +2,6 @@ import 'package:investing/controller/calendar_controller.dart';
 import 'package:investing/model/calendar/calendar_event.dart';
 import 'package:investing/util/date_time_format.dart';
 import 'package:investing/view/calendar_view/calendar_event_card/economic_event_card.dart';
-import 'package:investing/view/calendar_view/detail_view/calendar_detail_view.dart';
 import 'package:investing/view/calendar_view/calendar_view_model.dart';
 import 'package:investing/view/view.dart';
 import 'package:investing/view/calendar_view/calendar_event_view/calendar_event_view.dart';

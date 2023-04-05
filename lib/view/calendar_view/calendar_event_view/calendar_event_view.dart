@@ -47,33 +47,24 @@ class CalendarEventView
 
   Widget eventListView() {
     final eventList = viewModel.loadEventList();
-    return SingleChildScrollView(
-      controller: viewModel.scrollController,
-      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-      physics: const BouncingScrollPhysics(),
-      child: Builder(builder: (context) {
-        if (eventList == null) {
-          return const SizedBox();
-        }
-        if (eventList.isEmpty) {
-          return const Text("No Result");
-        }
-        return eventBuilder(viewModel.focusedDateTime, eventList);
-      }),
-    );
+    if (eventList == null) {
+      return const SizedBox();
+    }
+    if (eventList.isEmpty) {
+      return const Text("No Result");
+    }
+    return eventBuilder(viewModel.focusedDateTime, eventList);
   }
 
   @override
   Widget body() {
-    return Column(
+    return ListView(
+      physics: const BouncingScrollPhysics(),
+      padding: const EdgeInsets.all(16.0),
       children: [
-        Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: calendarWidget(),
-        ),
-        Expanded(
-          child: eventListView(),
-        ),
+        calendarWidget(),
+        const SizedBox(height: 16.0),
+        eventListView(),
       ],
     );
   }

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:investing/model/calendar/calendar_event.dart';
-import 'package:investing/model/country.dart';
 
 class EconomicEventCard extends StatelessWidget {
   const EconomicEventCard({
@@ -9,9 +8,8 @@ class EconomicEventCard extends StatelessWidget {
   });
   final EconomicEvent event;
 
-  Widget countryWidget() {
-    final country = Country.fromName(event.country);
-    return Text(country.icon());
+  String removeNbsp(String data) {
+    return data.replaceAll("&nbsp;", "-");
   }
 
   @override
@@ -23,12 +21,12 @@ class EconomicEventCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(event.gmt),
-              countryWidget(),
+              Text(event.country.icon()),
             ],
           ),
           title: Text(event.eventName),
           subtitle: Text(
-              "Act: ${event.actual} | Cons: ${event.consensus} | Prev: ${event.previous}"),
+              "Act: ${removeNbsp(event.actual)} | Cons: ${event.consensus} | Prev: ${event.previous}"),
         ),
       ),
     );

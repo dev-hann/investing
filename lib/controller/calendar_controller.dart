@@ -16,7 +16,9 @@ class CalendarController extends Controller {
       case CalendarEventType.economics:
         return (await repo.requestEconomicEventList(dateTime))
             .map((e) => EconomicEvent.fromMap(e))
-            .toList();
+            .where((element) {
+          return element.country.code == "US";
+        }).toList();
       case CalendarEventType.earnings:
         return (await repo.requestEarningEventList(dateTime))
             .map((e) => EarningEvent.fromMap(e))

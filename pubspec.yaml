@@ -14,9 +14,9 @@ dependencies:
   flutter_slidable:
   table_calendar:
   pull_to_refresh:
-  html:
   flutter_html:
   http:
+  html:
 
   # DataBase
   hive_flutter:

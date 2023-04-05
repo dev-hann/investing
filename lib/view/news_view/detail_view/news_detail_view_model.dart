@@ -1,8 +1,9 @@
+import 'package:html/parser.dart' as html;
+import 'package:http/http.dart' as http;
+
 import 'package:investing/controller/news_controller.dart';
 import 'package:investing/model/news.dart';
 import 'package:investing/view/view.dart';
-import 'package:html/parser.dart';
-import 'package:http/http.dart' as http;
 
 class NewsDetailViewModel extends ViewModel<NewsController> {
   NewsDetailViewModel(this.news);
@@ -14,7 +15,7 @@ class NewsDetailViewModel extends ViewModel<NewsController> {
   Future init() async {
     final url = news.articleDetailURL;
     final res = await http.get(Uri.parse(url));
-    final doc = parse(res.body);
+    final doc = html.parse(res.body);
     final bodyContents = doc.getElementsByClassName("body__content").first;
     bodyHtml = bodyContents.innerHtml;
     return super.init();

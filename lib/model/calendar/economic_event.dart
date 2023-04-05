@@ -1,34 +1,23 @@
 part of calendar_event;
 
 class EconomicEvent extends CalendarEvent {
-  const EconomicEvent({
+  EconomicEvent({
     required this.gmt,
-    required this.country,
+    required String country,
     required this.eventName,
     required this.actual,
     required this.consensus,
     required this.previous,
     required this.description,
-  }) : super(CalendarEventType.economics);
+  })  : country = Country.fromName(country),
+        super(CalendarEventType.economics);
   final String gmt;
-  final String country;
+  final Country country;
   final String eventName;
   final String actual;
   final String consensus;
   final String previous;
   final String description;
-
-  Map<String, dynamic> toMap() {
-    return <String, dynamic>{
-      'gmt': gmt,
-      'country': country,
-      'eventName': eventName,
-      'actual': actual,
-      'consensus': consensus,
-      'previous': previous,
-      'description': description,
-    };
-  }
 
   factory EconomicEvent.fromMap(Map<String, dynamic> map) {
     return EconomicEvent(
@@ -41,4 +30,16 @@ class EconomicEvent extends CalendarEvent {
       description: map['description'] as String,
     );
   }
+
+  @override
+  List<Object?> get props => [
+        type,
+        gmt,
+        country,
+        eventName,
+        actual,
+        consensus,
+        previous,
+        description,
+      ];
 }

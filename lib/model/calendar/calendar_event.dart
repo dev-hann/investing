@@ -1,6 +1,7 @@
 library calendar_event;
 
 import 'package:equatable/equatable.dart';
+import 'package:investing/model/country.dart';
 import 'package:investing/util/date_time_format.dart';
 
 part './economic_event.dart';
@@ -21,9 +22,4 @@ abstract class CalendarEvent extends Equatable {
   static String key(DateTime dateTime) {
     return IVDateTimeFormat(dateTime).dateTimeFormat();
   }
-
-  @override
-  List<Object?> get props => [
-        type,
-      ];
 }

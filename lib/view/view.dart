@@ -29,6 +29,15 @@ abstract class View<T extends ViewModel, S extends Controller>
     return const IVLoadingWidget();
   }
 
+  @mustCallSuper
+  void init(BuildContext context) {
+    viewModel._init();
+  }
+
+  void dispose() {
+    viewModel.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -36,10 +45,10 @@ abstract class View<T extends ViewModel, S extends Controller>
         id: viewModel.viewID,
         key: UniqueKey(),
         initState: (state) {
-          viewModel._init();
+          init(context);
         },
         dispose: (state) {
-          viewModel.dispose();
+          dispose();
         },
         builder: (controller) {
           if (viewModel.isLoading) {
