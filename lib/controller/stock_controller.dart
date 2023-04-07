@@ -1,45 +1,31 @@
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:investing/controller/controller.dart';
-import 'package:investing/data/db/data_base.dart';
-import 'package:investing/data/service/service.dart';
+import 'package:investing/model/index.dart';
 import 'package:investing/model/stock.dart';
 import 'package:get/get.dart';
+import 'package:investing/repo/stock/stock_repo.dart';
 
-class StockController extends Controller {
+class StockController extends Controller<StockRepo> {
+  StockController(super.repo);
+
   static StockController find() => Get.find<StockController>();
-  final List<Stock> indexList = <Stock>[
-    const Stock(
-      name: "Nasdaq",
-      symbol: "",
-      price: 20,
-      stockTypeIndex: 0,
-    ),
-    const Stock(
-      name: "S&P500",
-      symbol: "",
-      price: 30,
-      stockTypeIndex: 0,
-    ),
-  ];
+
+  final List<Index> indexList = <Index>[];
   final List<Stock> watchList = <Stock>[];
 
-  final DataBase watchListDB = DataBase("WatchList");
-  Stream<BoxEvent> get watchListStream => watchListDB.stream;
+  Stream get watchListStream => repo.watchListStream();
 
-  final StockService stockService = StockService();
   @override
-  void onReady() async {
-    await watchListDB.init();
+  Future onReady() async {
     watchListStream.listen((event) {
       refreshState();
     });
+    indexList.addAll(await requestMajorIndexList());
     refreshState();
     super.onReady();
   }
 
   void refreshState() {
-    final list =
-        watchListDB.loadStockList().map((e) => Stock.fromMap(e)).toList();
+    final list = repo.loadStockList().map((e) => Stock.fromMap(e)).toList();
     list.sort();
     watchList.clear();
     watchList.addAll(list);
@@ -47,11 +33,11 @@ class StockController extends Controller {
   }
 
   Future updateStock(Stock stock) {
-    return watchListDB.updateStock(stock);
+    return repo.updateStock(stock);
   }
 
   Future removeStock(String stockIndex) {
-    return watchListDB.removeStock(stockIndex);
+    return repo.removeStock(stockIndex);
   }
 
   Future toggleBookmark(Stock stock) async {
@@ -63,7 +49,7 @@ class StockController extends Controller {
   }
 
   Future<List<Stock>> searchStock(String query) async {
-    final list = await stockService.searchStock(query);
+    final list = await repo.searchStock(query);
     final searchedList = <Stock>[];
     for (int index = 0; index < list.length; ++index) {
       final item = Stock.dto(list[index]);
@@ -72,5 +58,11 @@ class StockController extends Controller {
       }
     }
     return searchedList;
+  }
+
+  Future<List<Index>> requestMajorIndexList() async {
+    final res = await repo.requestMajorIndexList();
+    final list = List.from(res).map((e) => Index.majorIndex(e)).toList();
+    return list;
   }
 }

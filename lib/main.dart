@@ -1,6 +1,11 @@
 import 'package:investing/const/color.dart';
+import 'package:investing/controller/calendar_controller.dart';
 import 'package:investing/controller/controller.dart';
 import 'package:investing/controller/home_controller.dart';
+import 'package:investing/controller/news_controller.dart';
+import 'package:investing/controller/stock_controller.dart';
+import 'package:investing/repo/event/event_repo.dart';
+import 'package:investing/repo/stock/stock_repo.dart';
 import 'package:investing/view/home_view/home_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
@@ -32,7 +37,18 @@ class MyApp extends StatelessWidget {
         ),
       ),
       home: Builder(builder: (context) {
-        Controller.put<HomeController>(HomeController());
+        Controller.put<HomeController>(
+          HomeController(StockImpl()),
+        );
+        Controller.put<StockController>(
+          StockController(StockImpl()),
+        );
+        Controller.put<NewsController>(
+          NewsController(StockImpl()),
+        );
+        Controller.put<CalendarController>(
+          CalendarController(EventImpl()),
+        );
         return HomeView();
       }),
     );

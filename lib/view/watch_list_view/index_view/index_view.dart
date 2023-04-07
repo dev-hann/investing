@@ -1,6 +1,8 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:investing/const/color.dart';
+import 'package:investing/model/index.dart';
 import 'package:investing/model/stock.dart';
 import 'package:investing/widget/stock_price_text.dart';
 import 'package:investing/widget/title_widget.dart';
@@ -11,11 +13,11 @@ class IndexView extends StatelessWidget {
     super.key,
     required this.indexList,
   });
-  final List<Stock> indexList;
+  final List<Index> indexList;
 
   double get size => Get.width / 2.5;
 
-  Widget item(Stock stock) {
+  Widget item(Index index) {
     return DecoratedBox(
       decoration: BoxDecoration(
         color: IVColor.blueGrey,
@@ -40,18 +42,19 @@ class IndexView extends StatelessWidget {
                     // child: Center(),
                   ),
                 ),
-                Text(
-                  stock.name,
-                  style: textTheme.bodyMedium,
+                AutoSizeText(
+                  index.name,
+                  maxLines: 1,
+                  // style: textTheme.bodySmall,
                 ),
                 Text(
-                  stock.priceText,
+                  index.lastSalePrice,
                   style: textTheme.titleMedium,
                 ),
-                StockPriceText(
-                  closedPrice: 20,
-                  currentPrice: stock.price,
-                ),
+                // StockPriceText(
+                //   closedPrice: ,
+                //   currentPrice: ,
+                // ),
               ],
             );
           }),

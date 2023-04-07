@@ -7,6 +7,7 @@ class StockPriceText extends StatelessWidget {
     required this.closedPrice,
     required this.currentPrice,
   });
+
   final double closedPrice;
   final double currentPrice;
   bool get isUp => currentPrice > closedPrice;

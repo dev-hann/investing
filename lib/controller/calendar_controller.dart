@@ -4,9 +4,8 @@ import 'package:investing/repo/event/event_repo.dart';
 
 typedef CalendarEventData = Map<String, List<CalendarEvent>>;
 
-class CalendarController extends Controller {
-  CalendarController(this.repo);
-  final EventRepo repo;
+class CalendarController extends Controller<EventRepo> {
+  CalendarController(super.repo);
 
   Future<List<CalendarEvent>> requestEventList({
     required DateTime dateTime,

@@ -1,9 +1,12 @@
 import 'package:investing/controller/controller.dart';
 import 'package:investing/data/service/service.dart';
 import 'package:investing/model/news.dart';
+import 'package:investing/repo/stock/stock_repo.dart';
 
-class NewsController extends Controller {
+class NewsController extends Controller<StockRepo> {
+  NewsController(super.repo);
   final NewsService newsService = NewsService();
+
   Future<List<News>> requestNewsList(int page) async {
     final res = await newsService.requestLatestNewsList(page);
     final list = List<Map<String, dynamic>>.from(
