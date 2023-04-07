@@ -12,7 +12,7 @@ class StockDetailView extends View<StockDetailViewModel, StockController> {
         );
   AppBar appBar() {
     return AppBar(
-      title: const Text("상세 정보"),
+      title: const Text("Stock Detail"),
       actions: [
         IconButton(
           onPressed: () {},

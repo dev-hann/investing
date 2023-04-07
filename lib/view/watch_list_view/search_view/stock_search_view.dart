@@ -23,7 +23,7 @@ class StockSearchView extends View<StockSearchViewModel, StockController> {
     return Card(
       child: CustomTextfield(
         controller: viewModel.queryCntroller,
-        onChanged: viewModel.queryValue,
+        onChanged: viewModel.rxQuery,
         onSubmitted: (text) {
           viewModel.searchStock(text);
         },
@@ -44,6 +44,7 @@ class StockSearchView extends View<StockSearchViewModel, StockController> {
         final isBookmark = stockList.contains(stock);
         return StockSearchCard(
           stock: stock,
+          query: viewModel.rxQuery.value,
           onTap: () async {
             Get.to(
               StockDetailView(stock: stock),
@@ -63,16 +64,21 @@ class StockSearchView extends View<StockSearchViewModel, StockController> {
 
   @override
   Widget body() {
-    return Scaffold(
-      appBar: appBar(),
-      body: ListView(
-        padding: const EdgeInsets.all(16.0),
-        physics: const BouncingScrollPhysics(),
-        children: [
-          queryTextField(),
-          const SizedBox(height: 16.0),
-          searchedListWidget(),
-        ],
+    return GestureDetector(
+      onTap: () {
+        FocusManager.instance.primaryFocus?.unfocus();
+      },
+      child: Scaffold(
+        appBar: appBar(),
+        body: ListView(
+          padding: const EdgeInsets.all(16.0),
+          physics: const BouncingScrollPhysics(),
+          children: [
+            queryTextField(),
+            const SizedBox(height: 16.0),
+            searchedListWidget(),
+          ],
+        ),
       ),
     );
   }

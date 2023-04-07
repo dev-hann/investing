@@ -17,6 +17,8 @@ dependencies:
   flutter_html:
   http:
   html:
+  auto_size_text:
+  highlight_text:
 
   # DataBase
   hive_flutter:

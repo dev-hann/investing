@@ -1,3 +1,4 @@
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:investing/controller/controller.dart';
 import 'package:investing/data/db/data_base.dart';
 import 'package:investing/data/service/service.dart';
@@ -6,31 +7,43 @@ import 'package:get/get.dart';
 
 class StockController extends Controller {
   static StockController find() => Get.find<StockController>();
-
+  final List<Stock> indexList = <Stock>[
+    const Stock(
+      name: "Nasdaq",
+      symbol: "",
+      price: 20,
+      stockTypeIndex: 0,
+    ),
+    const Stock(
+      name: "S&P500",
+      symbol: "",
+      price: 30,
+      stockTypeIndex: 0,
+    ),
+  ];
   final List<Stock> watchList = <Stock>[];
 
   final DataBase watchListDB = DataBase("WatchList");
+  Stream<BoxEvent> get watchListStream => watchListDB.stream;
+
   final StockService stockService = StockService();
   @override
   void onReady() async {
     await watchListDB.init();
-    watchListDB.stream.listen((event) {
+    watchListStream.listen((event) {
       refreshState();
     });
+    refreshState();
     super.onReady();
   }
 
-  void _loadStockList() {
+  void refreshState() {
     final list =
         watchListDB.loadStockList().map((e) => Stock.fromMap(e)).toList();
     list.sort();
     watchList.clear();
     watchList.addAll(list);
     update();
-  }
-
-  void refreshState() {
-    _loadStockList();
   }
 
   Future updateStock(Stock stock) {

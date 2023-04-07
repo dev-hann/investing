@@ -7,4 +7,5 @@ class IVColor {
   static const Color orange = Color(0xFFFFAB40);
   static const Color red = Colors.redAccent;
   static const Color blue = Colors.blueAccent;
+  static const Color grey = Colors.grey;
 }

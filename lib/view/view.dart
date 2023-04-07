@@ -42,7 +42,6 @@ abstract class View<T extends ViewModel, S extends Controller>
   Widget build(BuildContext context) {
     return Material(
       child: GetBuilder<S>(
-        id: viewModel.viewID,
         key: UniqueKey(),
         initState: (state) {
           init(context);

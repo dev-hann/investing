@@ -33,7 +33,7 @@ class StockCard extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
-        Text("${stock.count}원"),
+        // Text("${stock.count}원"),
         Text("예상 배당률 ${stock.dividendYield}%"),
       ],
     );

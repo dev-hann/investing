@@ -23,26 +23,26 @@ class Stock extends DataBaseModel with EquatableMixin, Comparable<Stock> {
   const Stock({
     required this.name,
     required this.symbol,
-    required this.count,
     required this.price,
-    required this.dividendYield,
     required this.stockTypeIndex,
+    this.dividendYield = 0.0,
   }) : super(index: symbol);
   final String name;
   final String symbol;
   final double price;
-  final int count;
   final double dividendYield;
   final int stockTypeIndex;
 
   StockType get type => StockType.values[stockTypeIndex];
+  String get priceText {
+    return price.toStringAsFixed(2);
+  }
 
   @override
   List<Object> get props => [
         name,
         symbol,
         price,
-        count,
         dividendYield,
         stockTypeIndex,
       ];
@@ -58,7 +58,6 @@ class Stock extends DataBaseModel with EquatableMixin, Comparable<Stock> {
       'name': name,
       'symbol': symbol,
       'price': price,
-      'count': count,
       'dividendYield': dividendYield,
       'stockTypeIndex': stockTypeIndex,
     };
@@ -69,7 +68,6 @@ class Stock extends DataBaseModel with EquatableMixin, Comparable<Stock> {
       name: map['name'] as String,
       symbol: map['symbol'] as String,
       price: map['price'] as double,
-      count: map['count'] as int,
       dividendYield: map['dividendYield'] as double,
       stockTypeIndex: map['stockTypeIndex'],
     );
@@ -86,7 +84,6 @@ class Stock extends DataBaseModel with EquatableMixin, Comparable<Stock> {
       name: List<String>.from(data['name']).first,
       symbol: List<String>.from(data['symbol']).first,
       price: 0,
-      count: 0,
       dividendYield: 0,
       stockTypeIndex: data["asset"].toString()._toStockType().index,
     );

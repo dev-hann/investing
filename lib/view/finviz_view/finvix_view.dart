@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
-import 'package:investing/controller/finviz_controller.dart';
 import 'package:investing/view/finviz_view/finvix_view_model.dart';
-import 'package:investing/view/view.dart';
 
 class FinVizView extends StatefulWidget {
   const FinVizView({super.key});
@@ -13,33 +11,21 @@ class FinVizView extends StatefulWidget {
 
 class _FinVizViewState extends State<FinVizView>
     with AutomaticKeepAliveClientMixin {
+  final viewModel = FinVizViewModel();
   late Widget keepAlive;
 
   @override
   void initState() {
     super.initState();
-    keepAlive = _FinVizView();
+    keepAlive = body();
   }
 
-  @override
-  Widget build(BuildContext context) {
-    super.build(context);
-    return keepAlive;
-  }
-
-  @override
-  bool get wantKeepAlive => true;
-}
-
-class _FinVizView extends View<FinVizViewModel, FinVizController> {
-  _FinVizView() : super(viewModel: FinVizViewModel());
   AppBar appBar() {
     return AppBar(
       title: const Text("FinViz"),
     );
   }
 
-  @override
   Widget body() {
     return Scaffold(
       appBar: appBar(),
@@ -69,4 +55,13 @@ class _FinVizView extends View<FinVizViewModel, FinVizController> {
       ),
     );
   }
+
+  @override
+  Widget build(BuildContext context) {
+    super.build(context);
+    return keepAlive;
+  }
+
+  @override
+  bool get wantKeepAlive => true;
 }

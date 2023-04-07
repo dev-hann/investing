@@ -4,7 +4,6 @@ typedef OverlayLoadingFunc = VoidFutureCallBack;
 
 abstract class ViewModel<T extends Controller> {
   final T controller = Get.find<T>();
-  dynamic get viewID => hashCode;
 
   bool get isLoading => _loading;
   bool _loading = true;
@@ -43,6 +42,6 @@ abstract class ViewModel<T extends Controller> {
   }
 
   void updateView() {
-    controller.update([viewID]);
+    controller.update();
   }
 }

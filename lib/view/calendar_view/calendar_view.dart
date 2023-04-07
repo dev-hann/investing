@@ -34,7 +34,8 @@ class CalendarView extends View<CalendarViewModel, CalendarController> {
       type: eventType,
       eventBuilder: (dateTime, eventList) {
         return TitleWidget(
-          title: Text(IVDateTimeFormat(dateTime).dateTimeFormat()),
+          title: Text(
+              "${IVDateTimeFormat(dateTime).dateTimeFormat()} (${eventList.length})"),
           child: Column(
             children: eventList.map((event) {
               return Padding(

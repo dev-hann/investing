@@ -1,6 +1,5 @@
 import 'package:investing/controller/calendar_controller.dart';
 import 'package:investing/controller/controller.dart';
-import 'package:investing/controller/finviz_controller.dart';
 import 'package:investing/controller/home_controller.dart';
 import 'package:investing/controller/news_controller.dart';
 import 'package:investing/controller/stock_controller.dart';
@@ -15,9 +14,6 @@ class HomeViewModel extends ViewModel<HomeController> {
     Controller.put<NewsController>(NewsController());
     Controller.put<CalendarController>(
       CalendarController(EventImpl()),
-    );
-    Controller.put<FinVizController>(
-      FinVizController(),
     );
     return super.init();
   }

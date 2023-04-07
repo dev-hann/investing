@@ -7,7 +7,7 @@ class StockDetailViewModel extends ViewModel<StockController> {
   final Stock stock;
   bool get isBookmark => controller.watchList.contains(stock);
 
-  Future toggleBookmark() {
+  Future toggleBookmark() async {
     return controller.toggleBookmark(stock);
   }
 }
