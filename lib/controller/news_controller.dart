@@ -1,9 +1,9 @@
 import 'package:investing/controller/controller.dart';
 import 'package:investing/data/service/service.dart';
 import 'package:investing/model/news.dart';
-import 'package:investing/repo/stock/stock_repo.dart';
+import 'package:investing/use_case/stock_use_case.dart';
 
-class NewsController extends Controller<StockRepo> {
+class NewsController extends Controller<StockUseCase> {
   NewsController(super.repo);
   final NewsService newsService = NewsService();
 

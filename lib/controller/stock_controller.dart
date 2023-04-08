@@ -2,67 +2,56 @@ import 'package:investing/controller/controller.dart';
 import 'package:investing/model/index.dart';
 import 'package:investing/model/stock.dart';
 import 'package:get/get.dart';
-import 'package:investing/repo/stock/stock_repo.dart';
+import 'package:investing/use_case/stock_use_case.dart';
 
-class StockController extends Controller<StockRepo> {
-  StockController(super.repo);
+class StockController extends Controller<StockUseCase> {
+  StockController(super.useCase);
 
   static StockController find() => Get.find<StockController>();
 
   final List<Index> indexList = <Index>[];
   final List<Stock> watchList = <Stock>[];
 
-  Stream get watchListStream => repo.watchListStream();
+  Stream get watchListStream => useCase.watchListStream();
 
   @override
   Future onReady() async {
     watchListStream.listen((event) {
       refreshState();
     });
-    indexList.addAll(await requestMajorIndexList());
+    indexList.clear();
+    for (final type in IndexType.values) {
+      final index = await useCase.requestIndex(type);
+      indexList.add(index);
+    }
     refreshState();
     super.onReady();
   }
 
   void refreshState() {
-    final list = repo.loadStockList().map((e) => Stock.fromMap(e)).toList();
-    list.sort();
+    final list = useCase.loadStockList();
     watchList.clear();
     watchList.addAll(list);
     update();
   }
 
-  Future updateStock(Stock stock) {
-    return repo.updateStock(stock);
+  Future updateFavoriteStock(Stock stock) {
+    return useCase.updateStock(stock);
   }
 
-  Future removeStock(String stockIndex) {
-    return repo.removeStock(stockIndex);
+  Future removeFavoriteStock(String stockIndex) {
+    return useCase.removeStock(stockIndex);
   }
 
-  Future toggleBookmark(Stock stock) async {
+  Future toggleFvoriteStock(Stock stock) async {
     if (watchList.contains(stock)) {
-      await removeStock(stock.index);
+      await removeFavoriteStock(stock.index);
     } else {
-      await updateStock(stock);
+      await updateFavoriteStock(stock);
     }
   }
 
   Future<List<Stock>> searchStock(String query) async {
-    final list = await repo.searchStock(query);
-    final searchedList = <Stock>[];
-    for (int index = 0; index < list.length; ++index) {
-      final item = Stock.dto(list[index]);
-      if (!searchedList.contains(item)) {
-        searchedList.add(item);
-      }
-    }
-    return searchedList;
-  }
-
-  Future<List<Index>> requestMajorIndexList() async {
-    final res = await repo.requestMajorIndexList();
-    final list = List.from(res).map((e) => Index.majorIndex(e)).toList();
-    return list;
+    return useCase.searchStock(query);
   }
 }

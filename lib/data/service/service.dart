@@ -1,6 +1,7 @@
 library service;
 
 import 'package:dio/dio.dart';
+import 'package:get/get_connect/http/src/utils/utils.dart';
 
 part './news_service.dart';
 part './stock_service.dart';

@@ -9,8 +9,8 @@ class WatchListViewModel extends ViewModel<StockController> {
   List<Index> get indexList => controller.indexList;
   List<Stock> get watchList => controller.watchList;
 
-  Future removeWatchList(Stock stock) async {
+  Future removeFavoriteStock(Stock stock) async {
     await Future.delayed(const Duration(milliseconds: 300));
-    return controller.removeStock(stock.index);
+    return controller.removeFavoriteStock(stock.index);
   }
 }

@@ -40,6 +40,6 @@ class StockSearchViewModel extends ViewModel<StockController> {
   }
 
   Future toggleBookmark(Stock stock) {
-    return controller.toggleBookmark(stock);
+    return controller.toggleFvoriteStock(stock);
   }
 }

@@ -1,11 +1,11 @@
 import 'dart:async';
 
 import 'package:get/get.dart';
-import 'package:investing/repo/repo.dart';
+import 'package:investing/use_case/use_case.dart';
 
-abstract class Controller<T extends Repo> extends GetxController {
-  Controller(this.repo);
-  final T repo;
+abstract class Controller<T extends UseCase> extends GetxController {
+  Controller(this.useCase);
+  final T useCase;
 
   final Completer _initComputer = Completer();
 
@@ -13,7 +13,7 @@ abstract class Controller<T extends Repo> extends GetxController {
 
   @override
   void onInit() async {
-    await repo.init();
+    await useCase.init();
     super.onInit();
   }
 

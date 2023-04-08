@@ -44,7 +44,7 @@ class WatchListView extends View<WatchListViewModel, StockController> {
             child: FavoriteView(
               stockList: viewModel.watchList,
               onTapRemove: (stock) {
-                viewModel.removeWatchList(stock);
+                viewModel.removeFavoriteStock(stock);
               },
             ),
           ),

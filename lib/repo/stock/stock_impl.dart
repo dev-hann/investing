@@ -22,34 +22,125 @@ class StockImpl extends StockRepo {
   }
 
   @override
-  Future removeStock(String index) {
+  Future removeStock(String index) async {
     return watchListDB.removeStock(index);
   }
 
   @override
-  Future updateStock(Stock data) {
+  Future updateStock(DataBaseModel data) async {
     return watchListDB.updateStock(data);
   }
 
   @override
-  Future<List> searchStock(String query) {
+  Future<List> searchStock(String query) async {
     return service.searchStock(query);
   }
 
   @override
-  Future<List> requestCommodityIndexList() async {
-    return [];
+  Future request20YTreasury({
+    required String fromDate,
+    required String toDate,
+  }) async {
+    final res = await service.request20YTreasury(
+      fromDate: fromDate,
+      toDate: toDate,
+    );
+    return res.data;
   }
 
   @override
-  Future<List> requestFixedIncomeIndexList() async {
-    return [];
+  Future request2YTreasury({
+    required String fromDate,
+    required String toDate,
+  }) async {
+    final res = await service.request2YTreasury(
+      fromDate: fromDate,
+      toDate: toDate,
+    );
+    return res.data;
   }
 
   @override
-  Future<List> requestMajorIndexList() async {
-    final data = await service.requestMajorIndexList();
-    final list = data["data"];
-    return list;
+  Future requestCopper({
+    required String fromDate,
+    required String toDate,
+  }) async {
+    final res = await service.requestCopper(
+      fromDate: fromDate,
+      toDate: toDate,
+    );
+    return res.data;
+  }
+
+  @override
+  Future requestCrudeOil({
+    required String fromDate,
+    required String toDate,
+  }) async {
+    final res = await service.requestCrudeOil(
+      fromDate: fromDate,
+      toDate: toDate,
+    );
+    return res.data;
+  }
+
+  @override
+  Future requestGold({
+    required String fromDate,
+    required String toDate,
+  }) async {
+    final res = await service.requestGold(
+      fromDate: fromDate,
+      toDate: toDate,
+    );
+    return res.data;
+  }
+
+  @override
+  Future requestNaturalGas({
+    required String fromDate,
+    required String toDate,
+  }) async {
+    final res = await service.requestNaturalGas(
+      fromDate: fromDate,
+      toDate: toDate,
+    );
+    return res.data;
+  }
+
+  @override
+  Future requestNasdaqIndex({
+    required String? fromDate,
+    required String? toDate,
+  }) async {
+    final res = await service.requestNasdaqIndex(
+      fromDate: fromDate,
+      toDate: toDate,
+    );
+    return res.data;
+  }
+
+  @override
+  Future requestSnpIndex({
+    required String? fromDate,
+    required String? toDate,
+  }) async {
+    final res = await service.requestSnpIndex(
+      fromDate: fromDate,
+      toDate: toDate,
+    );
+    return res.data;
+  }
+
+  @override
+  Future requestDowIndex({
+    required String? fromDate,
+    required String? toDate,
+  }) async {
+    final res = await service.requestDowIndex(
+      fromDate: fromDate,
+      toDate: toDate,
+    );
+    return res.data;
   }
 }

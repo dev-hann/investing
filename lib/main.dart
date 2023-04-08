@@ -6,6 +6,8 @@ import 'package:investing/controller/news_controller.dart';
 import 'package:investing/controller/stock_controller.dart';
 import 'package:investing/repo/event/event_repo.dart';
 import 'package:investing/repo/stock/stock_repo.dart';
+import 'package:investing/use_case/event_use_case.dart';
+import 'package:investing/use_case/stock_use_case.dart';
 import 'package:investing/view/home_view/home_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
@@ -38,16 +40,24 @@ class MyApp extends StatelessWidget {
       ),
       home: Builder(builder: (context) {
         Controller.put<HomeController>(
-          HomeController(StockImpl()),
+          HomeController(
+            StockUseCase(StockImpl()),
+          ),
         );
         Controller.put<StockController>(
-          StockController(StockImpl()),
+          StockController(
+            StockUseCase(StockImpl()),
+          ),
         );
         Controller.put<NewsController>(
-          NewsController(StockImpl()),
+          NewsController(
+            StockUseCase(StockImpl()),
+          ),
         );
         Controller.put<CalendarController>(
-          CalendarController(EventImpl()),
+          CalendarController(
+            EventUseCase(EventImpl()),
+          ),
         );
         return HomeView();
       }),

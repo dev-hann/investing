@@ -3,11 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:investing/const/color.dart';
 import 'package:investing/model/index.dart';
-import 'package:investing/model/stock.dart';
-import 'package:investing/widget/stock_price_text.dart';
 import 'package:investing/widget/title_widget.dart';
 
-// S&P500, Nasdaq, Dow, Gold, Oil, Dollar,
 class IndexView extends StatelessWidget {
   const IndexView({
     super.key,
