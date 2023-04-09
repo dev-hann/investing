@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:investing/model/chart.dart';
 
 enum IndexType {
   nasdaq,
@@ -53,7 +54,7 @@ class Index extends Equatable {
   final String lastSalePrice;
   final String netChange;
   final String percentageChange;
-  final List<Chart> chartList;
+  final List<IVChart> chartList;
   IndexType get type {
     final s = symbol.toLowerCase();
     if (s.contains("nasdaq")) {
@@ -91,13 +92,16 @@ class Index extends Equatable {
 
   factory Index.fromMap(dynamic map) {
     final data = Map<String, dynamic>.from(map["data"]);
+    final chartList =
+        List.from(data["chart"]).map((e) => IVChart.fromMap(e)).toList();
+    chartList.sort();
     return Index(
       symbol: data["symbol"],
       name: data["company"],
       lastSalePrice: data["lastSalePrice"],
       netChange: data["netChange"],
       percentageChange: data["percentageChange"],
-      chartList: List.from(data["chart"]).map((e) => Chart.fromMap(e)).toList(),
+      chartList: chartList,
     );
   }
 
@@ -127,38 +131,4 @@ class Index extends Equatable {
   //     type: IndexType.commodity,
   //   );
   // }
-}
-
-class Chart extends Equatable {
-  const Chart(this.x, this.y, this.z);
-  final int x;
-  final double y;
-  final Z z;
-
-  @override
-  List<Object?> get props => [x, y, z];
-
-  factory Chart.fromMap(Map<String, dynamic> map) {
-    return Chart(
-      map['x'],
-      map['y'],
-      Z.fromMap(map['z'] as Map<String, dynamic>),
-    );
-  }
-}
-
-class Z extends Equatable {
-  const Z(this.dateTime, this.value);
-  final String dateTime;
-  final String value;
-
-  @override
-  List<Object?> get props => [dateTime, value];
-
-  factory Z.fromMap(Map<String, dynamic> map) {
-    return Z(
-      map['dateTime'] as String,
-      map['value'] as String,
-    );
-  }
 }

@@ -19,14 +19,16 @@ dependencies:
   html:
   auto_size_text:
   highlight_text:
+  flutter_inappwebview:
 
   # DataBase
   hive_flutter:
 
+  fl_chart:
+
   equatable:
   dio:
   intl:
-  flutter_inappwebview:
 
   # StateManager
   get:

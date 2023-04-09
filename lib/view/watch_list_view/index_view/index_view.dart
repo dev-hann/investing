@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:investing/const/color.dart';
 import 'package:investing/model/index.dart';
+import 'package:investing/widget/chart_widget.dart';
 import 'package:investing/widget/title_widget.dart';
 
 class IndexView extends StatelessWidget {
@@ -24,37 +25,38 @@ class IndexView extends StatelessWidget {
         width: size,
         child: Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Builder(builder: (context) {
-            final textTheme = Theme.of(context).textTheme;
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "15분 지연",
-                  style: textTheme.labelMedium,
-                ),
-                const Expanded(
-                  child: ColoredBox(
-                    color: Colors.white,
-                    // child: Center(),
+          child: Builder(
+            builder: (context) {
+              final textTheme = Theme.of(context).textTheme;
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "15분 지연",
+                    style: textTheme.labelMedium,
                   ),
-                ),
-                AutoSizeText(
-                  index.name,
-                  maxLines: 1,
-                  // style: textTheme.bodySmall,
-                ),
-                Text(
-                  index.lastSalePrice,
-                  style: textTheme.titleMedium,
-                ),
-                // StockPriceText(
-                //   closedPrice: ,
-                //   currentPrice: ,
-                // ),
-              ],
-            );
-          }),
+                  Expanded(
+                    child: IVChartWidget(
+                      chatList: index.chartList,
+                    ),
+                  ),
+                  AutoSizeText(
+                    index.name,
+                    maxLines: 1,
+                    // style: textTheme.bodySmall,
+                  ),
+                  Text(
+                    index.lastSalePrice,
+                    style: textTheme.titleMedium,
+                  ),
+                  // StockPriceText(
+                  //   closedPrice: ,
+                  //   currentPrice: ,
+                  // ),
+                ],
+              );
+            },
+          ),
         ),
       ),
     );
