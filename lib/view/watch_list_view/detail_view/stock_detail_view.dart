@@ -1,13 +1,15 @@
 import 'package:investing/controller/stock_controller.dart';
-import 'package:investing/model/stock.dart';
+import 'package:investing/model/ticker.dart';
 import 'package:investing/view/watch_list_view/detail_view/stock_detail_view_model.dart';
 import 'package:investing/view/view.dart';
 import 'package:investing/widget/book_mark.dart';
 import 'package:flutter/material.dart';
 
 class StockDetailView extends View<StockDetailViewModel, StockController> {
-  StockDetailView({super.key, required Stock stock})
-      : super(
+  StockDetailView({
+    super.key,
+    required Ticker stock,
+  }) : super(
           viewModel: StockDetailViewModel(stock),
         );
   AppBar appBar() {

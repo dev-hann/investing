@@ -45,7 +45,6 @@ class StockService extends IVService {
   }) async {
     final url =
         "https://api.nasdaq.com/api/quote/$symbol/chart?assetclass=index";
-    // const url = "https://api.nasdaq.com/api/quote/indices";
     return get(
       url,
       query: {
@@ -144,6 +143,23 @@ class StockService extends IVService {
   }) async {
     final url =
         "https://api.nasdaq.com/api/quote/$symbol/chart?assetclass=commodities";
+    return get(
+      url,
+      query: {
+        "fromdate": fromDate,
+        "todate": toDate,
+      },
+    );
+  }
+
+  Future<Response> requestStock({
+    required String symbol,
+    required String assetClass,
+    required String? fromDate,
+    required String? toDate,
+  }) async {
+    final url =
+        "https://api.nasdaq.com/api/quote/$symbol/chart?assetclass=$assetClass";
     return get(
       url,
       query: {

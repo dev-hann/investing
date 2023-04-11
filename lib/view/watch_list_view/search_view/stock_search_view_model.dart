@@ -1,14 +1,14 @@
 import 'dart:async';
 
 import 'package:investing/controller/stock_controller.dart';
-import 'package:investing/model/stock.dart';
+import 'package:investing/model/ticker.dart';
 import 'package:investing/view/view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class StockSearchViewModel extends ViewModel<StockController> {
-  List<Stock> get stockList => controller.watchList;
-  final List<Stock> searchedList = [];
+  List<Ticker> get stockList => controller.watchList;
+  final List<Ticker> searchedList = [];
   final TextEditingController queryCntroller = TextEditingController();
   final RxString rxQuery = RxString("");
   late final Worker _queryWoker;
@@ -39,7 +39,7 @@ class StockSearchViewModel extends ViewModel<StockController> {
     updateView();
   }
 
-  Future toggleBookmark(Stock stock) {
+  Future toggleBookmark(Ticker stock) {
     return controller.toggleFvoriteStock(stock);
   }
 }

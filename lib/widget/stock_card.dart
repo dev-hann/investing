@@ -1,4 +1,4 @@
-import 'package:investing/model/stock.dart';
+import 'package:investing/model/ticker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:investing/widget/stock_price_text.dart';
@@ -11,7 +11,7 @@ class StockCard extends StatelessWidget {
     required this.onTapRemove,
     this.enableSlide = true,
   });
-  final Stock stock;
+  final Ticker stock;
   final VoidCallback onTap;
   final VoidCallback onTapRemove;
   final bool enableSlide;

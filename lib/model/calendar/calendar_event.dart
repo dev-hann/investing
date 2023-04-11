@@ -20,6 +20,6 @@ abstract class CalendarEvent extends Equatable {
   final CalendarEventType type;
 
   static String key(DateTime dateTime) {
-    return IVDateTimeFormat(dateTime).dateTimeFormat();
+    return IVDateTimeFormat(dateTime).dateTimeFormat()!;
   }
 }

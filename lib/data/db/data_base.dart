@@ -1,4 +1,4 @@
-import 'package:investing/data/db/data_base_model.dart';
+import 'package:investing/data/db/data_base_model_mixin.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 class DataBase {
@@ -9,7 +9,7 @@ class DataBase {
     _box = await Hive.openBox(name);
   }
 
-  Future updateStock(DataBaseModel model) {
+  Future updateStock<T extends DataBaseModelMixin>(T model) {
     return _box.put(model.index, model.toMap());
   }
 

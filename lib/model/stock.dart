@@ -1,91 +1,64 @@
-import 'dart:convert';
-
 import 'package:equatable/equatable.dart';
-
-import 'package:investing/data/db/data_base_model.dart';
+import 'package:investing/model/chart.dart';
+import 'package:investing/model/date_time_range.dart';
 
 enum StockType {
+  majorIndex,
+  finxedIncome,
+  commodity,
   etf,
   stock,
 }
 
-extension StockTypeExtension on String {
-  StockType _toStockType() {
-    if (toLowerCase() == "etf") {
-      return StockType.etf;
-    } else {
-      return StockType.stock;
+abstract class Stock extends Equatable {
+  const Stock({
+    required this.symbol,
+    required this.name,
+    required this.lastSalePrice,
+    required this.netChange,
+    required this.percentageChange,
+    required this.chartList,
+    required this.type,
+  });
+  final String symbol;
+  final String name;
+  final String lastSalePrice;
+  final String netChange;
+  final String percentageChange;
+  final List<IVChart> chartList;
+  final StockType type;
+
+  String get assetClass {
+    switch (type) {
+      case StockType.majorIndex:
+        return "index";
+      case StockType.finxedIncome:
+        return "fixedincome";
+      case StockType.commodity:
+        return "commodities";
+      case StockType.etf:
+        return "etf";
+      case StockType.stock:
+        return "stocks";
     }
   }
-}
 
-class Stock extends DataBaseModel with EquatableMixin, Comparable<Stock> {
-  const Stock({
-    required this.name,
-    required this.symbol,
-    required this.price,
-    required this.stockTypeIndex,
-    this.dividendYield = 0.0,
-  }) : super(index: symbol);
-  final String name;
-  final String symbol;
-  final double price;
-  final double dividendYield;
-  final int stockTypeIndex;
-
-  StockType get type => StockType.values[stockTypeIndex];
-  String get priceText {
-    return price.toStringAsFixed(2);
-  }
-
-  @override
-  List<Object> get props => [
-        name,
-        symbol,
-        price,
-        dividendYield,
-        stockTypeIndex,
-      ];
-
-  @override
-  int compareTo(Stock other) {
-    return index.compareTo(other.index);
-  }
-
-  @override
-  Map<String, dynamic> toMap() {
-    return <String, dynamic>{
-      'name': name,
-      'symbol': symbol,
-      'price': price,
-      'dividendYield': dividendYield,
-      'stockTypeIndex': stockTypeIndex,
-    };
-  }
-
-  factory Stock.fromMap(Map<String, dynamic> map) {
-    return Stock(
-      name: map['name'] as String,
-      symbol: map['symbol'] as String,
-      price: map['price'] as double,
-      dividendYield: map['dividendYield'] as double,
-      stockTypeIndex: map['stockTypeIndex'],
-    );
-  }
-
-  String toJson() => json.encode(toMap());
-
-  factory Stock.fromJson(String source) =>
-      Stock.fromMap(json.decode(source) as Map<String, dynamic>);
-
-  factory Stock.dto(dynamic map) {
-    final data = Map<String, dynamic>.from(map);
-    return Stock(
-      name: List<String>.from(data['name']).first,
-      symbol: List<String>.from(data['symbol']).first,
-      price: 0,
-      dividendYield: 0,
-      stockTypeIndex: data["asset"].toString()._toStockType().index,
-    );
+  List<IVDateTimeRange?> get dateTimeRangeList {
+    final list = <IVDateTimeRange?>[
+      IVDateTimeRange.beforeDay(7),
+      IVDateTimeRange.beforeMonth(1),
+      IVDateTimeRange.beforeMonth(3),
+      IVDateTimeRange.beforeYear(1),
+      IVDateTimeRange.beforeYear(100),
+    ];
+    switch (type) {
+      case StockType.majorIndex:
+      case StockType.stock:
+        return [null, ...list];
+      case StockType.finxedIncome:
+      case StockType.commodity:
+      case StockType.etf:
+        return list;
+    }
   }
 }

@@ -1,83 +1,115 @@
-import 'package:equatable/equatable.dart';
 import 'package:investing/model/chart.dart';
+import 'package:investing/model/stock.dart';
 
-enum IndexType {
-  nasdaq,
-  snp500,
-  dow,
-  treasury2Year,
-  treasury20Year,
-  oil,
-  gold,
-  copper,
-  gas,
-}
-
-// extension IndexTypeExtension on IndexType {
-//   String toSymbol() {
-//     switch (this) {
-//       case IndexType.nasdaq:
-//         return "COMP";
-//       case IndexType.snp500:
-//         return "SPX";
-//       case IndexType.dow:
-//         return "INDU";
-//       case IndexType.treasury2Year:
-//         return "CMTN2Y";
-//       case IndexType.treasury20Year:
-//         return "CMTN20Y";
-//       case IndexType.oil:
-//         return "CL%3ANMX";
-//       case IndexType.gold:
-//         return "GC%3ACMX";
-//       case IndexType.copper:
-//         return "hg%3Acmx";
-//       case IndexType.gas:
-//         return "ng%3Anmx";
-//       case IndexType.unknown:
-//         return "";
-//     }
-//   }
-// }
-
-class Index extends Equatable {
+class Index extends Stock {
   const Index({
-    required this.symbol,
-    required this.name,
-    required this.lastSalePrice,
-    required this.netChange,
-    required this.percentageChange,
-    required this.chartList,
+    required super.symbol,
+    required super.name,
+    required super.lastSalePrice,
+    required super.netChange,
+    required super.percentageChange,
+    required super.chartList,
+    required super.type,
   });
-  final String symbol;
-  final String name;
-  final String lastSalePrice;
-  final String netChange;
-  final String percentageChange;
-  final List<IVChart> chartList;
-  IndexType get type {
-    final s = symbol.toLowerCase();
-    if (s.contains("nasdaq")) {
-      return IndexType.nasdaq;
-    } else if (s.contains("s&p")) {
-      return IndexType.snp500;
-    } else if (s.contains("dow")) {
-      return IndexType.dow;
-    } else if (s.contains("cmtn2y")) {
-      return IndexType.treasury2Year;
-    } else if (s.contains("cmtn20y")) {
-      return IndexType.treasury20Year;
-    } else if (s.contains("gc")) {
-      return IndexType.gold;
-    } else if (s.contains("hg")) {
-      return IndexType.copper;
-    } else if (s.contains("ng")) {
-      return IndexType.gas;
-    } else if (s.contains("cl")) {
-      return IndexType.oil;
-    } else {
-      throw UnimplementedError("Request Symbol : $symbol Not Implemented");
-    }
+
+  factory Index.empty({
+    required String symbol,
+    required String name,
+    required StockType type,
+  }) {
+    return Index(
+      symbol: symbol,
+      name: name,
+      type: type,
+      lastSalePrice: "",
+      netChange: "",
+      percentageChange: "",
+      chartList: const [],
+    );
+  }
+
+  factory Index.snp() {
+    return Index.empty(
+      symbol: "SPX",
+      name: "S&P 500",
+      type: StockType.majorIndex,
+    );
+  }
+
+  factory Index.dow() {
+    return Index.empty(
+      symbol: "INDU",
+      name: "DOW",
+      type: StockType.majorIndex,
+    );
+  }
+
+  factory Index.nasdaq() {
+    return Index.empty(
+      symbol: "COMP",
+      name: "Nasdaq",
+      type: StockType.majorIndex,
+    );
+  }
+  factory Index.treasury2Y() {
+    return Index.empty(
+      symbol: "CMTN2Y",
+      name: "2 Years Treasury",
+      type: StockType.finxedIncome,
+    );
+  }
+  factory Index.treasury20Y() {
+    return Index.empty(
+      symbol: "CMTN2Y",
+      name: "20 Years Treasury",
+      type: StockType.finxedIncome,
+    );
+  }
+  factory Index.crudeOil() {
+    return Index.empty(
+      symbol: "CL%3ANMX",
+      name: "WTI Oil",
+      type: StockType.commodity,
+    );
+  }
+
+  factory Index.gold() {
+    return Index.empty(
+      symbol: "GC%3ACMX",
+      name: "Gold",
+      type: StockType.commodity,
+    );
+  }
+  factory Index.copper() {
+    return Index.empty(
+      symbol: "hg%3Acmx",
+      name: "Copper",
+      type: StockType.commodity,
+    );
+  }
+
+  factory Index.naturalGas() {
+    return Index.empty(
+      symbol: "ng%3Anmx",
+      name: "Natural Gas",
+      type: StockType.commodity,
+    );
+  }
+
+  Index dto(dynamic map) {
+    final data = Map<String, dynamic>.from(map)["data"];
+    final chartList =
+        List.from(data["chart"]).map((e) => IVChart.fromMap(e)).toList();
+    chartList.sort();
+    return Index(
+      symbol: symbol,
+      name: name,
+      type: type,
+      lastSalePrice: data["lastSalePrice"],
+      netChange: data["netChange"],
+      percentageChange: data["percentageChange"],
+      chartList: chartList,
+    );
   }
 
   @override
@@ -90,6 +122,7 @@ class Index extends Equatable {
         chartList,
       ];
 
+  @Deprecated("will be deprecated")
   factory Index.fromMap(dynamic map) {
     final data = Map<String, dynamic>.from(map["data"]);
     final chartList =
@@ -97,6 +130,7 @@ class Index extends Equatable {
     chartList.sort();
     return Index(
       symbol: data["symbol"],
+      type: StockType.etf,
       name: data["company"],
       lastSalePrice: data["lastSalePrice"],
       netChange: data["netChange"],
@@ -104,31 +138,4 @@ class Index extends Equatable {
       chartList: chartList,
     );
   }
-
-  // factory Index.treasury(dynamic map) {
-  //   final data = Map<String, dynamic>.from(map)["data"];
-  //   final primaryData = data["primaryData"];
-  //   return Index(
-  //     symbol: data["symbol"],
-  //     name: data["companyName"],
-  //     lastSalePrice: primaryData["lastSalePrice"],
-  //     netChange: primaryData["netChange"],
-  //     percentageChange: primaryData["percentageChange"],
-  //     chartList: List.from(data["chart"]).map((e) => Chart.fromMap(e)).toList(),
-  //     type: IndexType.treasury,
-  //   );
-  // }
-
-  // factory Index.commodity(dynamic map) {
-  //   final data = Map<String, dynamic>.from(map)["data"];
-  //   final primaryData = data["primaryData"];
-  //   return Index(
-  //     symbol: data["symbol"],
-  //     name: data["companyName"],
-  //     lastSalePrice: primaryData["lastSalePrice"],
-  //     netChange: primaryData["netChange"],
-  //     percentageChange: primaryData["percentageChange"],
-  //     type: IndexType.commodity,
-  //   );
-  // }
 }

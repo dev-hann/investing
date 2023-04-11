@@ -1,6 +1,6 @@
 import 'package:investing/controller/controller.dart';
 import 'package:investing/model/index.dart';
-import 'package:investing/model/stock.dart';
+import 'package:investing/model/ticker.dart';
 import 'package:get/get.dart';
 import 'package:investing/use_case/stock_use_case.dart';
 
@@ -9,8 +9,18 @@ class StockController extends Controller<StockUseCase> {
 
   static StockController find() => Get.find<StockController>();
 
-  final List<Index> indexList = <Index>[];
-  final List<Stock> watchList = <Stock>[];
+  final List<Index> indexList = <Index>[
+    Index.nasdaq(),
+    Index.snp(),
+    Index.dow(),
+    Index.treasury2Y(),
+    Index.treasury20Y(),
+    Index.gold(),
+    Index.copper(),
+    Index.naturalGas(),
+    Index.crudeOil(),
+  ];
+  final List<Ticker> watchList = <Ticker>[];
 
   Stream get watchListStream => useCase.watchListStream();
 
@@ -19,10 +29,14 @@ class StockController extends Controller<StockUseCase> {
     watchListStream.listen((event) {
       refreshState();
     });
-    indexList.clear();
-    for (final type in IndexType.values) {
-      final index = await useCase.requestIndex(type);
-      indexList.add(index);
+    for (int index = 0; index < indexList.length; ++index) {
+      final item = indexList[index];
+      final res = await useCase.requestIndex(
+        index: item,
+        dateTimeRange: item.dateTimeRangeList.first,
+      );
+      print(res);
+      indexList[index] = res;
     }
     refreshState();
     super.onReady();
@@ -35,7 +49,7 @@ class StockController extends Controller<StockUseCase> {
     update();
   }
 
-  Future updateFavoriteStock(Stock stock) {
+  Future updateFavoriteStock(Ticker stock) {
     return useCase.updateStock(stock);
   }
 
@@ -43,7 +57,7 @@ class StockController extends Controller<StockUseCase> {
     return useCase.removeStock(stockIndex);
   }
 
-  Future toggleFvoriteStock(Stock stock) async {
+  Future toggleFvoriteStock(Ticker stock) async {
     if (watchList.contains(stock)) {
       await removeFavoriteStock(stock.index);
     } else {
@@ -51,7 +65,7 @@ class StockController extends Controller<StockUseCase> {
     }
   }
 
-  Future<List<Stock>> searchStock(String query) async {
+  Future<List<Ticker>> searchStock(String query) async {
     return useCase.searchStock(query);
   }
 }

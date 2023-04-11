@@ -27,7 +27,7 @@ class StockImpl extends StockRepo {
   }
 
   @override
-  Future updateStock(DataBaseModel data) async {
+  Future updateStock<T extends DataBaseModelMixin>(T data) async {
     return watchListDB.updateStock(data);
   }
 
@@ -138,6 +138,22 @@ class StockImpl extends StockRepo {
     required String? toDate,
   }) async {
     final res = await service.requestDowIndex(
+      fromDate: fromDate,
+      toDate: toDate,
+    );
+    return res.data;
+  }
+
+  @override
+  Future requestIndex({
+    required String symbol,
+    required String assetClass,
+    required String? fromDate,
+    required String? toDate,
+  }) async {
+    final res = await service.requestStock(
+      symbol: symbol,
+      assetClass: assetClass,
       fromDate: fromDate,
       toDate: toDate,
     );

@@ -31,13 +31,11 @@ class IndexView extends StatelessWidget {
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    "15분 지연",
-                    style: textTheme.labelMedium,
-                  ),
                   Expanded(
-                    child: IVChartWidget(
-                      chatList: index.chartList,
+                    child: IgnorePointer(
+                      child: IVChartWidget(
+                        chatList: index.chartList,
+                      ),
                     ),
                   ),
                   AutoSizeText(

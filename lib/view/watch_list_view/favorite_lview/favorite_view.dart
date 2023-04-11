@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:investing/model/stock.dart';
+import 'package:investing/model/ticker.dart';
 import 'package:investing/view/watch_list_view/detail_view/stock_detail_view.dart';
 import 'package:investing/widget/stock_card.dart';
 import 'package:investing/widget/title_widget.dart';
@@ -11,8 +11,8 @@ class FavoriteView extends StatelessWidget {
     required this.stockList,
     required this.onTapRemove,
   });
-  final List<Stock> stockList;
-  final Function(Stock stock) onTapRemove;
+  final List<Ticker> stockList;
+  final Function(Ticker stock) onTapRemove;
 
   @override
   Widget build(BuildContext context) {

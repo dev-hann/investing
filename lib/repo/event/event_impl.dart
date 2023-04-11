@@ -7,7 +7,7 @@ class EventImpl extends EventRepo {
     try {
       final list = List.from(
         await eventService.requestEconomicEventList(
-          IVDateTimeFormat(dateTime).dateTimeFormat(),
+          IVDateTimeFormat(dateTime).dateTimeFormat()!,
         ),
       );
       return list;
@@ -21,7 +21,7 @@ class EventImpl extends EventRepo {
     try {
       final list = List.from(
         await eventService.requestDvidendEventList(
-          IVDateTimeFormat(dateTime).dateTimeFormat(),
+          IVDateTimeFormat(dateTime).dateTimeFormat()!,
         ),
       );
       return list;
@@ -35,7 +35,7 @@ class EventImpl extends EventRepo {
     try {
       final list = List.from(
         await eventService.requestEarningEventList(
-          IVDateTimeFormat(dateTime).dateTimeFormat(),
+          IVDateTimeFormat(dateTime).dateTimeFormat()!,
         ),
       );
       return list;
