@@ -1,21 +1,21 @@
 import 'dart:async';
 
 import 'package:investing/controller/stock_controller.dart';
-import 'package:investing/model/ticker.dart';
+import 'package:investing/model/stock.dart';
 import 'package:investing/view/view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class StockSearchViewModel extends ViewModel<StockController> {
-  List<Ticker> get stockList => controller.watchList;
-  final List<Ticker> searchedList = [];
+  List<Stock> get favoriteStockList => controller.favoriteStockList;
+  final List<Stock> searchedList = [];
   final TextEditingController queryCntroller = TextEditingController();
   final RxString rxQuery = RxString("");
-  late final Worker _queryWoker;
+  Worker? _queryWoker;
 
   @override
   Future init() {
-    _queryWoker = debounce(rxQuery, (query) {
+    _queryWoker ??= debounce(rxQuery, (query) {
       searchStock(query);
     }, time: const Duration(milliseconds: 1000));
     return super.init();
@@ -23,7 +23,7 @@ class StockSearchViewModel extends ViewModel<StockController> {
 
   @override
   Future dispose() {
-    _queryWoker.dispose();
+    _queryWoker?.dispose();
     return super.dispose();
   }
 
@@ -39,7 +39,10 @@ class StockSearchViewModel extends ViewModel<StockController> {
     updateView();
   }
 
-  Future toggleBookmark(Ticker stock) {
-    return controller.toggleFvoriteStock(stock);
+  Future toggleBookmark(Stock stock) async {
+    if (controller.contains(stock)) {
+      return controller.removeFavoriteStock(stock);
+    }
+    return controller.updateFavoriteStock(stock);
   }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:get/get.dart';
-import 'package:investing/model/ticker.dart';
+import 'package:investing/model/stock.dart';
 import 'package:investing/view/watch_list_view/detail_view/stock_detail_view.dart';
 import 'package:investing/widget/stock_card.dart';
 import 'package:investing/widget/title_widget.dart';
@@ -11,8 +12,8 @@ class FavoriteView extends StatelessWidget {
     required this.stockList,
     required this.onTapRemove,
   });
-  final List<Ticker> stockList;
-  final Function(Ticker stock) onTapRemove;
+  final List<Stock> stockList;
+  final Function(Stock stock) onTapRemove;
 
   @override
   Widget build(BuildContext context) {
@@ -28,16 +29,36 @@ class FavoriteView extends StatelessWidget {
         itemCount: stockList.length,
         itemBuilder: (context, index) {
           final stock = stockList[index];
-          return StockCard(
-            stock: stock,
-            onTap: () {
-              Get.to(
-                StockDetailView(stock: stock),
-              );
-            },
-            onTapRemove: () {
-              onTapRemove(stock);
-            },
+          return Slidable(
+            endActionPane: ActionPane(
+              motion: const BehindMotion(),
+              children: [
+                SlidableAction(
+                  onPressed: (context) {},
+                  backgroundColor: const Color(0xFF21B7CA),
+                  foregroundColor: Colors.white,
+                  icon: Icons.share,
+                  label: 'Share',
+                ),
+                SlidableAction(
+                  onPressed: (context) {
+                    onTapRemove(stock);
+                  },
+                  backgroundColor: const Color(0xFFFE4A49),
+                  foregroundColor: Colors.white,
+                  icon: Icons.delete,
+                  label: 'Delete',
+                ),
+              ],
+            ),
+            child: StockCard(
+              stock: stock,
+              onTap: () {
+                Get.to(
+                  StockDetailView(stock: stock),
+                );
+              },
+            ),
           );
         },
       ),

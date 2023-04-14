@@ -34,7 +34,7 @@ class StockSearchView extends View<StockSearchViewModel, StockController> {
 
   Widget searchedListWidget() {
     final searchedList = viewModel.searchedList;
-    final stockList = viewModel.stockList;
+    final stockList = viewModel.favoriteStockList;
     return ListView.separated(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
@@ -53,7 +53,7 @@ class StockSearchView extends View<StockSearchViewModel, StockController> {
           onTapBookmark: () async {
             await viewModel.toggleBookmark(stock);
           },
-          isBookmark: isBookmark,
+          isBookmakred: isBookmark,
         );
       },
       separatorBuilder: (context, index) {

@@ -40,15 +40,15 @@ class HomeView extends View<HomeViewModel, HomeController> {
   @override
   Widget body() {
     return Scaffold(
-      bottomNavigationBar: bottom(),
+      // bottomNavigationBar: bottom(),
       body: PageView(
         physics: const NeverScrollableScrollPhysics(),
         controller: viewModel.pageController,
         children: [
           WatchListView(),
-          NewsView(),
-          CalendarView(),
-          FinVizView(),
+          // NewsView(),
+          // CalendarView(),
+          // FinVizView(),
         ],
       ),
     );

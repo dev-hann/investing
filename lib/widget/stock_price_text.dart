@@ -1,30 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:investing/const/color.dart';
+import 'package:investing/model/stock.dart';
 
-class StockPriceText extends StatelessWidget {
-  const StockPriceText({
+class IVStockPriceText extends StatelessWidget {
+  const IVStockPriceText({
     super.key,
-    required this.closedPrice,
-    required this.currentPrice,
+    required this.stock,
   });
-
-  final double closedPrice;
-  final double currentPrice;
-  bool get isUp => currentPrice > closedPrice;
-  bool get isSame => currentPrice == closedPrice;
-  double get incomePrice => (closedPrice - currentPrice).abs();
-  double get percent => (incomePrice / closedPrice).abs();
+  final Stock stock;
 
   @override
   Widget build(BuildContext context) {
+    if (stock.isEmpty) {
+      return const SizedBox();
+    }
+
+    final isUp = stock.deltaIndicator == "up";
+    final netChange = stock.netChange;
+    final percentageChange = stock.percentageChange;
+    final percentageChangText =
+        percentageChange.isEmpty ? "0%" : percentageChange;
+
     return Text(
-      "${isSame ? " - " : isUp ? "▲" : "▼"}${percent.toStringAsFixed(2)}% (${incomePrice.toStringAsFixed(2)})",
+      "${isUp ? "▲" : "▼"} $percentageChangText ($netChange)",
       style: TextStyle(
-        color: isSame
-            ? IVColor.grey
-            : isUp
-                ? IVColor.red
-                : IVColor.blue,
+        color: isUp ? IVColor.red : IVColor.blue,
       ),
     );
   }

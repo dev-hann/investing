@@ -15,13 +15,25 @@ class NewsService extends IVService {
   }) async {
     final begin = (page - 1) * stride;
     final end = page * stride;
-    final url =
-        "https://api.nasdaq.com/api/news/topic/latestnews?offset=$begin&limit=$end";
-    final res = await get(url);
+    const url = "https://api.nasdaq.com/api/news/topic/latestnews";
+    final res = await get(
+      url,
+      query: {
+        "offset": begin,
+        "limit": end,
+      },
+    );
     return res.data;
   }
 
-  Future<List> searchNews(String query) {
-    return _search(SearchType.news, query: query);
+  Future<List> searchNews(String query) async {
+    const url = "https://api.nasdaq.com/api/search/site";
+    final res = await get(
+      url,
+      query: {
+        "query": query,
+      },
+    );
+    return List.from(res.data["data"]["news"]["value"]);
   }
 }

@@ -10,12 +10,12 @@ abstract class ViewModel<T extends Controller> {
 
   Future _init() async {
     await controller.loading;
-    _loading = false;
     init();
   }
 
   @mustCallSuper
   Future init() async {
+    _loading = false;
     updateView();
   }
 

@@ -2,8 +2,10 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:investing/const/color.dart';
-import 'package:investing/model/index.dart';
+import 'package:investing/model/stock.dart';
+import 'package:investing/view/watch_list_view/detail_view/stock_detail_view.dart';
 import 'package:investing/widget/chart_widget.dart';
+import 'package:investing/widget/stock_price_text.dart';
 import 'package:investing/widget/title_widget.dart';
 
 class IndexView extends StatelessWidget {
@@ -11,49 +13,52 @@ class IndexView extends StatelessWidget {
     super.key,
     required this.indexList,
   });
-  final List<Index> indexList;
+  final List<Stock> indexList;
 
-  double get size => Get.width / 2.5;
-
-  Widget item(Index index) {
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        color: IVColor.blueGrey,
-        borderRadius: BorderRadius.circular(16.0),
-      ),
-      child: SizedBox(
-        width: size,
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Builder(
-            builder: (context) {
-              final textTheme = Theme.of(context).textTheme;
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Expanded(
-                    child: IgnorePointer(
-                      child: IVChartWidget(
-                        chatList: index.chartList,
+  Widget item(Stock index) {
+    return GestureDetector(
+      onTap: () {
+        Get.to(
+          StockDetailView(stock: index),
+        );
+      },
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 4.0),
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+            color: IVColor.blueGrey,
+            borderRadius: BorderRadius.circular(16.0),
+          ),
+          child: SizedBox(
+            width: Get.width / 2.5,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Builder(
+                builder: (context) {
+                  final textTheme = Theme.of(context).textTheme;
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      IgnorePointer(
+                        child: IVChartWidget(
+                          stock: index,
+                        ),
                       ),
-                    ),
-                  ),
-                  AutoSizeText(
-                    index.name,
-                    maxLines: 1,
-                    // style: textTheme.bodySmall,
-                  ),
-                  Text(
-                    index.lastSalePrice,
-                    style: textTheme.titleMedium,
-                  ),
-                  // StockPriceText(
-                  //   closedPrice: ,
-                  //   currentPrice: ,
-                  // ),
-                ],
-              );
-            },
+                      AutoSizeText(
+                        index.name,
+                        maxLines: 1,
+                        // style: textTheme.bodySmall,
+                      ),
+                      Text(
+                        index.lastSalePrice,
+                        style: textTheme.titleMedium,
+                      ),
+                      IVStockPriceText(stock: index),
+                    ],
+                  );
+                },
+              ),
+            ),
           ),
         ),
       ),
@@ -68,19 +73,12 @@ class IndexView extends StatelessWidget {
         padding: EdgeInsets.symmetric(horizontal: 16.0),
         child: Text("Index"),
       ),
-      child: SizedBox(
-        height: size * 1.1,
-        child: ListView.separated(
-          physics: const BouncingScrollPhysics(),
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          itemCount: itemList.length,
-          scrollDirection: Axis.horizontal,
-          separatorBuilder: (context, index) {
-            return const SizedBox(width: 8.0);
-          },
-          itemBuilder: (context, index) {
-            return item(itemList[index]);
-          },
+      child: SingleChildScrollView(
+        physics: const BouncingScrollPhysics(),
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          children: itemList.map(item).toList(),
         ),
       ),
     );
