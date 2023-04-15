@@ -5,7 +5,7 @@ import 'package:investing/const/color.dart';
 import 'package:investing/model/stock.dart';
 import 'package:investing/view/watch_list_view/detail_view/stock_detail_view.dart';
 import 'package:investing/widget/chart_widget.dart';
-import 'package:investing/widget/stock_price_text.dart';
+import 'package:investing/widget/stock_price_builder.dart';
 import 'package:investing/widget/title_widget.dart';
 
 class IndexView extends StatelessWidget {
@@ -47,13 +47,28 @@ class IndexView extends StatelessWidget {
                       AutoSizeText(
                         index.name,
                         maxLines: 1,
-                        // style: textTheme.bodySmall,
                       ),
-                      Text(
-                        index.lastSalePrice,
-                        style: textTheme.titleMedium,
+                      IVStockPriceBuilder(
+                        stock: index,
+                        lastPriceStyle: textTheme.titleMedium,
+                        netChangeBracket: true,
+                        builder:
+                            (indicator, percentageChange, netChage, lastPrice) {
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              lastPrice,
+                              Row(
+                                children: [
+                                  indicator,
+                                  percentageChange,
+                                  netChage,
+                                ],
+                              ),
+                            ],
+                          );
+                        },
                       ),
-                      IVStockPriceText(stock: index),
                     ],
                   );
                 },

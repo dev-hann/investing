@@ -32,7 +32,8 @@ class StockController extends Controller<StockUseCase> {
       )
           .then((value) async {
         favoriteStockList[index] = value;
-        update([stock.symbol]);
+        // TODO: update veiew by id
+        update();
       });
     }
   }

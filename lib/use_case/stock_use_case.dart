@@ -1,5 +1,4 @@
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:investing/model/chart.dart';
 import 'package:investing/model/date_time_range.dart';
 import 'package:investing/model/stock.dart';
 import 'package:investing/repo/stock/stock_repo.dart';

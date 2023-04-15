@@ -11,7 +11,8 @@ class Stock extends Equatable with DataBaseModelMixin, Comparable<Stock> {
     required this.netChange,
     required this.percentageChange,
     required this.deltaIndicator,
-    required this.chartList,
+    required this.priceChartList,
+    required this.volumeChartList,
     required this.asset,
     this.marketStatus = "Closed",
   });
@@ -21,7 +22,8 @@ class Stock extends Equatable with DataBaseModelMixin, Comparable<Stock> {
   final String netChange;
   final String percentageChange;
   final String deltaIndicator;
-  final List<IVChart> chartList;
+  final List<IVChart> priceChartList;
+  final List<IVChart> volumeChartList;
   final String asset;
   final String marketStatus;
 
@@ -34,7 +36,7 @@ class Stock extends Equatable with DataBaseModelMixin, Comparable<Stock> {
       IVDateTimeRange.beforeYear(100),
     ];
     final assetValue = asset.toLowerCase();
-    if (assetValue == "index") {
+    if (assetValue == "index" || assetValue == "stocks") {
       return [null, IVDateTimeRange.beforeDay(1), ...list];
     }
     return list;
@@ -45,7 +47,7 @@ class Stock extends Equatable with DataBaseModelMixin, Comparable<Stock> {
         lastSalePrice.isEmpty &&
         netChange.isEmpty &&
         percentageChange.isEmpty &&
-        chartList.isEmpty;
+        priceChartList.isEmpty;
   }
 
   factory Stock.empty({
@@ -61,7 +63,8 @@ class Stock extends Equatable with DataBaseModelMixin, Comparable<Stock> {
       lastSalePrice: "",
       netChange: "",
       percentageChange: "",
-      chartList: const [],
+      priceChartList: const [],
+      volumeChartList: const [],
     );
   }
 
@@ -90,7 +93,8 @@ class Stock extends Equatable with DataBaseModelMixin, Comparable<Stock> {
       symbol: symbol,
       name: name,
       asset: asset,
-      chartList: chartList,
+      priceChartList: priceChartList,
+      volumeChartList: volumeChartList,
       deltaIndicator: primaryData["deltaIndicator"],
       lastSalePrice: primaryData["lastSalePrice"],
       netChange: primaryData["netChange"],
@@ -100,19 +104,24 @@ class Stock extends Equatable with DataBaseModelMixin, Comparable<Stock> {
   }
 
   Stock fromStockWithChart(dynamic map) {
-    final data = Map<String, dynamic>.from(map)["data"];
-    final chartList =
+    final Map<String, dynamic> data = Map<String, dynamic>.from(map)["data"];
+    final priceChartList =
         List.from(data["chart"]).map((e) => IVChart.fromMap(e)).toList();
-    chartList.sort();
+    priceChartList.sort();
+    final volumeData = data["volumeChart"] ?? [];
+    final List<IVChart> volumeChartList =
+        List.from(volumeData).map((e) => IVChart.fromMap(e)).toList();
+    volumeChartList.sort();
     return Stock(
       symbol: symbol,
       name: name,
       asset: asset,
+      priceChartList: priceChartList,
+      volumeChartList: volumeChartList,
       deltaIndicator: data["deltaIndicator"],
       lastSalePrice: data["lastSalePrice"],
       netChange: data["netChange"],
       percentageChange: data["percentageChange"],
-      chartList: chartList,
     );
   }
 

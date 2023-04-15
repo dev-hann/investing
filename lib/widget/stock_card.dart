@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:investing/model/stock.dart';
+import 'package:investing/widget/stock_price_builder.dart';
 
 class StockCard extends StatelessWidget {
   const StockCard({
@@ -23,13 +24,22 @@ class StockCard extends StatelessWidget {
   }
 
   Widget trailingWidget() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.end,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Text(stock.percentageChange),
-        Text(stock.lastSalePrice),
-      ],
+    return IVStockPriceBuilder(
+      stock: stock,
+      builder: (indicator, percentageChange, netChage, lastPrice) {
+        return Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            IntrinsicWidth(
+              child: Row(
+                children: [indicator, percentageChange],
+              ),
+            ),
+            lastPrice,
+          ],
+        );
+      },
     );
   }
 

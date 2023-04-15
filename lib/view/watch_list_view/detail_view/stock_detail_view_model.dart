@@ -5,8 +5,7 @@ import 'package:investing/view/view.dart';
 class StockDetailViewModel extends ViewModel<StockController> {
   StockDetailViewModel(this.stock);
   Stock stock;
-  bool get isBookmark => false;
-  //  controller.watchList.contains(stock);
+  bool get isBookmark => controller.contains(stock);
 
   @override
   Future init() async {
@@ -15,6 +14,9 @@ class StockDetailViewModel extends ViewModel<StockController> {
   }
 
   Future toggleBookmark() async {
-    // return controller.toggleFvoriteStock(stock);
+    if (controller.contains(stock)) {
+      return controller.removeFavoriteStock(stock);
+    }
+    return controller.updateFavoriteStock(stock);
   }
 }
