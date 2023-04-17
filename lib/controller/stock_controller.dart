@@ -34,7 +34,12 @@ class StockController extends Controller<StockUseCase> {
         _marketTimer!.cancel();
       });
     } else {
-      print("Open Market!!");
+      _marketTimer = Timer.periodic(const Duration(seconds: 5), (timer) {
+        if (!marketStatus.isOpened) {
+          _marketTimer!.cancel();
+          return;
+        }
+      });
     }
   }
 
@@ -101,6 +106,10 @@ class StockController extends Controller<StockUseCase> {
       stock: stock,
       dateTimeRange: stock.dateTimeRangeList.first,
     );
+  }
+
+  Future<List<Stock>> requestStockList(List<Stock> list) {
+    return useCase.requestStockList(list);
   }
 
   bool contains(Stock stock) {

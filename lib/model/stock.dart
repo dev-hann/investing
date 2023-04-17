@@ -1,4 +1,6 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:equatable/equatable.dart';
+
 import 'package:investing/data/db/data_base_model_mixin.dart';
 import 'package:investing/model/chart.dart';
 import 'package:investing/model/date_time_range.dart';
@@ -67,7 +69,7 @@ class Stock extends Equatable with DataBaseModelMixin, Comparable<Stock> {
       volumeChartList: const [],
     );
   }
-
+  // TODO: clean too mucn dto
   factory Stock.fromSearch(dynamic map) {
     final data = Map<String, dynamic>.from(map);
     return Stock.empty(
@@ -76,7 +78,6 @@ class Stock extends Equatable with DataBaseModelMixin, Comparable<Stock> {
       asset: data["asset"] as String,
     );
   }
-
   factory Stock.fromDB(dynamic map) {
     final data = Map<String, dynamic>.from(map);
     return Stock.empty(
@@ -217,5 +218,31 @@ class Stock extends Equatable with DataBaseModelMixin, Comparable<Stock> {
   @override
   int compareTo(Stock other) {
     return other.symbol.compareTo(symbol);
+  }
+
+  Stock copyWith({
+    String? symbol,
+    String? name,
+    String? lastSalePrice,
+    String? netChange,
+    String? percentageChange,
+    String? deltaIndicator,
+    List<IVChart>? priceChartList,
+    List<IVChart>? volumeChartList,
+    String? asset,
+    String? marketStatus,
+  }) {
+    return Stock(
+      symbol: symbol ?? this.symbol,
+      name: name ?? this.name,
+      lastSalePrice: lastSalePrice ?? this.lastSalePrice,
+      netChange: netChange ?? this.netChange,
+      percentageChange: percentageChange ?? this.percentageChange,
+      deltaIndicator: deltaIndicator ?? this.deltaIndicator,
+      priceChartList: priceChartList ?? this.priceChartList,
+      volumeChartList: volumeChartList ?? this.volumeChartList,
+      asset: asset ?? this.asset,
+      marketStatus: marketStatus ?? this.marketStatus,
+    );
   }
 }
