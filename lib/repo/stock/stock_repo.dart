@@ -5,7 +5,6 @@ import 'package:investing/data/db/data_base.dart';
 import 'package:investing/data/db/data_base_model_mixin.dart';
 import 'package:investing/data/service/service.dart';
 import 'package:investing/repo/repo.dart';
-
 part './stock_impl.dart';
 
 abstract class StockRepo extends Repo {
@@ -26,4 +25,6 @@ abstract class StockRepo extends Repo {
     required String symbol,
     required String asset,
   });
+
+  Future<dynamic> requestMarketStatus();
 }

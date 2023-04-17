@@ -10,4 +10,8 @@ class IVDateTimeFormat {
     }
     return DateFormat(format).format(dateTime!);
   }
+
+  static DateTime fromPattern(String pattern, String value) {
+    return DateFormat(pattern).parse(value);
+  }
 }

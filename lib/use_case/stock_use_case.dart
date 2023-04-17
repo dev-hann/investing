@@ -1,5 +1,6 @@
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:investing/model/date_time_range.dart';
+import 'package:investing/model/market_status.dart';
 import 'package:investing/model/stock.dart';
 import 'package:investing/repo/stock/stock_repo.dart';
 import 'package:investing/use_case/use_case.dart';
@@ -62,5 +63,10 @@ class StockUseCase extends UseCase<StockRepo> {
         toDate: IVDateTimeFormat(dateTimeRange?.end).dateTimeFormat(),
       ),
     );
+  }
+
+  Future<MarketStatus> requestMarketStatus() async {
+    final res = await repo.requestMarketStatus();
+    return MarketStatus.fromMap(res);
   }
 }

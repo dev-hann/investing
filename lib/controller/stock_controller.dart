@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:investing/controller/controller.dart';
 import 'package:get/get.dart';
+import 'package:investing/model/market_status.dart';
 import 'package:investing/model/stock.dart';
 import 'package:investing/use_case/stock_use_case.dart';
 
@@ -9,13 +12,30 @@ class StockController extends Controller<StockUseCase> {
 
   static StockController find() => Get.find<StockController>();
   final List<Stock> favoriteStockList = [];
-
+  late MarketStatus marketStatus;
   Stream<BoxEvent> get watchListStream => useCase.watchListStream();
 
   @override
   Future onReady() async {
     _initFavoriteStockList();
+    await _initMarketStatus();
     super.onReady();
+  }
+
+  Timer? _marketTimer;
+
+  Future _initMarketStatus() async {
+    marketStatus = await useCase.requestMarketStatus();
+    if (!marketStatus.isOpened) {
+      final now = DateTime.now();
+      final leftDuration = marketStatus.preMarketOpen.difference(now);
+      _marketTimer = Timer.periodic(leftDuration, (timer) {
+        _initMarketStatus();
+        _marketTimer!.cancel();
+      });
+    } else {
+      print("Open Market!!");
+    }
   }
 
   void _initFavoriteStockList() {

@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:investing/controller/stock_controller.dart';
+import 'package:investing/model/market_status.dart';
 import 'package:investing/model/stock.dart';
 import 'package:investing/view/view.dart';
 
@@ -11,12 +12,13 @@ class WatchListViewModel extends ViewModel<StockController> {
     Stock.dow(),
     Stock.treasury2Y(),
     Stock.treasury20Y(),
-    Stock.gold(),
-    Stock.copper(),
-    Stock.naturalGas(),
-    Stock.crudeOil(),
+    // Stock.gold(),
+    // Stock.copper(),
+    // Stock.naturalGas(),
+    // Stock.crudeOil(),
   ];
   List<Stock> get watchList => controller.favoriteStockList;
+  MarketStatus get marketStatus => controller.marketStatus;
 
   @override
   Future init() async {

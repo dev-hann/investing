@@ -19,6 +19,7 @@ class StockService extends IVService {
     required String? toDate,
   }) async {
     final url = "https://api.nasdaq.com/api/quote/$symbol/chart";
+
     return get(
       url,
       query: {
@@ -40,5 +41,10 @@ class StockService extends IVService {
         "assetClass": assetClass,
       },
     );
+  }
+
+  Future<Response> requestMarketStatus() {
+    const url = "https://api.nasdaq.com/api/market-info";
+    return get(url);
   }
 }
