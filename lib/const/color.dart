@@ -5,7 +5,7 @@ class IVColor {
   static const Color blueGrey = Color(0xFF37474F);
   // orangeAccent[200];
   static const Color orange = Color(0xFFFFAB40);
-  static const Color red = Colors.redAccent;
+  static const Color red = Color(0xFFFF5252);
   static const Color blue = Colors.blueAccent;
   static const Color grey = Colors.grey;
 }

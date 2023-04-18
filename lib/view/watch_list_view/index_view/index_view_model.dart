@@ -1,12 +1,9 @@
-import 'dart:async';
-
 import 'package:investing/controller/stock_controller.dart';
-import 'package:investing/model/market_status.dart';
 import 'package:investing/model/stock.dart';
 import 'package:investing/model/stock_detail.dart';
 import 'package:investing/view/view.dart';
 
-class WatchListViewModel extends ViewModel<StockController> {
+class IndexViewModel extends ViewModel<StockController> {
   final List<Stock> _indexStockList = [
     Stock.nasdaq(),
     Stock.snp(),
@@ -19,11 +16,10 @@ class WatchListViewModel extends ViewModel<StockController> {
     Stock.crudeOil(),
   ];
   final List<StockDetail> indexDetailList = [];
-  MarketStatus get marketStatus => controller.marketStatus;
 
   @override
   Future init() async {
-    // await refreshIndexList();
+    await refreshIndexList();
     return super.init();
   }
 

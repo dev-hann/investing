@@ -2,24 +2,23 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:investing/const/color.dart';
-import 'package:investing/model/stock.dart';
+import 'package:investing/controller/stock_controller.dart';
+import 'package:investing/model/stock_detail.dart';
+import 'package:investing/view/view.dart';
 import 'package:investing/view/watch_list_view/detail_view/stock_detail_view.dart';
+import 'package:investing/view/watch_list_view/index_view/index_view_model.dart';
 import 'package:investing/widget/chart_widget.dart';
 import 'package:investing/widget/stock_price_builder.dart';
 import 'package:investing/widget/title_widget.dart';
 
-class IndexView extends StatelessWidget {
-  const IndexView({
-    super.key,
-    required this.indexList,
-  });
-  final List<Stock> indexList;
+class IndexView extends View<IndexViewModel, StockController> {
+  IndexView({super.key}) : super(viewModel: IndexViewModel());
 
-  Widget item(Stock index) {
+  Widget item(StockDetail indexDetail) {
     return GestureDetector(
       onTap: () {
         Get.to(
-          StockDetailView(stock: index),
+          StockDetailView(stock: indexDetail),
         );
       },
       child: Padding(
@@ -41,15 +40,15 @@ class IndexView extends StatelessWidget {
                     children: [
                       IgnorePointer(
                         child: IVChartWidget(
-                          stock: index,
+                          stockDetail: indexDetail,
                         ),
                       ),
                       AutoSizeText(
-                        index.name,
+                        indexDetail.name,
                         maxLines: 1,
                       ),
                       IVStockPriceBuilder(
-                        stock: index,
+                        stock: indexDetail,
                         lastPriceStyle: textTheme.titleMedium,
                         netChangeBracket: true,
                         builder:
@@ -81,8 +80,8 @@ class IndexView extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
-    final itemList = indexList;
+  Widget body() {
+    final itemList = viewModel.indexDetailList;
     return TitleWidget(
       title: const Padding(
         padding: EdgeInsets.symmetric(horizontal: 16.0),

@@ -1,3 +1,4 @@
+import 'package:equatable/equatable.dart';
 import 'package:investing/data/db/data_base_model_mixin.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
@@ -29,7 +30,7 @@ class IVDataBase {
   }
 
   Stream<IVDataBaseEvent> get stream => _box.watch().map<IVDataBaseEvent>(
-        (event) => IVDataBaseEvent(event.deleted, event.key, event.value),
+        (event) => IVDataBaseEvent(event.deleted, event.value),
       );
 
   Future removeStock(String stockIndex) {
@@ -37,9 +38,14 @@ class IVDataBase {
   }
 }
 
-class IVDataBaseEvent {
-  IVDataBaseEvent(this.deleted, this.key, this.value);
+class IVDataBaseEvent<T> extends Equatable {
+  const IVDataBaseEvent(this.deleted, this.data);
   final bool deleted;
-  final String key;
-  final dynamic value;
+  final T data;
+
+  @override
+  List<Object?> get props => [
+        deleted,
+        data,
+      ];
 }

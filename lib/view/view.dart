@@ -43,6 +43,7 @@ abstract class View<T extends ViewModel, S extends Controller>
     return Material(
       child: GetBuilder<S>(
         key: UniqueKey(),
+        id: viewModel.hashCode,
         initState: (state) {
           init(context);
         },

@@ -18,27 +18,34 @@ class IVChartButton extends StatelessWidget {
     this.selectedIndex = 0,
     this.activeColor = IVColor.grey,
     this.background = IVColor.blueGrey,
+    required this.onTap,
     required this.itemList,
   });
   final int selectedIndex;
   final List<ChartButtonItem> itemList;
   final Color activeColor;
   final Color background;
+  final Function(int index) onTap;
 
   Widget itemWidget(int index) {
     final item = itemList[index];
     final isSelected = selectedIndex == index;
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        color: isSelected ? activeColor : background,
-        borderRadius: BorderRadius.circular(8.0),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Center(
-          child: Text(
-            item.text,
-            style: TextStyle(color: isSelected ? IVColor.blueGrey : null),
+    return GestureDetector(
+      onTap: () {
+        onTap(index);
+      },
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          color: isSelected ? activeColor : background,
+          borderRadius: BorderRadius.circular(8.0),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Center(
+            child: Text(
+              item.text,
+              style: TextStyle(color: isSelected ? IVColor.blueGrey : null),
+            ),
           ),
         ),
       ),

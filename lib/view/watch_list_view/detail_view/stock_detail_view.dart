@@ -33,44 +33,48 @@ class StockDetailView extends View<StockDetailViewModel, StockController> {
   }
 
   Widget titleText(Stock stock) {
-    return Builder(builder: (context) {
-      final textTheme = Theme.of(context).textTheme;
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(stock.name),
-          Text(stock.symbol),
-          Builder(
-            builder: (context) {
-              return IVStockPriceBuilder(
-                stock: stock,
-                lastPriceStyle: textTheme.titleLarge,
-                builder: (indicator, percentageChange, netChage, lastPrice) {
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      lastPrice,
-                      Row(
-                        children: [
-                          indicator,
-                          percentageChange,
-                          netChage,
-                        ],
-                      )
-                    ],
-                  );
-                },
-              );
-            },
-          )
-        ],
-      );
-    });
+    return Builder(
+      builder: (context) {
+        final textTheme = Theme.of(context).textTheme;
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(stock.name),
+            Text(stock.symbol),
+            Builder(
+              builder: (context) {
+                return IVStockPriceBuilder(
+                  stock: stock,
+                  lastPriceStyle: textTheme.titleLarge,
+                  netChangeBracket: true,
+                  builder: (indicator, percentageChange, netChage, lastPrice) {
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        lastPrice,
+                        Row(
+                          children: [
+                            indicator,
+                            percentageChange,
+                            netChage,
+                          ],
+                        )
+                      ],
+                    );
+                  },
+                );
+              },
+            )
+          ],
+        );
+      },
+    );
   }
 
   Widget chartButtonListView() {
     return IVChartButton(
-      itemList: [
+      onTap: (index) {},
+      itemList: const [
         ChartButtonItem(text: "1일"),
         ChartButtonItem(text: "1주"),
         ChartButtonItem(text: "1달"),
@@ -81,9 +85,10 @@ class StockDetailView extends View<StockDetailViewModel, StockController> {
     );
   }
 
-  Widget chartWidget(Stock stock) {
+  Widget chartWidget() {
     return IVChartWidget(
-      stock: stock,
+      stockDetail: viewModel.stockDetail,
+      enableGesture: true,
     );
   }
 
@@ -97,8 +102,11 @@ class StockDetailView extends View<StockDetailViewModel, StockController> {
         children: [
           titleText(stock),
           Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8.0),
-            child: chartWidget(stock),
+            padding: const EdgeInsets.only(
+              top: 56.0,
+              bottom: 16.0,
+            ),
+            child: chartWidget(),
           ),
           chartButtonListView(),
         ],

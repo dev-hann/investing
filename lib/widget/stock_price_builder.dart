@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:investing/const/color.dart';
 import 'package:investing/model/stock.dart';
-import 'package:investing/widget/stock_indicator.dart';
 
 typedef PriceWidgetBuilder = Widget Function(
   Widget indicator,
@@ -41,12 +40,12 @@ class IVStockPriceBuilder extends StatelessWidget {
     final percentageChange = stock.percentageChange;
     String percentageChangText =
         percentageChange.isEmpty ? "0%" : percentageChange;
-    final lastPriceText = stock.lastSalePrice;
+    final lastPriceText = stock.lastSalePriceText;
     final style = TextStyle(
       color: isUp ? IVColor.red : IVColor.blue,
     );
     return builder(
-      StockIndicator(stock: stock, style: indicatorStyle ?? style),
+      Text(stock.isUp ? "▲" : "▼", style: indicatorStyle ?? style),
       Text(percentageChangText, style: percentageStyle ?? style),
       Text(netChange, style: netChangeStyle ?? style),
       Text(lastPriceText, style: lastPriceStyle ?? style),

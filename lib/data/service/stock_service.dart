@@ -19,7 +19,6 @@ class StockService extends IVService {
     required String? toDate,
   }) async {
     final url = "https://api.nasdaq.com/api/quote/$symbol/chart";
-
     return get(
       url,
       query: {

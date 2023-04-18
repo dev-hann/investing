@@ -4,23 +4,27 @@ typedef OverlayLoadingFunc = VoidFutureCallBack;
 
 abstract class ViewModel<T extends Controller> {
   final T controller = Get.find<T>();
+  int get viewID => hashCode;
 
   bool get isLoading => _loading;
   bool _loading = true;
 
   Future _init() async {
     await controller.loading;
+    controller.addViewID(viewID);
     init();
   }
 
   @mustCallSuper
   Future init() async {
     _loading = false;
-    updateView();
+    updateViewByID();
   }
 
   @mustCallSuper
-  Future dispose() async {}
+  Future dispose() async {
+    controller.removeViewID(viewID);
+  }
 
   bool _overlayLoading = false;
   bool get isOverlayLoading => _overlayLoading;
@@ -33,15 +37,19 @@ abstract class ViewModel<T extends Controller> {
 
   void initOverlayLoading() {
     _overlayLoading = true;
-    updateView();
+    updateViewByID();
   }
 
   void completedOverlayLoading() {
     _overlayLoading = false;
-    updateView();
+    updateViewByID();
   }
 
   void updateView() {
-    controller.update();
+    controller.updateView();
+  }
+
+  void updateViewByID() {
+    controller.update([viewID]);
   }
 }

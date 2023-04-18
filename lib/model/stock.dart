@@ -2,32 +2,31 @@
 import 'package:equatable/equatable.dart';
 
 import 'package:investing/data/db/data_base_model_mixin.dart';
-import 'package:investing/model/chart.dart';
 import 'package:investing/model/date_time_range.dart';
+import 'package:investing/util/number_format.dart';
 
 class Stock extends Equatable with DataBaseModelMixin, Comparable<Stock> {
   const Stock({
     required this.symbol,
     required this.name,
     required this.lastSalePrice,
+    required this.previousSalePrice,
     required this.netChange,
     required this.percentageChange,
     required this.deltaIndicator,
-    required this.priceChartList,
-    required this.volumeChartList,
     required this.asset,
-    this.marketStatus = "Closed",
   });
   final String symbol;
   final String name;
-  final String lastSalePrice;
+  final double lastSalePrice;
+  final double previousSalePrice;
   final String netChange;
   final String percentageChange;
   final String deltaIndicator;
-  final List<IVChart> priceChartList;
-  final List<IVChart> volumeChartList;
   final String asset;
-  final String marketStatus;
+
+  String get lastSalePriceText => IVNumberFormat.priceFormat(lastSalePrice);
+  bool get isUp => deltaIndicator.toLowerCase() == "up";
 
   List<IVDateTimeRange?> get dateTimeRangeList {
     final list = <IVDateTimeRange?>[
@@ -46,10 +45,9 @@ class Stock extends Equatable with DataBaseModelMixin, Comparable<Stock> {
 
   bool get isEmpty {
     return deltaIndicator.isEmpty &&
-        lastSalePrice.isEmpty &&
+        lastSalePriceText.isEmpty &&
         netChange.isEmpty &&
-        percentageChange.isEmpty &&
-        priceChartList.isEmpty;
+        percentageChange.isEmpty;
   }
 
   factory Stock.empty({
@@ -62,11 +60,10 @@ class Stock extends Equatable with DataBaseModelMixin, Comparable<Stock> {
       name: name,
       asset: asset,
       deltaIndicator: "",
-      lastSalePrice: "",
+      lastSalePrice: 0,
+      previousSalePrice: 0,
       netChange: "",
       percentageChange: "",
-      priceChartList: const [],
-      volumeChartList: const [],
     );
   }
 
@@ -167,26 +164,22 @@ class Stock extends Equatable with DataBaseModelMixin, Comparable<Stock> {
   Stock copyWith({
     String? symbol,
     String? name,
-    String? lastSalePrice,
+    double? lastSalePrice,
+    double? previousSalePrice,
     String? netChange,
     String? percentageChange,
     String? deltaIndicator,
-    List<IVChart>? priceChartList,
-    List<IVChart>? volumeChartList,
     String? asset,
-    String? marketStatus,
   }) {
     return Stock(
       symbol: symbol ?? this.symbol,
       name: name ?? this.name,
       lastSalePrice: lastSalePrice ?? this.lastSalePrice,
+      previousSalePrice: previousSalePrice ?? this.previousSalePrice,
       netChange: netChange ?? this.netChange,
       percentageChange: percentageChange ?? this.percentageChange,
       deltaIndicator: deltaIndicator ?? this.deltaIndicator,
-      priceChartList: priceChartList ?? this.priceChartList,
-      volumeChartList: volumeChartList ?? this.volumeChartList,
       asset: asset ?? this.asset,
-      marketStatus: marketStatus ?? this.marketStatus,
     );
   }
 }
