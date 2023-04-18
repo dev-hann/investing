@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:investing/controller/controller.dart';
 import 'package:get/get.dart';
+import 'package:investing/data/db/data_base.dart';
 import 'package:investing/model/market_status.dart';
 import 'package:investing/model/stock.dart';
 import 'package:investing/use_case/stock_use_case.dart';
@@ -13,7 +13,7 @@ class StockController extends Controller<StockUseCase> {
   static StockController find() => Get.find<StockController>();
   final List<Stock> favoriteStockList = [];
   late MarketStatus marketStatus;
-  Stream<BoxEvent> get watchListStream => useCase.watchListStream();
+  Stream<IVDataBaseEvent> get watchListStream => useCase.watchListStream();
 
   @override
   Future onReady() async {
@@ -63,14 +63,20 @@ class StockController extends Controller<StockUseCase> {
     }
   }
 
-  void refreshWatchList(BoxEvent event) async {
+  void refreshWatchList(IVDataBaseEvent event) async {
     final index =
         favoriteStockList.indexWhere((element) => element.symbol == event.key);
     final isDeleted = event.deleted;
     if (isDeleted) {
       favoriteStockList.removeAt(index);
     } else {
-      final stock = Stock.fromDB(event.value);
+      final data = event.value;
+      final stock = Stock.empty(
+        name: data["name"],
+        symbol: data["symbol"],
+        asset: data["asset"],
+      );
+      // final stock = Stock.fromDB(event.value);
       final isNew = index == -1;
       if (isNew) {
         favoriteStockList.add(stock);

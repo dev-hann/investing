@@ -3,7 +3,7 @@ part of stock_repo;
 class StockImpl extends StockRepo {
   final StockService service = StockService();
 
-  final DataBase watchListDB = DataBase("WatchList");
+  final IVDataBase watchListDB = IVDataBase("WatchList");
 
   @override
   Future init() async {
@@ -12,7 +12,7 @@ class StockImpl extends StockRepo {
   }
 
   @override
-  Stream<BoxEvent> watchListStream() {
+  Stream<IVDataBaseEvent> watchListStream() {
     return watchListDB.stream;
   }
 

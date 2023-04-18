@@ -14,7 +14,9 @@ class IVChartWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final priceChartList = stock.priceChartList;
+    priceChartList.sort();
     final volumeChartList = stock.volumeChartList;
+    volumeChartList.sort();
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: LayoutBuilder(

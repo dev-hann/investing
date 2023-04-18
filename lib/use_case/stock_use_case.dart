@@ -1,4 +1,5 @@
-import 'package:hive_flutter/hive_flutter.dart';
+import 'package:investing/data/db/data_base.dart';
+import 'package:investing/model/chart.dart';
 import 'package:investing/model/date_time_range.dart';
 import 'package:investing/model/market_status.dart';
 import 'package:investing/model/stock.dart';
@@ -9,12 +10,21 @@ import 'package:investing/util/date_time_format.dart';
 class StockUseCase extends UseCase<StockRepo> {
   StockUseCase(super.repo);
 
-  Stream<BoxEvent> watchListStream() {
+  Stream<IVDataBaseEvent> watchListStream() {
     return repo.watchListStream();
   }
 
   List<Stock> loadStockList() {
-    final list = repo.loadStockList().map((e) => Stock.fromDB(e)).toList();
+    final list = repo
+        .loadStockList()
+        .map(
+          (data) => Stock.empty(
+            name: data["name"],
+            symbol: data["symbol"],
+            asset: data["asset"],
+          ),
+        )
+        .toList();
     list.sort();
     return list;
   }
@@ -31,7 +41,13 @@ class StockUseCase extends UseCase<StockRepo> {
     final list = await repo.searchStock(query);
     final searchedList = <Stock>[];
     for (int index = 0; index < list.length; ++index) {
-      final item = Stock.fromSearch(list[index]);
+      final data = list[index];
+
+      final item = Stock.empty(
+        name: List.from(data["name"]).first,
+        symbol: List.from(data["symbol"]).first,
+        asset: data["asset"],
+      );
       if (!searchedList.contains(item)) {
         searchedList.add(item);
       }
@@ -43,11 +59,18 @@ class StockUseCase extends UseCase<StockRepo> {
     required Stock stock,
     required IVDateTimeRange? dateTimeRange,
   }) async {
-    return stock.fromStock(
-      await repo.requestStock(
-        symbol: stock.symbol,
-        asset: stock.asset,
-      ),
+    final res = await repo.requestStock(
+      symbol: stock.symbol,
+      asset: stock.asset,
+    );
+    final data = Map<String, dynamic>.from(res)["data"];
+    final primaryData = data["primaryData"];
+    return stock.copyWith(
+      deltaIndicator: primaryData["deltaIndicator"],
+      lastSalePrice: primaryData["lastSalePrice"],
+      netChange: primaryData["netChange"],
+      percentageChange: primaryData["percentageChange"],
+      marketStatus: primaryData["marketStatus"],
     );
   }
 
@@ -55,13 +78,23 @@ class StockUseCase extends UseCase<StockRepo> {
     required Stock stock,
     required IVDateTimeRange? dateTimeRange,
   }) async {
-    return stock.fromStockWithChart(
-      await repo.requestStockWithChart(
-        symbol: stock.symbol,
-        asset: stock.asset,
-        fromDate: IVDateTimeFormat(dateTimeRange?.begin).dateTimeFormat(),
-        toDate: IVDateTimeFormat(dateTimeRange?.end).dateTimeFormat(),
-      ),
+    final res = await await repo.requestStockWithChart(
+      symbol: stock.symbol,
+      asset: stock.asset,
+      fromDate: IVDateTimeFormat(dateTimeRange?.begin).dateTimeFormat(),
+      toDate: IVDateTimeFormat(dateTimeRange?.end).dateTimeFormat(),
+    );
+    final Map<String, dynamic> data = Map<String, dynamic>.from(res)["data"];
+    return stock.copyWith(
+      deltaIndicator: data["deltaIndicator"],
+      lastSalePrice: data["lastSalePrice"],
+      netChange: data["netChange"],
+      percentageChange: data["percentageChange"],
+      priceChartList:
+          List.from(data["chart"]).map((e) => IVChart.fromMap(e)).toList(),
+      volumeChartList: List.from(data["volumeChart"] ?? [])
+          .map((e) => IVChart.fromMap(e))
+          .toList(),
     );
   }
 
@@ -72,7 +105,7 @@ class StockUseCase extends UseCase<StockRepo> {
 
   Future<List<Stock>> requestStockList(List<Stock> list) async {
     return [];
-    // final res = await repo.requestStockList();
+
     // return List.from(res).map((e) => )
   }
 }

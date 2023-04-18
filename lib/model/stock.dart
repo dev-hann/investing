@@ -69,62 +69,6 @@ class Stock extends Equatable with DataBaseModelMixin, Comparable<Stock> {
       volumeChartList: const [],
     );
   }
-  // TODO: clean too mucn dto
-  factory Stock.fromSearch(dynamic map) {
-    final data = Map<String, dynamic>.from(map);
-    return Stock.empty(
-      name: List.from(data['name']).first as String,
-      symbol: List.from(data['symbol']).first as String,
-      asset: data["asset"] as String,
-    );
-  }
-  factory Stock.fromDB(dynamic map) {
-    final data = Map<String, dynamic>.from(map);
-    return Stock.empty(
-      name: data["name"],
-      symbol: data["symbol"],
-      asset: data["asset"],
-    );
-  }
-
-  Stock fromStock(dynamic map) {
-    final data = Map<String, dynamic>.from(map)["data"];
-    final primaryData = data["primaryData"];
-    return Stock(
-      symbol: symbol,
-      name: name,
-      asset: asset,
-      priceChartList: priceChartList,
-      volumeChartList: volumeChartList,
-      deltaIndicator: primaryData["deltaIndicator"],
-      lastSalePrice: primaryData["lastSalePrice"],
-      netChange: primaryData["netChange"],
-      percentageChange: primaryData["percentageChange"],
-      marketStatus: primaryData["marketStatus"],
-    );
-  }
-
-  Stock fromStockWithChart(dynamic map) {
-    final Map<String, dynamic> data = Map<String, dynamic>.from(map)["data"];
-    final priceChartList =
-        List.from(data["chart"]).map((e) => IVChart.fromMap(e)).toList();
-    priceChartList.sort();
-    final volumeData = data["volumeChart"] ?? [];
-    final List<IVChart> volumeChartList =
-        List.from(volumeData).map((e) => IVChart.fromMap(e)).toList();
-    volumeChartList.sort();
-    return Stock(
-      symbol: symbol,
-      name: name,
-      asset: asset,
-      priceChartList: priceChartList,
-      volumeChartList: volumeChartList,
-      deltaIndicator: data["deltaIndicator"],
-      lastSalePrice: data["lastSalePrice"],
-      netChange: data["netChange"],
-      percentageChange: data["percentageChange"],
-    );
-  }
 
   @override
   Map<String, dynamic> toMap() {
