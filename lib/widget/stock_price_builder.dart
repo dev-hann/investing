@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:investing/const/color.dart';
 import 'package:investing/model/stock.dart';
+import 'package:investing/util/number_format.dart';
 
 typedef PriceWidgetBuilder = Widget Function(
   Widget indicator,
@@ -27,27 +28,41 @@ class IVStockPriceBuilder extends StatelessWidget {
   final TextStyle? netChangeStyle;
   final TextStyle? lastPriceStyle;
   final bool netChangeBracket;
+  TextStyle get style {
+    switch (stock.indicatorStatus) {
+      case IndicatorStatus.up:
+        return const TextStyle(color: IVColor.red);
+      case IndicatorStatus.down:
+        return const TextStyle(color: IVColor.blue);
+      case IndicatorStatus.same:
+        return const TextStyle(color: IVColor.grey);
+    }
+  }
+
+  String indicatorText() {
+    switch (stock.indicatorStatus) {
+      case IndicatorStatus.up:
+        return "▲";
+      case IndicatorStatus.down:
+        return "▼";
+      case IndicatorStatus.same:
+        return "-";
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     if (stock.isEmpty) {
       return const SizedBox();
     }
-
-    final isUp = stock.deltaIndicator == "up";
-    final netChange =
-        netChangeBracket ? "(${stock.netChange})" : stock.netChange;
-    final percentageChange = stock.percentageChange;
-    String percentageChangText =
-        percentageChange.isEmpty ? "0%" : percentageChange;
-    final lastPriceText = stock.lastSalePriceText;
-    final style = TextStyle(
-      color: isUp ? IVColor.red : IVColor.blue,
-    );
+    final netChange = stock.netChange;
+    final netChagneText = netChangeBracket ? "($netChange)" : "$netChange";
+    String percentageChangText = "${stock.percentChange}%";
+    final lastPriceText = IVNumberFormat.priceFormat(stock.lastSalePrice);
     return builder(
-      Text(stock.isUp ? "▲" : "▼", style: indicatorStyle ?? style),
+      Text(indicatorText(), style: indicatorStyle ?? style),
       Text(percentageChangText, style: percentageStyle ?? style),
-      Text(netChange, style: netChangeStyle ?? style),
+      Text(netChagneText, style: netChangeStyle ?? style),
       Text(lastPriceText, style: lastPriceStyle ?? style),
     );
   }

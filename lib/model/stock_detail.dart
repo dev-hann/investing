@@ -3,15 +3,13 @@ import 'package:investing/model/chart.dart';
 import 'package:investing/model/stock.dart';
 
 class StockDetail extends Stock {
-  const StockDetail({
+  StockDetail({
     required super.symbol,
     required super.name,
-    required super.lastSalePrice,
-    required super.previousSalePrice,
-    required super.netChange,
-    required super.percentageChange,
-    required super.deltaIndicator,
     required super.asset,
+    super.lastSalePrice = 0.0,
+    super.netChange = 0.0,
+    super.percentChange = 0.0,
     this.priceChartList = const [],
     this.volumeChartList = const [],
     this.previousClosePrice = 0,
@@ -23,6 +21,12 @@ class StockDetail extends Stock {
 
   @override
   List<Object?> get props => [
+        symbol,
+        name,
+        asset,
+        lastSalePrice,
+        netChange,
+        percentChange,
         priceChartList.hashCode,
         volumeChartList.hashCode,
       ];
@@ -31,25 +35,20 @@ class StockDetail extends Stock {
   StockDetail copyWith({
     String? symbol,
     String? name,
-    double? lastSalePrice,
-    double? previousSalePrice,
-    String? netChange,
-    String? percentageChange,
-    String? deltaIndicator,
     String? asset,
-    double? previousClosePrice,
+    double? lastSalePrice,
+    double? netChange,
+    double? percentChange,
     List<IVChart>? priceChartList,
     List<IVChart>? volumeChartList,
   }) {
     return StockDetail(
       symbol: symbol ?? this.symbol,
       name: name ?? this.name,
-      lastSalePrice: lastSalePrice ?? this.lastSalePrice,
-      previousSalePrice: previousSalePrice ?? this.previousSalePrice,
-      netChange: netChange ?? this.netChange,
-      percentageChange: percentageChange ?? this.percentageChange,
-      deltaIndicator: deltaIndicator ?? this.deltaIndicator,
       asset: asset ?? this.asset,
+      lastSalePrice: lastSalePrice ?? this.lastSalePrice,
+      netChange: netChange ?? this.netChange,
+      percentChange: percentChange ?? this.percentChange,
       previousClosePrice: previousClosePrice ?? this.previousClosePrice,
       priceChartList: priceChartList ?? this.priceChartList,
       volumeChartList: volumeChartList ?? this.volumeChartList,
@@ -61,11 +60,6 @@ class StockDetail extends Stock {
       symbol: stock.symbol,
       name: stock.name,
       asset: stock.asset,
-      lastSalePrice: 0,
-      previousSalePrice: 0,
-      netChange: "",
-      percentageChange: "",
-      deltaIndicator: "",
     );
   }
 }

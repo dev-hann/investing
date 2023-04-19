@@ -12,12 +12,17 @@ abstract class ViewModel<T extends Controller> {
   Future _init() async {
     await controller.loading;
     controller.addViewID(viewID);
-    init();
+    await init();
   }
 
   @mustCallSuper
   Future init() async {
     _loading = false;
+    updateViewByID();
+  }
+
+  @mustCallSuper
+  Future didUpdate() async {
     updateViewByID();
   }
 
@@ -49,7 +54,7 @@ abstract class ViewModel<T extends Controller> {
     controller.updateView();
   }
 
-  void updateViewByID() {
-    controller.update([viewID]);
+  void updateViewByID([dynamic customID]) {
+    controller.updateViewByID(customID ?? viewID);
   }
 }

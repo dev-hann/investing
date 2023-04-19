@@ -15,6 +15,7 @@ abstract class View<T extends ViewModel, S extends Controller>
     super.key,
     required this.viewModel,
   });
+
   final T viewModel;
 
   Widget body();
@@ -30,22 +31,39 @@ abstract class View<T extends ViewModel, S extends Controller>
   }
 
   @mustCallSuper
-  void init(BuildContext context) {
+  void init() {
     viewModel._init();
   }
 
+  void didUpdateWidget() async {}
+
   void dispose() {
     viewModel.dispose();
+  }
+
+  Widget childBuilder({
+    required dynamic childViewID,
+    required Widget child,
+  }) {
+    return GetBuilder<S>(
+      id: childViewID,
+      builder: (_) {
+        return child;
+      },
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Material(
       child: GetBuilder<S>(
-        key: UniqueKey(),
-        id: viewModel.hashCode,
+        key: key ?? ValueKey(viewModel.viewID),
+        id: viewModel.viewID,
         initState: (state) {
-          init(context);
+          init();
+        },
+        didUpdateWidget: (oldWidget, state) {
+          didUpdateWidget();
         },
         dispose: (state) {
           dispose();

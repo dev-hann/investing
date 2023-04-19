@@ -12,12 +12,12 @@ import 'package:investing/util/number_format.dart';
 class StockUseCase extends UseCase<StockRepo> {
   StockUseCase(super.repo);
 
-  Stream<IVDataBaseEvent<Stock>> watchListStream() {
-    return repo.watchListStream().map((event) {
+  Stream<IVDataBaseEvent<Stock>> favoriteStream() {
+    return repo.favoriteStream().map((event) {
       final data = event.data;
       return IVDataBaseEvent(
         event.deleted,
-        Stock.empty(
+        Stock(
           name: data["name"],
           symbol: data["symbol"],
           asset: data["asset"],
@@ -30,7 +30,7 @@ class StockUseCase extends UseCase<StockRepo> {
     final list = repo
         .loadStockList()
         .map(
-          (data) => Stock.empty(
+          (data) => Stock(
             name: data["name"],
             symbol: data["symbol"],
             asset: data["asset"],
@@ -54,10 +54,9 @@ class StockUseCase extends UseCase<StockRepo> {
     final searchedList = <Stock>[];
     for (int index = 0; index < list.length; ++index) {
       final data = list[index];
-
-      final item = Stock.empty(
-        name: List.from(data["name"]).first,
+      final item = Stock(
         symbol: List.from(data["symbol"]).first,
+        name: List.from(data["name"]).first,
         asset: data["asset"],
       );
       if (!searchedList.contains(item)) {
@@ -78,10 +77,9 @@ class StockUseCase extends UseCase<StockRepo> {
     final data = Map<String, dynamic>.from(res)["data"];
     final primaryData = data["primaryData"];
     return stock.copyWith(
-      deltaIndicator: primaryData["deltaIndicator"],
       lastSalePrice: IVNumberFormat(primaryData["lastSalePrice"]).toDouble(),
-      netChange: primaryData["netChange"],
-      percentageChange: primaryData["percentageChange"],
+      netChange: IVNumberFormat(primaryData["netChange"]).toDouble(),
+      percentChange: IVNumberFormat(primaryData["percentageChange"]).toDouble(),
     );
   }
 
@@ -95,13 +93,11 @@ class StockUseCase extends UseCase<StockRepo> {
       fromDate: IVDateTimeFormat(dateTimeRange?.begin).dateTimeFormat(),
       toDate: IVDateTimeFormat(dateTimeRange?.end).dateTimeFormat(),
     );
-    final Map<String, dynamic> data = Map<String, dynamic>.from(res)["data"];
+    final data = Map<String, dynamic>.from(res)["data"];
     return stockDetail.copyWith(
-      deltaIndicator: data["deltaIndicator"],
       lastSalePrice: IVNumberFormat(data["lastSalePrice"]).toDouble(),
-      previousSalePrice: IVNumberFormat(data["previousClose"]).toDouble(),
-      netChange: data["netChange"],
-      percentageChange: data["percentageChange"],
+      netChange: IVNumberFormat(data["netChange"]).toDouble(),
+      percentChange: IVNumberFormat(data["percentageChange"]).toDouble(),
       priceChartList:
           List.from(data["chart"]).map((e) => IVChart.fromMap(e)).toList(),
       volumeChartList: List.from(data["volumeChart"] ?? [])
@@ -116,6 +112,12 @@ class StockUseCase extends UseCase<StockRepo> {
   }
 
   Future<List<Stock>> requestStockList(List<Stock> list) async {
+    final symbolList = list.map((e) {
+      final symbol = e.symbol;
+      final asset = e.asset;
+      return "$symbol|$asset";
+    }).toList();
+    final res = await repo.requestStockList(symbolList);
     return [];
     // return List.from(res).map((e) => )
   }

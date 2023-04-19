@@ -7,7 +7,7 @@ import 'package:investing/repo/repo.dart';
 part './stock_impl.dart';
 
 abstract class StockRepo extends Repo {
-  Stream<IVDataBaseEvent> watchListStream();
+  Stream<IVDataBaseEvent> favoriteStream();
   List loadStockList();
   Future updateStock<T extends DataBaseModelMixin>(T data);
   Future removeStock(String index);
@@ -26,4 +26,6 @@ abstract class StockRepo extends Repo {
   });
 
   Future<dynamic> requestMarketStatus();
+
+  Future<dynamic> requestStockList(List<String> symbolList);
 }

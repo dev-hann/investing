@@ -1,15 +1,14 @@
 part of service;
 
 class StockService extends IVService {
-  Future<List> searchStock(String query) async {
+  Future<Response> searchStock(String query) async {
     const url = "https://api.nasdaq.com/api/search/site";
-    final res = await get(
+    return get(
       url,
       query: {
         "query": query,
       },
     );
-    return List.from(res.data["data"]["symbol"]["value"]);
   }
 
   Future<Response> requestStockWithChart({
@@ -44,6 +43,12 @@ class StockService extends IVService {
 
   Future<Response> requestMarketStatus() {
     const url = "https://api.nasdaq.com/api/market-info";
+    return get(url);
+  }
+
+  Future<Response> requestStockList(List<String> symbolList) {
+    final q = symbolList.map((e) => "symbol=$e").join("&");
+    final url = "https://api.nasdaq.com/api/quote/basic?$q";
     return get(url);
   }
 }

@@ -5,7 +5,9 @@ class IVNumberFormat {
   final String number;
 
   double toDouble() {
-    return double.tryParse(number.replaceAll(",", "").replaceAll("\$", "")) ??
+    return double.tryParse(
+          number.replaceAll(RegExp("[,\$%]"), ""),
+        ) ??
         0.0;
   }
 

@@ -1,32 +1,44 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:equatable/equatable.dart';
 
 import 'package:investing/data/db/data_base_model_mixin.dart';
 import 'package:investing/model/date_time_range.dart';
-import 'package:investing/util/number_format.dart';
+
+enum IndicatorStatus {
+  up,
+  down,
+  same,
+}
 
 class Stock extends Equatable with DataBaseModelMixin, Comparable<Stock> {
-  const Stock({
+  Stock({
     required this.symbol,
     required this.name,
-    required this.lastSalePrice,
-    required this.previousSalePrice,
-    required this.netChange,
-    required this.percentageChange,
-    required this.deltaIndicator,
     required this.asset,
+    this.lastSalePrice = 0.0,
+    this.netChange = 0.0,
+    this.percentChange = 0.0,
   });
+
   final String symbol;
   final String name;
   final double lastSalePrice;
-  final double previousSalePrice;
-  final String netChange;
-  final String percentageChange;
-  final String deltaIndicator;
+  final double netChange;
+  final double percentChange;
   final String asset;
 
-  String get lastSalePriceText => IVNumberFormat.priceFormat(lastSalePrice);
-  bool get isUp => deltaIndicator.toLowerCase() == "up";
+  bool get isEmpty {
+    return lastSalePrice == 0 && netChange == 0 && percentChange == 0;
+  }
+
+  IndicatorStatus get indicatorStatus {
+    if (netChange == 0) {
+      return IndicatorStatus.same;
+    }
+    if (netChange > 0) {
+      return IndicatorStatus.up;
+    }
+    return IndicatorStatus.down;
+  }
 
   List<IVDateTimeRange?> get dateTimeRangeList {
     final list = <IVDateTimeRange?>[
@@ -36,36 +48,18 @@ class Stock extends Equatable with DataBaseModelMixin, Comparable<Stock> {
       IVDateTimeRange.beforeYear(1),
       IVDateTimeRange.beforeYear(100),
     ];
-    final assetValue = asset.toLowerCase();
-    if (assetValue == "index" || assetValue == "stocks") {
-      return [null, IVDateTimeRange.beforeDay(1), ...list];
-    }
+    // final assetValue = asset.toLowerCase();
+    // if (assetValue == "index" || assetValue == "stocks") {
+    //   return [null, IVDateTimeRange.beforeDay(1), ...list];
+    // }
     return list;
   }
 
-  bool get isEmpty {
-    return deltaIndicator.isEmpty &&
-        lastSalePriceText.isEmpty &&
-        netChange.isEmpty &&
-        percentageChange.isEmpty;
+  bool get i {
+    return lastSalePrice == 0 && netChange == 0 && percentChange == 0;
   }
 
-  factory Stock.empty({
-    required String symbol,
-    required String name,
-    required String asset,
-  }) {
-    return Stock(
-      symbol: symbol,
-      name: name,
-      asset: asset,
-      deltaIndicator: "",
-      lastSalePrice: 0,
-      previousSalePrice: 0,
-      netChange: "",
-      percentageChange: "",
-    );
-  }
+  get change => null;
 
   @override
   Map<String, dynamic> toMap() {
@@ -89,7 +83,7 @@ class Stock extends Equatable with DataBaseModelMixin, Comparable<Stock> {
   String get index => symbol;
 
   factory Stock.snp() {
-    return Stock.empty(
+    return Stock(
       symbol: "SPX",
       name: "S&P 500",
       asset: "index",
@@ -97,7 +91,7 @@ class Stock extends Equatable with DataBaseModelMixin, Comparable<Stock> {
   }
 
   factory Stock.dow() {
-    return Stock.empty(
+    return Stock(
       symbol: "INDU",
       name: "DOW",
       asset: "index",
@@ -105,28 +99,25 @@ class Stock extends Equatable with DataBaseModelMixin, Comparable<Stock> {
   }
 
   factory Stock.nasdaq() {
-    return Stock.empty(
+    return Stock(
       symbol: "COMP",
       name: "Nasdaq",
       asset: "index",
     );
   }
   factory Stock.treasury2Y() {
-    return Stock.empty(
-      symbol: "CMTN2Y",
-      name: "2 Years Treasury",
-      asset: "fixedincome",
-    );
+    return Stock(
+        symbol: "CMTN2Y", name: "2 Years Treasury", asset: "fixedincome");
   }
   factory Stock.treasury20Y() {
-    return Stock.empty(
+    return Stock(
       symbol: "CMTN2Y",
       name: "20 Years Treasury",
       asset: "fixedincome",
     );
   }
   factory Stock.crudeOil() {
-    return Stock.empty(
+    return Stock(
       symbol: "CL%3ANMX",
       name: "WTI Oil",
       asset: "commodities",
@@ -134,14 +125,14 @@ class Stock extends Equatable with DataBaseModelMixin, Comparable<Stock> {
   }
 
   factory Stock.gold() {
-    return Stock.empty(
+    return Stock(
       symbol: "GC%3ACMX",
       name: "Gold",
       asset: "commodities",
     );
   }
   factory Stock.copper() {
-    return Stock.empty(
+    return Stock(
       symbol: "hg%3Acmx",
       name: "Copper",
       asset: "commodities",
@@ -149,7 +140,7 @@ class Stock extends Equatable with DataBaseModelMixin, Comparable<Stock> {
   }
 
   factory Stock.naturalGas() {
-    return Stock.empty(
+    return Stock(
       symbol: "ng%3Anmx",
       name: "Natural Gas",
       asset: "commodities",
@@ -164,22 +155,18 @@ class Stock extends Equatable with DataBaseModelMixin, Comparable<Stock> {
   Stock copyWith({
     String? symbol,
     String? name,
-    double? lastSalePrice,
-    double? previousSalePrice,
-    String? netChange,
-    String? percentageChange,
-    String? deltaIndicator,
     String? asset,
+    double? lastSalePrice,
+    double? netChange,
+    double? percentChange,
   }) {
     return Stock(
       symbol: symbol ?? this.symbol,
       name: name ?? this.name,
-      lastSalePrice: lastSalePrice ?? this.lastSalePrice,
-      previousSalePrice: previousSalePrice ?? this.previousSalePrice,
-      netChange: netChange ?? this.netChange,
-      percentageChange: percentageChange ?? this.percentageChange,
-      deltaIndicator: deltaIndicator ?? this.deltaIndicator,
       asset: asset ?? this.asset,
+      lastSalePrice: lastSalePrice ?? this.lastSalePrice,
+      netChange: netChange ?? this.netChange,
+      percentChange: percentChange ?? this.percentChange,
     );
   }
 }

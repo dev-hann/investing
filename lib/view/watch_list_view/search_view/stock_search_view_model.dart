@@ -4,27 +4,25 @@ import 'package:investing/controller/stock_controller.dart';
 import 'package:investing/model/stock.dart';
 import 'package:investing/view/view.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 class StockSearchViewModel extends ViewModel<StockController> {
-  List<Stock> get favoriteStockList => controller.favoriteStockList;
+  List<Stock> get favoriteStockList => controller.favoriteList;
   final List<Stock> searchedList = [];
   final TextEditingController queryCntroller = TextEditingController();
-  final RxString rxQuery = RxString("");
-  Worker? _queryWoker;
+  String get query => queryCntroller.text;
 
   @override
   Future init() {
-    _queryWoker ??= debounce(rxQuery, (query) {
-      searchStock(query);
-    }, time: const Duration(milliseconds: 1000));
+    _initSearch();
     return super.init();
   }
 
-  @override
-  Future dispose() {
-    _queryWoker?.dispose();
-    return super.dispose();
+  void _initSearch() {
+    controller.favoriteStream.listen((event) {
+      controller.refreshFavoriteList();
+      updateView();
+    });
+    controller.refreshFavoriteList();
   }
 
   void searchStock(String query) async {

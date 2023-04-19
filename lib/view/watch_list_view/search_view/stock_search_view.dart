@@ -23,7 +23,7 @@ class StockSearchView extends View<StockSearchViewModel, StockController> {
     return Card(
       child: CustomTextfield(
         controller: viewModel.queryCntroller,
-        onChanged: viewModel.rxQuery,
+        textInputAction: TextInputAction.search,
         onSubmitted: (text) {
           viewModel.searchStock(text);
         },
@@ -44,7 +44,7 @@ class StockSearchView extends View<StockSearchViewModel, StockController> {
         final isBookmark = stockList.contains(stock);
         return StockSearchCard(
           stock: stock,
-          query: viewModel.rxQuery.value,
+          query: viewModel.query,
           onTap: () async {
             Get.to(
               StockDetailView(stock: stock),

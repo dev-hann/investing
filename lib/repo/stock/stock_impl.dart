@@ -3,37 +3,38 @@ part of stock_repo;
 class StockImpl extends StockRepo {
   final StockService service = StockService();
 
-  final IVDataBase watchListDB = IVDataBase("WatchList");
+  final IVDataBase favoriteDB = IVDataBase("Favorite");
 
   @override
   Future init() async {
-    await watchListDB.init();
+    await favoriteDB.init();
     return super.init();
   }
 
   @override
-  Stream<IVDataBaseEvent> watchListStream() {
-    return watchListDB.stream;
+  Stream<IVDataBaseEvent> favoriteStream() {
+    return favoriteDB.stream;
   }
 
   @override
   List loadStockList() {
-    return watchListDB.loadStockList();
+    return favoriteDB.loadStockList();
   }
 
   @override
   Future removeStock(String index) async {
-    return watchListDB.removeStock(index);
+    return favoriteDB.removeStock(index);
   }
 
   @override
   Future updateStock<T extends DataBaseModelMixin>(T data) async {
-    return watchListDB.updateStock(data);
+    return favoriteDB.updateStock(data);
   }
 
   @override
   Future<List> searchStock(String query) async {
-    return service.searchStock(query);
+    final res = await service.searchStock(query);
+    return List.from(res.data["data"]["symbol"]["value"]);
   }
 
   @override
@@ -67,6 +68,12 @@ class StockImpl extends StockRepo {
   @override
   Future requestMarketStatus() async {
     final res = await service.requestMarketStatus();
+    return res.data;
+  }
+
+  @override
+  Future requestStockList(List<String> symbolList) async {
+    final res = await service.requestStockList(symbolList);
     return res.data;
   }
 }

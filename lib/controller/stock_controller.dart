@@ -10,75 +10,45 @@ import 'package:investing/use_case/stock_use_case.dart';
 class StockController extends Controller<StockUseCase> {
   StockController(super.useCase);
 
-  final List<Stock> favoriteStockList = [];
   late MarketStatus marketStatus;
-  Stream<IVDataBaseEvent<Stock>> get watchListStream =>
-      useCase.watchListStream();
 
-  @override
-  Future onReady() async {
-    _initFavoriteStockList();
-    await _initMarketStatus();
-    super.onReady();
-  }
+  Stream<IVDataBaseEvent<Stock>> get favoriteStream => useCase.favoriteStream();
 
-  Timer? _marketTimer;
-
-  Future _initMarketStatus() async {
+  Future refreshMarkStatus() async {
     marketStatus = await useCase.requestMarketStatus();
-    // if (!marketStatus.isOpened) {
-    //   final now = DateTime.now();
-    //   final leftDuration = marketStatus.preMarketOpen.difference(now);
-    //   _marketTimer = Timer.periodic(leftDuration, (timer) {
-    //     _initMarketStatus();
-    //     _marketTimer!.cancel();
-    //   });
-    // } else {
-    //   _marketTimer = Timer.periodic(const Duration(seconds: 5), (timer) {
-    //     if (!marketStatus.isOpened) {
-    //       _marketTimer!.cancel();
-    //       return;
-    //     }
-    //   });
-    // }
   }
 
-  void _initFavoriteStockList() {
-    watchListStream.listen((event) {
-      refreshWatchList(event);
-    });
-    favoriteStockList.addAll(useCase.loadStockList());
-    for (int index = 0; index < favoriteStockList.length; ++index) {
-      final stock = favoriteStockList[index];
-      useCase
-          .requestStock(
+  // Favorite
+  final List<Stock> favoriteList = [];
+  final List<StockDetail> favoriteDetailList = [];
+  void refreshFavoriteList() {
+    favoriteList.clear();
+    favoriteList.addAll(useCase.loadStockList());
+  }
+
+  Future refreshFavoriteListQuote() async {
+    for (int index = 0; index < favoriteList.length; ++index) {
+      final stock = favoriteList[index];
+      favoriteList[index] = await useCase.requestStock(
         stock: stock,
         dateTimeRange: stock.dateTimeRangeList.first,
-      )
-          .then((value) async {
-        favoriteStockList[index] = value;
-        // TODO: update veiew by id
-        updateView();
-      });
+      );
     }
   }
 
-  void refreshWatchList(IVDataBaseEvent<Stock> event) async {
-    final stock = event.data;
-    final index = favoriteStockList
-        .indexWhere((element) => element.symbol == stock.symbol);
-    final isDeleted = event.deleted;
-    if (isDeleted) {
-      favoriteStockList.removeAt(index);
-    } else {
-      final isNew = index == -1;
-      if (isNew) {
-        favoriteStockList.add(stock);
-      } else {
-        favoriteStockList[index] = stock;
-      }
+  Future refreshFavoriteDetail() async {}
+
+  // Index
+  final List<StockDetail> indexDetailList = [];
+  Future refreshIndexList(List<Stock> indexList) async {
+    indexDetailList.clear();
+    for (int index = 0; index < indexList.length; ++index) {
+      final stock = indexList[index];
+      final res = await requestStockDetail(
+        StockDetail.fromStock(stock),
+      );
+      indexDetailList.add(res);
     }
-    updateView();
   }
 
   List<Stock> loadStockList() {
@@ -109,6 +79,6 @@ class StockController extends Controller<StockUseCase> {
   }
 
   bool contains(Stock stock) {
-    return favoriteStockList.contains(stock);
+    return favoriteList.contains(stock);
   }
 }

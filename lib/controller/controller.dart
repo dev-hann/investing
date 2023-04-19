@@ -41,4 +41,8 @@ abstract class Controller<T extends UseCase> extends GetxController {
   void updateView() {
     update([..._idList]);
   }
+
+  void updateViewByID(dynamic viewID) {
+    update([viewID]);
+  }
 }

@@ -2,17 +2,18 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:investing/const/color.dart';
-import 'package:investing/controller/stock_controller.dart';
 import 'package:investing/model/stock_detail.dart';
-import 'package:investing/view/view.dart';
 import 'package:investing/view/watch_list_view/detail_view/stock_detail_view.dart';
-import 'package:investing/view/watch_list_view/index_view/index_view_model.dart';
 import 'package:investing/widget/chart_widget.dart';
 import 'package:investing/widget/stock_price_builder.dart';
 import 'package:investing/widget/title_widget.dart';
 
-class IndexView extends View<IndexViewModel, StockController> {
-  IndexView({super.key}) : super(viewModel: IndexViewModel());
+class IndexView extends StatelessWidget {
+  const IndexView({
+    super.key,
+    required this.indexDetailList,
+  });
+  final List<StockDetail> indexDetailList;
 
   Widget item(StockDetail indexDetail) {
     return GestureDetector(
@@ -80,19 +81,16 @@ class IndexView extends View<IndexViewModel, StockController> {
   }
 
   @override
-  Widget body() {
-    final itemList = viewModel.indexDetailList;
+  Widget build(BuildContext context) {
     return TitleWidget(
-      title: const Padding(
-        padding: EdgeInsets.symmetric(horizontal: 16.0),
-        child: Text("Index"),
-      ),
+      title: const Text("Index"),
+      trailing: const Icon(Icons.settings),
       child: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         scrollDirection: Axis.horizontal,
         child: Row(
-          children: itemList.map(item).toList(),
+          children: indexDetailList.map(item).toList(),
         ),
       ),
     );
