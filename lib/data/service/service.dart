@@ -25,7 +25,16 @@ abstract class IVService {
   Future<Response> get(
     String url, {
     Map<String, dynamic>? query,
-  }) {
+    bool showURL = false,
+  }) async {
+    if (showURL) {
+      final res = await _dio.get(
+        url,
+        queryParameters: query,
+      );
+      print(res.realUri);
+    }
+
     return _dio.get(
       url,
       queryParameters: query,

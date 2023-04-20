@@ -1,17 +1,22 @@
 import 'package:investing/controller/stock_controller.dart';
+import 'package:investing/model/stock.dart';
 import 'package:investing/view/watch_list_view/detail_view/stock_detail_view.dart';
-import 'package:investing/view/watch_list_view/search_view/stock_search_view_model.dart';
 import 'package:investing/widget/stock_search_card.dart';
-import 'package:investing/view/view.dart';
 import 'package:investing/widget/text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class StockSearchView extends View<StockSearchViewModel, StockController> {
-  StockSearchView({super.key})
-      : super(
-          viewModel: StockSearchViewModel(),
-        );
+class StockSearchView extends StatefulWidget {
+  const StockSearchView({super.key});
+
+  @override
+  State<StockSearchView> createState() => _StockSearchViewState();
+}
+
+class _StockSearchViewState extends State<StockSearchView> {
+  final controller = StockController.find();
+  final queryController = TextEditingController();
+  final searchedList = RxList<Stock>();
 
   AppBar appBar() {
     return AppBar(
@@ -19,41 +24,41 @@ class StockSearchView extends View<StockSearchViewModel, StockController> {
     );
   }
 
-  Widget queryTextField() {
+  Widget queryTextField({
+    required TextEditingController queryController,
+    required Function(String text) onSubmitted,
+  }) {
     return Card(
       child: CustomTextfield(
-        controller: viewModel.queryCntroller,
+        controller: queryController,
         textInputAction: TextInputAction.search,
-        onSubmitted: (text) {
-          viewModel.searchStock(text);
-        },
+        onSubmitted: onSubmitted,
         hintText: "Aa",
       ),
     );
   }
 
-  Widget searchedListWidget() {
-    final searchedList = viewModel.searchedList;
-    final stockList = viewModel.favoriteStockList;
+  Widget searchedListWidget({
+    required String query,
+    required List<Stock> searchedList,
+    required List<Stock> favoriteList,
+  }) {
     return ListView.separated(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       itemCount: searchedList.length,
       itemBuilder: (context, index) {
         final stock = searchedList[index];
-        final isBookmark = stockList.contains(stock);
-        return StockSearchCard(
-          stock: stock,
-          query: viewModel.query,
-          onTap: () async {
-            Get.to(
-              StockDetailView(stock: stock),
-            );
-          },
-          onTapBookmark: () async {
-            await viewModel.toggleBookmark(stock);
-          },
-          isBookmakred: isBookmark,
+        return Card(
+          child: StockSearchCard(
+            stock: stock,
+            query: query,
+            onTap: () {
+              Get.to(
+                StockDetailView(stock: stock),
+              );
+            },
+          ),
         );
       },
       separatorBuilder: (context, index) {
@@ -63,22 +68,38 @@ class StockSearchView extends View<StockSearchViewModel, StockController> {
   }
 
   @override
-  Widget body() {
+  Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
         FocusManager.instance.primaryFocus?.unfocus();
       },
       child: Scaffold(
         appBar: appBar(),
-        body: ListView(
-          padding: const EdgeInsets.all(16.0),
-          physics: const BouncingScrollPhysics(),
-          children: [
-            queryTextField(),
-            const SizedBox(height: 16.0),
-            searchedListWidget(),
-          ],
-        ),
+        body: Obx(() {
+          return ListView(
+            padding: const EdgeInsets.all(16.0),
+            physics: const BouncingScrollPhysics(),
+            children: [
+              queryTextField(
+                queryController: queryController,
+                onSubmitted: (query) async {
+                  if (query.isEmpty) {
+                    return;
+                  }
+                  final list = await controller.searchStock(query);
+                  searchedList.clear();
+                  searchedList.addAll(list);
+                },
+              ),
+              const SizedBox(height: 16.0),
+              searchedListWidget(
+                query: queryController.text,
+                searchedList: searchedList,
+                favoriteList: controller.favoriteList,
+              ),
+            ],
+          );
+        }),
       ),
     );
   }

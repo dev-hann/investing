@@ -4,6 +4,7 @@ import 'package:investing/model/date_time_range.dart';
 import 'package:investing/model/market_status.dart';
 import 'package:investing/model/stock.dart';
 import 'package:investing/model/stock_detail.dart';
+import 'package:investing/model/stock_dividend.dart';
 import 'package:investing/repo/stock/stock_repo.dart';
 import 'package:investing/use_case/use_case.dart';
 import 'package:investing/util/date_time_format.dart';
@@ -17,11 +18,14 @@ class StockUseCase extends UseCase<StockRepo> {
       final data = event.data;
       return IVDataBaseEvent(
         event.deleted,
-        Stock(
-          name: data["name"],
-          symbol: data["symbol"],
-          asset: data["asset"],
-        ),
+        event.key,
+        data == null
+            ? null
+            : Stock(
+                name: data["name"],
+                symbol: data["symbol"],
+                asset: data["asset"],
+              ),
       );
     });
   }
@@ -66,10 +70,8 @@ class StockUseCase extends UseCase<StockRepo> {
     return searchedList;
   }
 
-  Future<Stock> requestStock({
-    required Stock stock,
-    required IVDateTimeRange? dateTimeRange,
-  }) async {
+  @Deprecated("will be deprecated")
+  Future<Stock> requestStock(Stock stock) async {
     final res = await repo.requestStock(
       symbol: stock.symbol,
       asset: stock.asset,
@@ -118,7 +120,28 @@ class StockUseCase extends UseCase<StockRepo> {
       return "$symbol|$asset";
     }).toList();
     final res = await repo.requestStockList(symbolList);
-    return [];
-    // return List.from(res).map((e) => )
+    return List.from(res["data"]["records"]).map((data) {
+      final ticker = List.from(data["ticker"]);
+      return Stock(
+        symbol: ticker.first,
+        name: ticker.last,
+        asset: data["assetclass"],
+        lastSalePrice: IVNumberFormat(data["lastSale"]).toDouble(),
+        netChange: IVNumberFormat(data["change"]).toDouble(),
+        percentChange: IVNumberFormat(data["pctChange"]).toDouble(),
+      );
+    }).toList();
+  }
+
+  Future<StockDividend?> requestStockDividend(Stock stock) async {
+    // TODO: fix enum type
+    if (stock.asset.toLowerCase() == "index") {
+      return null;
+    }
+    final res = await repo.requestStockDividend(
+      symbol: stock.symbol,
+      asset: stock.asset,
+    );
+    return StockDividend.fromMap(res["data"]);
   }
 }

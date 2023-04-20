@@ -21,10 +21,10 @@ class Stock extends Equatable with DataBaseModelMixin, Comparable<Stock> {
 
   final String symbol;
   final String name;
+  final String asset;
   final double lastSalePrice;
   final double netChange;
   final double percentChange;
-  final String asset;
 
   bool get isEmpty {
     return lastSalePrice == 0 && netChange == 0 && percentChange == 0;
@@ -55,18 +55,15 @@ class Stock extends Equatable with DataBaseModelMixin, Comparable<Stock> {
     return list;
   }
 
-  bool get i {
-    return lastSalePrice == 0 && netChange == 0 && percentChange == 0;
-  }
-
-  get change => null;
-
   @override
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
-      'name': name,
       'symbol': symbol,
+      'name': name,
       'asset': asset,
+      'lastSalePrice': lastSalePrice,
+      'netChange': netChange,
+      'percentChange': percentChange,
     };
   }
 
@@ -77,6 +74,11 @@ class Stock extends Equatable with DataBaseModelMixin, Comparable<Stock> {
   @override
   List<Object?> get props => [
         symbol,
+        name,
+        asset,
+        lastSalePrice,
+        netChange,
+        percentChange,
       ];
 
   @override
@@ -107,7 +109,10 @@ class Stock extends Equatable with DataBaseModelMixin, Comparable<Stock> {
   }
   factory Stock.treasury2Y() {
     return Stock(
-        symbol: "CMTN2Y", name: "2 Years Treasury", asset: "fixedincome");
+      symbol: "CMTN2Y",
+      name: "2 Years Treasury",
+      asset: "fixedincome",
+    );
   }
   factory Stock.treasury20Y() {
     return Stock(

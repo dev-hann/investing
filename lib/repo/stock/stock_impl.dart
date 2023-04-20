@@ -76,4 +76,16 @@ class StockImpl extends StockRepo {
     final res = await service.requestStockList(symbolList);
     return res.data;
   }
+
+  @override
+  Future requestStockDividend({
+    required String symbol,
+    required String asset,
+  }) async {
+    final res = await service.requestStockDividend(
+      symbol: symbol,
+      asset: asset,
+    );
+    return res.data;
+  }
 }

@@ -28,4 +28,9 @@ abstract class StockRepo extends Repo {
   Future<dynamic> requestMarketStatus();
 
   Future<dynamic> requestStockList(List<String> symbolList);
+
+  Future<dynamic> requestStockDividend({
+    required String symbol,
+    required String asset,
+  });
 }

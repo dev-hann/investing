@@ -47,13 +47,10 @@ class StockCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
-      child: Card(
-        clipBehavior: Clip.hardEdge,
-        child: ListTile(
-          title: titleText(),
-          subtitle: subtitleText(),
-          trailing: trailingWidget(),
-        ),
+      child: ListTile(
+        title: titleText(),
+        subtitle: subtitleText(),
+        trailing: trailingWidget(),
       ),
     );
   }

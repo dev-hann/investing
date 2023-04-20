@@ -1,24 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:investing/const/color.dart';
+import 'package:investing/controller/stock_controller.dart';
 import 'package:investing/model/market_status.dart';
 
 class MarketStatusWidget extends StatelessWidget {
   const MarketStatusWidget({
     super.key,
-    required this.status,
   });
-  final MarketStatus status;
-  bool get isOpned => status.isOpened;
-  MarketStatusType get type => status.type;
 
-  Widget statusIcon() {
+  Widget statusIcon({
+    required bool isOpned,
+  }) {
     return Icon(
       Icons.online_prediction,
       color: isOpned ? IVColor.orange : IVColor.grey,
     );
   }
 
-  Widget statusText() {
+  Widget statusText({
+    required bool isOpned,
+    required MarketStatusType type,
+  }) {
     String text = "Closed";
     if (isOpned) {
       switch (type) {
@@ -45,12 +48,26 @@ class MarketStatusWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        statusIcon(),
-        statusText(),
-      ],
-    );
+    final controller = StockController.find();
+    return Obx(() {
+      final status = controller.marketStatus.value;
+      if (status == null) {
+        return const SizedBox();
+      }
+      final isOpened = status.isOpened;
+      final type = status.type;
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          statusIcon(
+            isOpned: isOpened,
+          ),
+          statusText(
+            isOpned: isOpened,
+            type: type,
+          ),
+        ],
+      );
+    });
   }
 }

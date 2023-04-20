@@ -41,18 +41,6 @@ abstract class View<T extends ViewModel, S extends Controller>
     viewModel.dispose();
   }
 
-  Widget childBuilder({
-    required dynamic childViewID,
-    required Widget child,
-  }) {
-    return GetBuilder<S>(
-      id: childViewID,
-      builder: (_) {
-        return child;
-      },
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Material(

@@ -32,6 +32,11 @@ class StockDetail extends Stock {
       ];
 
   @override
+  bool get isEmpty {
+    return super.isEmpty && priceChartList.isEmpty;
+  }
+
+  @override
   StockDetail copyWith({
     String? symbol,
     String? name,

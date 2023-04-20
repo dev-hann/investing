@@ -2,11 +2,14 @@ import 'package:intl/intl.dart';
 
 class IVNumberFormat {
   IVNumberFormat(this.number);
-  final String number;
+  final String? number;
 
   double toDouble() {
+    if (number == null) {
+      return 0.0;
+    }
     return double.tryParse(
-          number.replaceAll(RegExp("[,\$%]"), ""),
+          number!.replaceAll(RegExp("[,\$%]"), ""),
         ) ??
         0.0;
   }

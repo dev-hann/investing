@@ -7,6 +7,7 @@ import 'package:investing/model/chart.dart';
 import 'package:investing/model/stock_detail.dart';
 import 'package:investing/util/date_time_format.dart';
 import 'package:investing/util/number_format.dart';
+import 'package:investing/widget/loading_widget.dart';
 
 class IVChartWidget extends StatelessWidget {
   IVChartWidget({
@@ -110,23 +111,33 @@ class IVChartWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final priceChartList = stockDetail.priceChartList;
-    final volumeChartList = stockDetail.volumeChartList;
-    final previousClosePrice = stockDetail.previousClosePrice;
-    double maxY = priceChartList.map((e) => e.value).reduce(max);
-    double minY = priceChartList.map((e) => e.value).reduce(min);
-    priceChartList.sort();
-    volumeChartList.sort();
-    if (enableGesture) {
-      //TODO:  normalize chart.
-      maxY = maxY;
-      minY = minY - (minY / 200);
-    }
+    // TODO: Need Refactoring view.
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: LayoutBuilder(
         builder: (context, constraints) {
           final width = constraints.maxWidth;
+          if (stockDetail.isEmpty) {
+            return SizedBox(
+              width: width,
+              height: width / 1.5,
+              child: const IVLoadingWidget(
+                background: Colors.transparent,
+              ),
+            );
+          }
+          final priceChartList = stockDetail.priceChartList;
+          final volumeChartList = stockDetail.volumeChartList;
+          final previousClosePrice = stockDetail.previousClosePrice;
+          double maxY = priceChartList.map((e) => e.value).reduce(max);
+          double minY = priceChartList.map((e) => e.value).reduce(min);
+          priceChartList.sort();
+          volumeChartList.sort();
+          if (enableGesture) {
+            //TODO:  normalize chart.
+            maxY = maxY;
+            minY = minY - (minY / 200);
+          }
           return Column(
             children: [
               SizedBox(

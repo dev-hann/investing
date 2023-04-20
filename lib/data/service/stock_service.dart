@@ -51,4 +51,17 @@ class StockService extends IVService {
     final url = "https://api.nasdaq.com/api/quote/basic?$q";
     return get(url);
   }
+
+  Future<Response> requestStockDividend({
+    required String symbol,
+    required String asset,
+  }) async {
+    final url = "https://api.nasdaq.com/api/quote/$symbol/dividends";
+    return get(
+      url,
+      query: {
+        "assetclass": asset,
+      },
+    );
+  }
 }

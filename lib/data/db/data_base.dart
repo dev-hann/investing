@@ -30,7 +30,13 @@ class IVDataBase {
   }
 
   Stream<IVDataBaseEvent> get stream => _box.watch().map<IVDataBaseEvent>(
-        (event) => IVDataBaseEvent(event.deleted, event.value),
+        (event) {
+          return IVDataBaseEvent<dynamic>(
+            event.deleted,
+            event.key,
+            event.value,
+          );
+        },
       );
 
   Future removeStock(String stockIndex) {
@@ -39,9 +45,14 @@ class IVDataBase {
 }
 
 class IVDataBaseEvent<T> extends Equatable {
-  const IVDataBaseEvent(this.deleted, this.data);
+  const IVDataBaseEvent(
+    this.deleted,
+    this.key,
+    this.data,
+  );
   final bool deleted;
-  final T data;
+  final String key;
+  final T? data;
 
   @override
   List<Object?> get props => [
