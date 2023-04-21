@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:investing/model/stock/stock.dart';
 
 class IVDateTimeRange extends Equatable {
   const IVDateTimeRange(this.begin, this.end);

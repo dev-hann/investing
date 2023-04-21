@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:investing/controller/stock_controller.dart';
-import 'package:investing/model/stock.dart';
+import 'package:investing/model/stock/stock.dart';
 
 class BookMarkWidget extends StatelessWidget {
   const BookMarkWidget({

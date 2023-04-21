@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:investing/const/color.dart';
-import 'package:investing/model/stock.dart';
+import 'package:investing/model/stock/stock.dart';
 import 'package:investing/util/number_format.dart';
 
 typedef PriceWidgetBuilder = Widget Function(

@@ -64,4 +64,34 @@ class StockService extends IVService {
       },
     );
   }
+
+  Future<Response> requestStockFinancial({
+    required String symbol,
+    required int typeIndex,
+  }) {
+    final url = "https://api.nasdaq.com/api/company/$symbol/financials";
+    return get(
+      url,
+      query: {
+        "frequency": typeIndex + 1,
+      },
+    );
+  }
+
+  Future<Response> requestStockCahrt({
+    required String symbol,
+    required String asset,
+    required String? fromDate,
+    required String? toDate,
+  }) {
+    final url = "https://api.nasdaq.com/api/quote/$symbol/chart";
+    return get(
+      url,
+      query: {
+        "assetclass": asset,
+        "fromdate": fromDate,
+        "todate": toDate,
+      },
+    );
+  }
 }

@@ -4,19 +4,17 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:investing/const/color.dart';
 import 'package:investing/model/chart.dart';
-import 'package:investing/model/stock_detail.dart';
+import 'package:investing/model/stock/stock_chart.dart';
 import 'package:investing/util/date_time_format.dart';
 import 'package:investing/util/number_format.dart';
-import 'package:investing/widget/loading_widget.dart';
 
 class IVChartWidget extends StatelessWidget {
   IVChartWidget({
     super.key,
-    required this.stockDetail,
+    required this.chart,
     this.enableGesture = false,
-  }) : showBaseLineNotifier =
-            ValueNotifier(stockDetail.previousClosePrice != 0);
-  final StockDetail stockDetail;
+  }) : showBaseLineNotifier = ValueNotifier(chart.previousClose != 0);
+  final StockChart chart;
   final bool enableGesture;
   final ValueNotifier<bool> showBaseLineNotifier;
 
@@ -117,25 +115,16 @@ class IVChartWidget extends StatelessWidget {
       child: LayoutBuilder(
         builder: (context, constraints) {
           final width = constraints.maxWidth;
-          if (stockDetail.isEmpty) {
-            return SizedBox(
-              width: width,
-              height: width / 1.5,
-              child: const IVLoadingWidget(
-                background: Colors.transparent,
-              ),
-            );
-          }
-          final priceChartList = stockDetail.priceChartList;
-          final volumeChartList = stockDetail.volumeChartList;
-          final previousClosePrice = stockDetail.previousClosePrice;
+          final priceChartList = chart.priceChartList;
+          final volumeChartList = chart.volumeChartList;
+          final previousClosePrice = chart.previousClose;
           double maxY = priceChartList.map((e) => e.value).reduce(max);
           double minY = priceChartList.map((e) => e.value).reduce(min);
           priceChartList.sort();
           volumeChartList.sort();
           if (enableGesture) {
             //TODO:  normalize chart.
-            maxY = maxY;
+            maxY = maxY + 0.01;
             minY = minY - (minY / 200);
           }
           return Column(

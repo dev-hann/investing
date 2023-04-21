@@ -3,10 +3,12 @@ import 'dart:async';
 import 'package:get/get.dart';
 import 'package:investing/controller/controller.dart';
 import 'package:investing/data/db/data_base.dart';
-import 'package:investing/model/stock_dividend.dart';
+import 'package:investing/model/date_time_range.dart';
+import 'package:investing/model/stock/stock.dart';
+import 'package:investing/model/stock/stock_chart.dart';
+import 'package:investing/model/stock/stock_dividend.dart';
+import 'package:investing/model/stock/stock_financial.dart';
 import 'package:investing/model/market_status.dart';
-import 'package:investing/model/stock.dart';
-import 'package:investing/model/stock_detail.dart';
 import 'package:investing/use_case/stock_use_case.dart';
 
 class StockController extends Controller<StockUseCase> {
@@ -54,7 +56,7 @@ class StockController extends Controller<StockUseCase> {
 
   // Index
   //TODO: make it edit by option button
-  final List<Stock> _indexStockList = [
+  final RxList<Stock> indexList = [
     Stock.nasdaq(),
     Stock.snp(),
     Stock.dow(),
@@ -64,21 +66,26 @@ class StockController extends Controller<StockUseCase> {
     Stock.copper(),
     Stock.naturalGas(),
     Stock.crudeOil(),
-  ];
+  ].obs;
   Future _initIndexList() async {
-    await refreshIndexList(_indexStockList);
+    await refreshIndexList();
   }
 
-  final RxList<StockDetail> indexDetailList = <StockDetail>[].obs;
-  Future refreshIndexList(List<Stock> indexList) async {
-    indexDetailList.clear();
+  final RxList<StockChart> indexChartList = <StockChart>[].obs;
+  Future refreshIndexList() async {
+    final res = await useCase.requestStockList(indexList);
+    indexList(res);
+    final list = <StockChart>[];
     for (int index = 0; index < indexList.length; ++index) {
       final stock = indexList[index];
-      final res = await requestStockDetail(
-        StockDetail.fromStock(stock),
+      final res = await useCase.requestStockChart(
+        symbol: stock.symbol,
+        asset: stock.asset,
+        dateTimeRange: IVDateTimeRange.beforeDay(7),
       );
-      indexDetailList.add(res);
+      list.add(res);
     }
+    indexChartList(list);
   }
 
   Future updateFavoriteStock(Stock stock) async {
@@ -122,18 +129,36 @@ class StockController extends Controller<StockUseCase> {
   }
 
   // Stock Detail
-  Future<StockDetail> requestStockDetail(StockDetail stockDetail) {
-    return useCase.requestStockDetail(
-      stockDetail: stockDetail,
-      dateTimeRange: stockDetail.dateTimeRangeList.first,
-    );
-  }
 
   Future<StockDividend?> requestStockDividend(Stock stock) async {
     try {
-      return useCase.requestStockDividend(stock);
+      return useCase.requestStockDividend(
+        symbol: stock.symbol,
+        asset: stock.asset,
+      );
     } catch (e) {
       return null;
     }
+  }
+
+  Future<StockFinancial?> requestStockFinancial({
+    required Stock stock,
+    required FinancialType type,
+  }) {
+    return useCase.requestStockFinancial(
+      symbol: stock.symbol,
+      type: type,
+    );
+  }
+
+  Future<StockChart> requestStockChart({
+    required Stock stock,
+    IVDateTimeRange? dateTimeRange,
+  }) {
+    return useCase.requestStockChart(
+      symbol: stock.symbol,
+      asset: stock.asset,
+      dateTimeRange: dateTimeRange,
+    );
   }
 }

@@ -1,7 +1,17 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 
 import 'package:investing/data/db/data_base_model_mixin.dart';
 import 'package:investing/model/date_time_range.dart';
+import 'package:investing/util/number_format.dart';
+
+enum StockType {
+  stock,
+  etf,
+  majorIndex,
+  fixedIncome,
+  commodity,
+}
 
 enum IndicatorStatus {
   up,
@@ -26,6 +36,39 @@ class Stock extends Equatable with DataBaseModelMixin, Comparable<Stock> {
   final double netChange;
   final double percentChange;
 
+  StockType get type {
+    final assetText = asset.toLowerCase();
+    if (assetText == "etf") {
+      return StockType.etf;
+    } else if (assetText == "stocks") {
+      return StockType.stock;
+    } else if (assetText == "index") {
+      return StockType.majorIndex;
+    } else if (assetText == "fixedincome") {
+      return StockType.fixedIncome;
+    } else if (assetText == "commodities") {
+      return StockType.commodity;
+    }
+    throw FlutterError("Unknown Stock Type $assetText");
+  }
+
+  List<IVDateTimeRange?> get dateTimeList {
+    final list = <IVDateTimeRange?>[
+      IVDateTimeRange.beforeDay(7),
+    ];
+    switch (type) {
+      case StockType.stock:
+      case StockType.etf:
+      case StockType.majorIndex:
+        list.insert(0, null);
+        break;
+      case StockType.fixedIncome:
+      case StockType.commodity:
+        break;
+    }
+    return list;
+  }
+
   bool get isEmpty {
     return lastSalePrice == 0 && netChange == 0 && percentChange == 0;
   }
@@ -38,21 +81,6 @@ class Stock extends Equatable with DataBaseModelMixin, Comparable<Stock> {
       return IndicatorStatus.up;
     }
     return IndicatorStatus.down;
-  }
-
-  List<IVDateTimeRange?> get dateTimeRangeList {
-    final list = <IVDateTimeRange?>[
-      IVDateTimeRange.beforeDay(7),
-      IVDateTimeRange.beforeMonth(1),
-      IVDateTimeRange.beforeMonth(3),
-      IVDateTimeRange.beforeYear(1),
-      IVDateTimeRange.beforeYear(100),
-    ];
-    // final assetValue = asset.toLowerCase();
-    // if (assetValue == "index" || assetValue == "stocks") {
-    //   return [null, IVDateTimeRange.beforeDay(1), ...list];
-    // }
-    return list;
   }
 
   @override
@@ -172,6 +200,22 @@ class Stock extends Equatable with DataBaseModelMixin, Comparable<Stock> {
       lastSalePrice: lastSalePrice ?? this.lastSalePrice,
       netChange: netChange ?? this.netChange,
       percentChange: percentChange ?? this.percentChange,
+    );
+  }
+
+  static double _toDouble(String value) {
+    return IVNumberFormat(value).toDouble();
+  }
+
+  factory Stock.fromMap(Map<String, dynamic> map) {
+    final ticker = List.from(map["ticker"]);
+    return Stock(
+      symbol: ticker.first,
+      name: ticker.last,
+      asset: map["assetclass"],
+      lastSalePrice: _toDouble(map["lastSale"]),
+      netChange: _toDouble(map["change"]),
+      percentChange: _toDouble(map["pctChange"]),
     );
   }
 }

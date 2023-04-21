@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:investing/model/stock_dividend.dart';
+import 'package:investing/model/stock/stock_dividend.dart';
 
 class DividendView extends StatelessWidget {
   const DividendView({

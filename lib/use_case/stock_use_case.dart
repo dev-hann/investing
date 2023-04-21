@@ -1,13 +1,12 @@
 import 'package:investing/data/db/data_base.dart';
-import 'package:investing/model/chart.dart';
 import 'package:investing/model/date_time_range.dart';
 import 'package:investing/model/market_status.dart';
-import 'package:investing/model/stock.dart';
-import 'package:investing/model/stock_detail.dart';
-import 'package:investing/model/stock_dividend.dart';
+import 'package:investing/model/stock/stock.dart';
+import 'package:investing/model/stock/stock_chart.dart';
+import 'package:investing/model/stock/stock_dividend.dart';
+import 'package:investing/model/stock/stock_financial.dart';
 import 'package:investing/repo/stock/stock_repo.dart';
 import 'package:investing/use_case/use_case.dart';
-import 'package:investing/util/date_time_format.dart';
 import 'package:investing/util/number_format.dart';
 
 class StockUseCase extends UseCase<StockRepo> {
@@ -85,27 +84,17 @@ class StockUseCase extends UseCase<StockRepo> {
     );
   }
 
-  Future<StockDetail> requestStockDetail({
-    required StockDetail stockDetail,
+  Future<StockChart> requestStockChart({
+    required String symbol,
+    required String asset,
     required IVDateTimeRange? dateTimeRange,
   }) async {
-    final res = await await repo.requestStockWithChart(
-      symbol: stockDetail.symbol,
-      asset: stockDetail.asset,
-      fromDate: IVDateTimeFormat(dateTimeRange?.begin).dateTimeFormat(),
-      toDate: IVDateTimeFormat(dateTimeRange?.end).dateTimeFormat(),
+    final res = await repo.requestStockChart(
+      symbol: symbol,
+      asset: asset,
+      dateTimeRange: dateTimeRange,
     );
-    final data = Map<String, dynamic>.from(res)["data"];
-    return stockDetail.copyWith(
-      lastSalePrice: IVNumberFormat(data["lastSalePrice"]).toDouble(),
-      netChange: IVNumberFormat(data["netChange"]).toDouble(),
-      percentChange: IVNumberFormat(data["percentageChange"]).toDouble(),
-      priceChartList:
-          List.from(data["chart"]).map((e) => IVChart.fromMap(e)).toList(),
-      volumeChartList: List.from(data["volumeChart"] ?? [])
-          .map((e) => IVChart.fromMap(e))
-          .toList(),
-    );
+    return StockChart.fromMap(res["data"]);
   }
 
   Future<MarketStatus> requestMarketStatus() async {
@@ -121,27 +110,42 @@ class StockUseCase extends UseCase<StockRepo> {
     }).toList();
     final res = await repo.requestStockList(symbolList);
     return List.from(res["data"]["records"]).map((data) {
-      final ticker = List.from(data["ticker"]);
-      return Stock(
-        symbol: ticker.first,
-        name: ticker.last,
-        asset: data["assetclass"],
-        lastSalePrice: IVNumberFormat(data["lastSale"]).toDouble(),
-        netChange: IVNumberFormat(data["change"]).toDouble(),
-        percentChange: IVNumberFormat(data["pctChange"]).toDouble(),
-      );
+      return Stock.fromMap(data);
     }).toList();
   }
 
-  Future<StockDividend?> requestStockDividend(Stock stock) async {
+  Future<StockDividend?> requestStockDividend({
+    required String symbol,
+    required String asset,
+  }) async {
     // TODO: fix enum type
-    if (stock.asset.toLowerCase() == "index") {
+    if (asset.toLowerCase() == "index") {
       return null;
     }
-    final res = await repo.requestStockDividend(
-      symbol: stock.symbol,
-      asset: stock.asset,
-    );
-    return StockDividend.fromMap(res["data"]);
+    try {
+      final res = await repo.requestStockDividend(
+        symbol: symbol,
+        asset: asset,
+      );
+      return StockDividend.fromMap(res["data"]);
+    } catch (e) {
+      // some stock have no dividend
+      return null;
+    }
+  }
+
+  Future<StockFinancial?> requestStockFinancial({
+    required String symbol,
+    required FinancialType type,
+  }) async {
+    try {
+      final res = await repo.requestStockFinancial(
+        symbol: symbol,
+        typeIndex: type.index,
+      );
+      return StockFinancial.fromMap(res["data"]);
+    } catch (e) {
+      return null;
+    }
   }
 }

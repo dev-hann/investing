@@ -88,4 +88,31 @@ class StockImpl extends StockRepo {
     );
     return res.data;
   }
+
+  @override
+  Future requestStockFinancial({
+    required String symbol,
+    required int typeIndex,
+  }) async {
+    final res = await service.requestStockFinancial(
+      symbol: symbol,
+      typeIndex: typeIndex,
+    );
+    return res.data;
+  }
+
+  @override
+  Future requestStockChart({
+    required String symbol,
+    required String asset,
+    required IVDateTimeRange? dateTimeRange,
+  }) async {
+    final res = await service.requestStockCahrt(
+      symbol: symbol,
+      asset: asset,
+      fromDate: IVDateTimeFormat(dateTimeRange?.begin).dateTimeFormat(),
+      toDate: IVDateTimeFormat(dateTimeRange?.end).dateTimeFormat(),
+    );
+    return res.data;
+  }
 }

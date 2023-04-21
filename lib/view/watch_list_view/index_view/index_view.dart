@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:investing/const/color.dart';
 import 'package:investing/controller/stock_controller.dart';
-import 'package:investing/model/stock_detail.dart';
+import 'package:investing/model/stock/stock.dart';
+import 'package:investing/model/stock/stock_chart.dart';
 import 'package:investing/view/watch_list_view/detail_view/stock_detail_view.dart';
 import 'package:investing/widget/chart_widget.dart';
+import 'package:investing/widget/loading_widget.dart';
 import 'package:investing/widget/stock_price_builder.dart';
 import 'package:investing/widget/title_widget.dart';
 
@@ -18,12 +20,19 @@ class IndexView extends StatefulWidget {
 
 class _IndexViewState extends State<IndexView> {
   final controller = StockController.find();
+  @override
+  void initState() {
+    super.initState();
+  }
 
-  Widget item(StockDetail indexDetail) {
+  Widget item({
+    required Stock index,
+    required StockChart chart,
+  }) {
     return GestureDetector(
       onTap: () {
         Get.to(
-          StockDetailView(stock: indexDetail),
+          StockDetailView(stock: index),
         );
       },
       child: Padding(
@@ -45,15 +54,15 @@ class _IndexViewState extends State<IndexView> {
                     children: [
                       IgnorePointer(
                         child: IVChartWidget(
-                          stockDetail: indexDetail,
+                          chart: chart,
                         ),
                       ),
                       AutoSizeText(
-                        indexDetail.name,
+                        index.name,
                         maxLines: 1,
                       ),
                       IVStockPriceBuilder(
-                        stock: indexDetail,
+                        stock: index,
                         lastPriceStyle: textTheme.titleMedium,
                         netChangeBracket: true,
                         builder:
@@ -97,9 +106,19 @@ class _IndexViewState extends State<IndexView> {
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         scrollDirection: Axis.horizontal,
         child: Obx(() {
-          final indexDetailList = controller.indexDetailList;
+          final indexList = controller.indexList;
+          final chartList = controller.indexChartList;
+          if (indexList.isEmpty) {
+            return const IVLoadingWidget();
+          }
           return Row(
-            children: indexDetailList.map(item).toList(),
+            children: [
+              for (int index = 0; index < chartList.length; ++index)
+                item(
+                  index: indexList[index],
+                  chart: chartList[index],
+                ),
+            ],
           );
         }),
       ),

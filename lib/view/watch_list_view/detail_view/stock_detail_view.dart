@@ -1,13 +1,16 @@
 import 'package:get/get.dart';
 import 'package:investing/controller/stock_controller.dart';
-import 'package:investing/model/stock.dart';
-import 'package:investing/model/stock_detail.dart';
-import 'package:investing/model/stock_dividend.dart';
+import 'package:investing/model/date_time_range.dart';
+import 'package:investing/model/stock/stock.dart';
+import 'package:investing/model/stock/stock_chart.dart';
+import 'package:investing/model/stock/stock_dividend.dart';
+import 'package:investing/model/stock/stock_financial.dart';
 import 'package:investing/view/watch_list_view/detail_view/dividend_view/dividend_view.dart';
 import 'package:investing/widget/book_mark.dart';
 import 'package:flutter/material.dart';
 import 'package:investing/widget/chart_button.dart';
 import 'package:investing/widget/chart_widget.dart';
+import 'package:investing/widget/loading_widget.dart';
 import 'package:investing/widget/stock_price_builder.dart';
 import 'package:investing/widget/title_widget.dart';
 
@@ -24,15 +27,23 @@ class StockDetailView extends StatefulWidget {
 
 class _StockDetailViewState extends State<StockDetailView> {
   final controller = StockController.find();
-  final Rxn<StockDetail> detail = Rxn();
+  final Rxn<StockChart> chart = Rxn();
   final Rxn<StockDividend> dividend = Rxn();
+  final Rxn<StockFinancial> financial = Rxn();
   @override
   void initState() {
     super.initState();
     final stock = widget.stock;
-    detail(StockDetail.fromStock(stock));
-    controller.requestStockDetail(detail.value!).then(detail);
+    controller
+        .requestStockChart(
+          stock: stock,
+          dateTimeRange: stock.dateTimeList.first,
+        )
+        .then(chart);
     controller.requestStockDividend(stock).then(dividend);
+    controller
+        .requestStockFinancial(stock: stock, type: FinancialType.annual)
+        .then(financial);
   }
 
   AppBar appBar() {
@@ -99,9 +110,12 @@ class _StockDetailViewState extends State<StockDetailView> {
     );
   }
 
-  Widget chartWidget(StockDetail detail) {
+  Widget chartWidget(StockChart? chart) {
+    if (chart == null) {
+      return const IVLoadingWidget();
+    }
     return IVChartWidget(
-      stockDetail: detail,
+      chart: chart,
       enableGesture: true,
     );
   }
@@ -145,13 +159,26 @@ class _StockDetailViewState extends State<StockDetailView> {
     );
   }
 
+  Widget financialWidget(StockFinancial? financial) {
+    if (financial == null) {
+      return const SizedBox();
+    }
+    return TitleWidget(
+      title: const Text("Financial"),
+      child: Text(
+        financial.balanceTable.toString(),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: appBar(),
       body: Obx(() {
-        final detailValue = detail.value;
         final dividendValue = dividend.value;
+        final financialValue = financial.value;
+        final chartValue = chart.value;
         return ListView(
           padding: const EdgeInsets.all(16.0),
           children: [
@@ -161,11 +188,13 @@ class _StockDetailViewState extends State<StockDetailView> {
                 top: 56.0,
                 bottom: 16.0,
               ),
-              child: chartWidget(detailValue!),
+              child: chartWidget(chartValue),
             ),
             chartButtonListView(),
             const SizedBox(height: 16.0),
-            dividendWidget(dividendValue)
+            dividendWidget(dividendValue),
+            const SizedBox(height: 16.0),
+            financialWidget(financialValue),
           ],
         );
       }),
