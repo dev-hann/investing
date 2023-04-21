@@ -55,6 +55,7 @@ class _IndexViewState extends State<IndexView> {
                       IgnorePointer(
                         child: IVChartWidget(
                           chart: chart,
+                          showBaseLine: false,
                         ),
                       ),
                       AutoSizeText(

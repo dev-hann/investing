@@ -12,8 +12,9 @@ class IVChartWidget extends StatelessWidget {
   IVChartWidget({
     super.key,
     required this.chart,
+    bool showBaseLine = true,
     this.enableGesture = false,
-  }) : showBaseLineNotifier = ValueNotifier(chart.previousClose != 0);
+  }) : showBaseLineNotifier = ValueNotifier(showBaseLine);
   final StockChart chart;
   final bool enableGesture;
   final ValueNotifier<bool> showBaseLineNotifier;

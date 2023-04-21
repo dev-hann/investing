@@ -1,6 +1,5 @@
 import 'package:get/get.dart';
 import 'package:investing/controller/stock_controller.dart';
-import 'package:investing/model/date_time_range.dart';
 import 'package:investing/model/stock/stock.dart';
 import 'package:investing/model/stock/stock_chart.dart';
 import 'package:investing/model/stock/stock_dividend.dart';

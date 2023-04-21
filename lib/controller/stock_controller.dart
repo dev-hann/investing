@@ -81,7 +81,7 @@ class StockController extends Controller<StockUseCase> {
       final res = await useCase.requestStockChart(
         symbol: stock.symbol,
         asset: stock.asset,
-        dateTimeRange: IVDateTimeRange.beforeDay(7),
+        dateTimeRange: stock.dateTimeList.first,
       );
       list.add(res);
     }
@@ -153,7 +153,7 @@ class StockController extends Controller<StockUseCase> {
 
   Future<StockChart> requestStockChart({
     required Stock stock,
-    IVDateTimeRange? dateTimeRange,
+    required IVDateTimeRange? dateTimeRange,
   }) {
     return useCase.requestStockChart(
       symbol: stock.symbol,

@@ -53,20 +53,26 @@ class Stock extends Equatable with DataBaseModelMixin, Comparable<Stock> {
   }
 
   List<IVDateTimeRange?> get dateTimeList {
-    final list = <IVDateTimeRange?>[
-      IVDateTimeRange.beforeDay(7),
-    ];
     switch (type) {
       case StockType.stock:
       case StockType.etf:
       case StockType.majorIndex:
-        list.insert(0, null);
-        break;
+        return [
+          null,
+          IVDateTimeRange.beforeDay(1),
+          IVDateTimeRange.beforeMonth(1),
+          IVDateTimeRange.beforeMonth(3),
+          IVDateTimeRange.beforeYear(1),
+          IVDateTimeRange.beforeYear(1000),
+        ];
       case StockType.fixedIncome:
       case StockType.commodity:
-        break;
+        return [
+          IVDateTimeRange.beforeMonth(3),
+          IVDateTimeRange.beforeYear(1),
+          IVDateTimeRange.beforeYear(1000),
+        ];
     }
-    return list;
   }
 
   bool get isEmpty {
