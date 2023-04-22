@@ -49,7 +49,9 @@ class StockService extends IVService {
   Future<Response> requestStockList(List<String> symbolList) {
     final q = symbolList.map((e) => "symbol=$e").join("&");
     final url = "https://api.nasdaq.com/api/quote/basic?$q";
-    return get(url);
+    return get(
+      url,
+    );
   }
 
   Future<Response> requestStockDividend({
@@ -87,6 +89,7 @@ class StockService extends IVService {
     final url = "https://api.nasdaq.com/api/quote/$symbol/chart";
     return get(
       url,
+      showURL: true,
       query: {
         "assetclass": asset,
         "fromdate": fromDate,

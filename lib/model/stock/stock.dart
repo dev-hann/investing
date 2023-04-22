@@ -59,18 +59,18 @@ class Stock extends Equatable with DataBaseModelMixin, Comparable<Stock> {
       case StockType.majorIndex:
         return [
           null,
-          IVDateTimeRange.beforeDay(1),
+          // IVDateTimeRange.beforeDay(1),
           IVDateTimeRange.beforeMonth(1),
           IVDateTimeRange.beforeMonth(3),
           IVDateTimeRange.beforeYear(1),
-          IVDateTimeRange.beforeYear(1000),
+          IVDateTimeRange.beforeYear(100),
         ];
       case StockType.fixedIncome:
       case StockType.commodity:
         return [
           IVDateTimeRange.beforeMonth(3),
           IVDateTimeRange.beforeYear(1),
-          IVDateTimeRange.beforeYear(1000),
+          IVDateTimeRange.beforeYear(100),
         ];
     }
   }
@@ -150,7 +150,7 @@ class Stock extends Equatable with DataBaseModelMixin, Comparable<Stock> {
   }
   factory Stock.treasury20Y() {
     return Stock(
-      symbol: "CMTN2Y",
+      symbol: "CMTN20Y",
       name: "20 Years Treasury",
       asset: "fixedincome",
     );

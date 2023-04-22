@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:get/get.dart';
 import 'package:investing/controller/stock_controller.dart';
 import 'package:investing/model/stock/stock.dart';
@@ -26,13 +28,14 @@ class StockDetailView extends StatefulWidget {
 
 class _StockDetailViewState extends State<StockDetailView> {
   final controller = StockController.find();
+  late final stock = widget.stock;
   final Rxn<StockChart> chart = Rxn();
   final Rxn<StockDividend> dividend = Rxn();
   final Rxn<StockFinancial> financial = Rxn();
+  final Rx<int> dateTimeRangeIndex = Rx(0);
   @override
   void initState() {
     super.initState();
-    final stock = widget.stock;
     controller
         .requestStockChart(
           stock: stock,
@@ -97,15 +100,17 @@ class _StockDetailViewState extends State<StockDetailView> {
 
   Widget chartButtonListView() {
     return IVChartButton(
-      onTap: (index) {},
-      itemList: const [
-        ChartButtonItem(text: "1일"),
-        ChartButtonItem(text: "1주"),
-        ChartButtonItem(text: "1달"),
-        ChartButtonItem(text: "3달"),
-        ChartButtonItem(text: "1년"),
-        ChartButtonItem(text: "전체"),
-      ],
+      selectedIndex: dateTimeRangeIndex.value,
+      onTap: (index) {
+        dateTimeRangeIndex(index);
+        controller
+            .requestStockChart(
+              stock: stock,
+              dateTimeRange: stock.dateTimeList[index],
+            )
+            .then(chart);
+      },
+      dateTimeList: stock.dateTimeList,
     );
   }
 

@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:investing/const/color.dart';
+import 'package:investing/model/date_time_range.dart';
 
 class ChartButtonItem extends Equatable {
   const ChartButtonItem({
@@ -18,14 +19,31 @@ class IVChartButton extends StatelessWidget {
     this.selectedIndex = 0,
     this.activeColor = IVColor.grey,
     this.background = IVColor.blueGrey,
+    required this.dateTimeList,
     required this.onTap,
-    required this.itemList,
   });
   final int selectedIndex;
-  final List<ChartButtonItem> itemList;
+  final List<IVDateTimeRange?> dateTimeList;
   final Color activeColor;
   final Color background;
   final Function(int index) onTap;
+
+  List<ChartButtonItem> get itemList {
+    // TODO: refactoring
+    final list = <ChartButtonItem>[];
+    for (final range in dateTimeList) {
+      final inDays = range?.inDays ?? 1;
+      list.add(ChartButtonItem(text: "${inDays}D"));
+    }
+    return list;
+    // return const [
+    //   ChartButtonItem(text: "1D"),
+    //   ChartButtonItem(text: "1M"),
+    //   ChartButtonItem(text: "3M"),
+    //   ChartButtonItem(text: "1Y"),
+    //   ChartButtonItem(text: "ALL"),
+    // ];
+  }
 
   Widget itemWidget(int index) {
     final item = itemList[index];
@@ -44,6 +62,8 @@ class IVChartButton extends StatelessWidget {
           child: Center(
             child: Text(
               item.text,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
               style: TextStyle(color: isSelected ? IVColor.blueGrey : null),
             ),
           ),

@@ -1,5 +1,4 @@
 import 'package:equatable/equatable.dart';
-import 'package:investing/model/stock/stock.dart';
 
 class IVDateTimeRange extends Equatable {
   const IVDateTimeRange(this.begin, this.end);
@@ -8,6 +7,8 @@ class IVDateTimeRange extends Equatable {
 
   @override
   List<Object?> get props => [begin, end];
+
+  int get inDays => end.difference(begin).inDays;
 
   factory IVDateTimeRange.beforeDay(int day) {
     final now = DateTime.now();

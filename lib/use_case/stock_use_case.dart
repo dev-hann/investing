@@ -103,6 +103,9 @@ class StockUseCase extends UseCase<StockRepo> {
   }
 
   Future<List<Stock>> requestStockList(List<Stock> list) async {
+    if (list.isEmpty) {
+      return [];
+    }
     final symbolList = list.map((e) {
       final symbol = e.symbol;
       final asset = e.asset;

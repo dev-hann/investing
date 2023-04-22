@@ -29,6 +29,36 @@ class IVChartWidget extends StatelessWidget {
 
     return ExtraLinesData(
       horizontalLines: [
+        // HorizontalLine(
+        //   y: maxLineValue ?? 0,
+        //   color: Colors.transparent,
+        //   label: HorizontalLineLabel(
+        //     show: true,
+        //     alignment: Alignment.topRight,
+        //     padding: EdgeInsets.zero,
+        //     style: const TextStyle(
+        //       color: Colors.white,
+        //     ),
+        //     labelResolver: (p0) {
+        //       return p0.y.toString();
+        //     },
+        //   ),
+        // ),
+        // HorizontalLine(
+        //   y: minLineValue ?? 0,
+        //   color: Colors.transparent,
+        //   label: HorizontalLineLabel(
+        //     show: true,
+        //     alignment: Alignment.topRight,
+        //     padding: EdgeInsets.zero,
+        //     style: const TextStyle(
+        //       color: Colors.white,
+        //     ),
+        //     labelResolver: (p0) {
+        //       return p0.y.toString();
+        //     },
+        //   ),
+        // ),
         HorizontalLine(
           y: previousClosePrice,
           color: IVColor.blue.withOpacity(0.4),
@@ -93,7 +123,11 @@ class IVChartWidget extends StatelessWidget {
   List<LineChartBarData> lineBarListData(List<IVChart> priceChartList) {
     return [
       LineChartBarData(
-        // color: stock.isUp ? IVColor.red : IVColor.blue,
+        // belowBarData: BarAreaData(
+        //   show: true,
+        //   spotsLine: BarAreaSpotsLine(),
+        // ),
+        // // color: stock.isUp ? IVColor.red : IVColor.blue,
         dotData: FlDotData(
           show: false,
         ),
@@ -169,8 +203,10 @@ class IVChartWidget extends StatelessWidget {
               //         height: width / 5,
               //         child: BarChart(
               //           BarChartData(
+              //             titlesData: FlTitlesData(show: false),
               //             barGroups: volumeChartList.map(
               //               (e) {
+              //                 print(e.value);
               //                 return BarChartGroupData(
               //                   x: e.dateTime,
               //                   barRods: [

@@ -97,11 +97,15 @@ class _IndexViewState extends State<IndexView> {
   @override
   Widget build(BuildContext context) {
     return TitleWidget(
-      title: const Padding(
-        padding: EdgeInsets.symmetric(horizontal: 16.0),
-        child: Text("Index"),
+      title: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        child: Row(
+          children: const [
+            Expanded(child: Text("Index")),
+            Icon(Icons.settings),
+          ],
+        ),
       ),
-      trailing: const Icon(Icons.settings),
       child: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
