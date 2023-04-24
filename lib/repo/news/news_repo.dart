@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 library news_repo;
 
 import 'package:investing/data/service/service.dart';
@@ -8,3 +9,8 @@ abstract class NewsRepo extends Repo {
   Future<dynamic> requestNewsList(int page);
   Future<dynamic> searchNewsList(String query);
 }
+=======
+import 'package:investing/repo/repo.dart';
+
+class NewsRepo extends Repo {}
+>>>>>>> main

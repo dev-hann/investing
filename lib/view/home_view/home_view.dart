@@ -1,7 +1,14 @@
 import 'package:get/get.dart';
 import 'package:investing/const/color.dart';
+<<<<<<< HEAD
 import 'package:investing/view/news_view/news_view.dart';
 import 'package:investing/view/stock_view/stock_view.dart';
+=======
+import 'package:investing/controller/home_controller.dart';
+import 'package:investing/view/home_view/home_view_model.dart';
+import 'package:investing/view/view.dart';
+import 'package:investing/view/watch_list_view/watch_list_view.dart';
+>>>>>>> main
 import 'package:flutter/material.dart';
 
 class HomeView extends StatefulWidget {
@@ -29,10 +36,17 @@ class _HomeViewState extends State<HomeView> {
     return Scaffold(
       body: PageView(
         physics: const NeverScrollableScrollPhysics(),
+<<<<<<< HEAD
         controller: pageController,
         children: const [
           StockView(),
           NewsView(),
+=======
+        controller: viewModel.pageController,
+        children: const [
+          WatchListView(),
+          // NewsView(),
+>>>>>>> main
           // CalendarView(),
           // FinVizView(),
         ],
