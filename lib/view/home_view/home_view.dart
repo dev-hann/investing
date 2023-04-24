@@ -1,9 +1,6 @@
 import 'package:investing/const/color.dart';
 import 'package:investing/controller/home_controller.dart';
-import 'package:investing/view/calendar_view/calendar_view.dart';
-import 'package:investing/view/finviz_view/finvix_view.dart';
 import 'package:investing/view/home_view/home_view_model.dart';
-import 'package:investing/view/news_view/news_view.dart';
 import 'package:investing/view/view.dart';
 import 'package:investing/view/watch_list_view/watch_list_view.dart';
 import 'package:flutter/material.dart';
@@ -44,7 +41,7 @@ class HomeView extends View<HomeViewModel, HomeController> {
       body: PageView(
         physics: const NeverScrollableScrollPhysics(),
         controller: viewModel.pageController,
-        children: [
+        children: const [
           WatchListView(),
           // NewsView(),
           // CalendarView(),
