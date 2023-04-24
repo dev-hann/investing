@@ -11,11 +11,11 @@ import 'package:investing/util/number_format.dart';
 class IVChartWidget extends StatelessWidget {
   IVChartWidget({
     super.key,
-    required this.chart,
+    required this.stockChart,
     bool showBaseLine = true,
     this.enableGesture = false,
   }) : showBaseLineNotifier = ValueNotifier(showBaseLine);
-  final StockChart chart;
+  final StockChart? stockChart;
   final bool enableGesture;
   final ValueNotifier<bool> showBaseLineNotifier;
 
@@ -149,7 +149,14 @@ class IVChartWidget extends StatelessWidget {
       padding: const EdgeInsets.all(8.0),
       child: LayoutBuilder(
         builder: (context, constraints) {
+          final chart = stockChart;
           final width = constraints.maxWidth;
+          if (chart == null) {
+            return SizedBox(
+              width: width,
+              height: width / 1.5,
+            );
+          }
           final priceChartList = chart.priceChartList;
           final volumeChartList = chart.volumeChartList;
           final previousClosePrice = chart.previousClose;

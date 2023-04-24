@@ -25,14 +25,14 @@ class HomeView extends View<HomeViewModel, HomeController> {
           icon: Icon(Icons.newspaper_outlined),
           label: "News",
         ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.calendar_month),
-          label: "Calendar",
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.map),
-          label: "FinViz",
-        ),
+        // BottomNavigationBarItem(
+        //   icon: Icon(Icons.calendar_month),
+        //   label: "Calendar",
+        // ),
+        // BottomNavigationBarItem(
+        //   icon: Icon(Icons.map),
+        //   label: "FinViz",
+        // ),
       ],
     );
   }
@@ -40,13 +40,13 @@ class HomeView extends View<HomeViewModel, HomeController> {
   @override
   Widget body() {
     return Scaffold(
-      // bottomNavigationBar: bottom(),
+      bottomNavigationBar: bottom(),
       body: PageView(
         physics: const NeverScrollableScrollPhysics(),
         controller: viewModel.pageController,
         children: [
-          WatchListView(),
-          // NewsView(),
+          const WatchListView(),
+          NewsView(),
           // CalendarView(),
           // FinVizView(),
         ],

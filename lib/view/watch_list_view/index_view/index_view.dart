@@ -54,7 +54,7 @@ class _IndexViewState extends State<IndexView> {
                     children: [
                       IgnorePointer(
                         child: IVChartWidget(
-                          chart: chart,
+                          stockChart: chart,
                           showBaseLine: false,
                         ),
                       ),

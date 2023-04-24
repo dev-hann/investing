@@ -115,11 +115,8 @@ class _StockDetailViewState extends State<StockDetailView> {
   }
 
   Widget chartWidget(StockChart? chart) {
-    if (chart == null) {
-      return const IVLoadingWidget();
-    }
     return IVChartWidget(
-      chart: chart,
+      stockChart: chart,
       enableGesture: true,
     );
   }

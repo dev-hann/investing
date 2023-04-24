@@ -7,8 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
-class NewsView extends View<NewsViewModel, NewsController> {
-  NewsView({super.key}) : super(viewModel: NewsViewModel());
+class NewsView extends StatelessWidget {
   AppBar appBar() {
     return AppBar(
       title: const Text("News"),
@@ -24,42 +23,43 @@ class NewsView extends View<NewsViewModel, NewsController> {
   }
 
   Widget newsListView() {
-    final list = viewModel.newsList;
-    return SmartRefresher(
-      enablePullDown: true,
-      enablePullUp: true,
-      onLoading: viewModel.onLoadingNews,
-      onRefresh: viewModel.onRefresh,
-      controller: viewModel.refreshController,
-      child: ListView.builder(
-        physics: const BouncingScrollPhysics(),
-        padding: const EdgeInsets.all(16.0),
-        itemCount: list.length,
-        itemBuilder: (context, index) {
-          final news = list[index];
-          return Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8.0),
-            child: Card(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: NewsCard(
-                  onTap: () {
-                    Get.to(
-                      NewsDetailView(news: news),
-                    );
-                  },
-                  news: news,
-                ),
-              ),
-            ),
-          );
-        },
-      ),
-    );
+    final list = [];
+    return SizedBox();
+    // return SmartRefresher(
+    //   enablePullDown: true,
+    //   enablePullUp: true,
+    //   onLoading: viewModel.onLoadingNews,
+    //   onRefresh: viewModel.onRefresh,
+    //   controller: viewModel.refreshController,
+    //   child: ListView.builder(
+    //     physics: const BouncingScrollPhysics(),
+    //     padding: const EdgeInsets.all(16.0),
+    //     itemCount: list.length,
+    //     itemBuilder: (context, index) {
+    //       final news = list[index];
+    //       return Padding(
+    //         padding: const EdgeInsets.symmetric(vertical: 8.0),
+    //         child: Card(
+    //           child: Padding(
+    //             padding: const EdgeInsets.all(16.0),
+    //             child: NewsCard(
+    //               onTap: () {
+    //                 Get.to(
+    //                   NewsDetailView(news: news),
+    //                 );
+    //               },
+    //               news: news,
+    //             ),
+    //           ),
+    //         ),
+    //       );
+    //     },
+    //   ),
+    // );
   }
 
   @override
-  Widget body() {
+  Widget build(BuildContext context) {
     return DefaultTabController(
       length: 6,
       child: Scaffold(

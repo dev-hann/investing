@@ -89,7 +89,6 @@ class StockService extends IVService {
     final url = "https://api.nasdaq.com/api/quote/$symbol/chart";
     return get(
       url,
-      showURL: true,
       query: {
         "assetclass": asset,
         "fromdate": fromDate,
