@@ -25,58 +25,55 @@ class _NewsViewState extends State<NewsView> {
   AppBar appBar() {
     return AppBar(
       title: const Text("News"),
-      actions: [
-        IconButton(
-          onPressed: () {
-            // Get.to(NewsSearchView());
-          },
-          icon: const Icon(Icons.search),
-        ),
-      ],
+      // actions: [
+      // IconButton(
+      //   onPressed: () {
+      //     // Get.to(NewsSearchView());
+      //   },
+      //   icon: const Icon(Icons.search),
+      // ),
+      // ],
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 6,
-      child: Scaffold(
-        appBar: appBar(),
-        body: Obx(() {
-          final list = controller.newsList;
-          return SmartRefresher(
-            enablePullDown: true,
-            enablePullUp: true,
-            onLoading: controller.requestNextPageNewsList,
-            onRefresh: controller.refreshNewsList,
-            controller: controller.refreshController,
-            child: ListView.builder(
-              physics: const BouncingScrollPhysics(),
-              padding: const EdgeInsets.all(16.0),
-              itemCount: list.length,
-              itemBuilder: (context, index) {
-                final news = list[index];
-                return Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8.0),
-                  child: Card(
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: NewsCard(
-                        onTap: () {
-                          Get.to(
-                            NewsDetailView(news: news),
-                          );
-                        },
-                        news: news,
-                      ),
+    return Scaffold(
+      appBar: appBar(),
+      body: Obx(() {
+        final list = controller.newsList;
+        return SmartRefresher(
+          enablePullDown: true,
+          enablePullUp: true,
+          onLoading: controller.requestNextPageNewsList,
+          onRefresh: controller.refreshNewsList,
+          controller: controller.refreshController,
+          child: ListView.builder(
+            physics: const BouncingScrollPhysics(),
+            padding: const EdgeInsets.all(16.0),
+            itemCount: list.length,
+            itemBuilder: (context, index) {
+              final news = list[index];
+              return Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                child: Card(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: NewsCard(
+                      onTap: () {
+                        Get.to(
+                          NewsDetailView(news: news),
+                        );
+                      },
+                      news: news,
                     ),
                   ),
-                );
-              },
-            ),
-          );
-        }),
-      ),
+                ),
+              );
+            },
+          ),
+        );
+      }),
     );
   }
 }

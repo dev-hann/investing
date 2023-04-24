@@ -38,9 +38,10 @@ class NewsController extends Controller<NewsUseCase> {
     refreshController.loadComplete();
   }
 
-  Future<List<News>> searchNews(String query) async {
-    return [];
-    // final list = await newsService.searchNews(query);
-    // return list.map((e) => News.dto(e)).toList();
+// Search
+  final RxList<News> searchedList = RxList();
+  Future searchNews(String query) async {
+    final list = await useCase.searchNewList(query);
+    searchedList(list);
   }
 }

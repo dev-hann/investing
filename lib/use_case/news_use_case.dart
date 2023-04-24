@@ -10,4 +10,11 @@ class NewsUseCase extends UseCase<NewsRepo> {
     final list = List.from(res);
     return list.map((e) => News.fromMap(e)).toList();
   }
+
+  Future<List<News>> searchNewList(String query) async {
+    final res = await repo.searchNewsList(query);
+    return List.from(res["data"]["news"]["value"])
+        .map((e) => News.fromMap(e))
+        .toList();
+  }
 }

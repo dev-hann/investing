@@ -1,12 +1,19 @@
+import 'package:get/get.dart';
 import 'package:investing/controller/news_controller.dart';
-import 'package:investing/view/news_view/search_view.dart/news_search_view_model.dart';
-import 'package:investing/view/view.dart';
+import 'package:investing/model/news.dart';
 import 'package:investing/widget/news_card.dart';
 import 'package:investing/widget/text_field.dart';
 import 'package:flutter/material.dart';
 
-class NewsSearchView extends View<NewsSearchViewModel, NewsController> {
-  NewsSearchView({super.key}) : super(viewModel: NewsSearchViewModel());
+class NewsSearchView extends StatefulWidget {
+  const NewsSearchView({super.key});
+
+  @override
+  State<NewsSearchView> createState() => _NewsSearchViewState();
+}
+
+class _NewsSearchViewState extends State<NewsSearchView> {
+  final NewsController controller = NewsController.find();
 
   AppBar appBar() {
     return AppBar(
@@ -14,21 +21,20 @@ class NewsSearchView extends View<NewsSearchViewModel, NewsController> {
     );
   }
 
-  Widget queryTextField() {
+  Widget queryTextField({
+    required Function(String query) onSubmitted,
+  }) {
     return Card(
       child: CustomTextfield(
-        controller: viewModel.queryCntroller,
-        onChanged: viewModel.queryValue,
-        onSubmitted: (text) {
-          viewModel.searchNews(text);
-        },
+        onSubmitted: onSubmitted,
         hintText: "Aa",
       ),
     );
   }
 
-  Widget searchedListWidget() {
-    final searchedList = viewModel.searchedList;
+  Widget searchedListWidget({
+    required List<News> searchedList,
+  }) {
     return ListView.separated(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
@@ -51,18 +57,26 @@ class NewsSearchView extends View<NewsSearchViewModel, NewsController> {
   }
 
   @override
-  Widget body() {
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: appBar(),
-      body: ListView(
-        padding: const EdgeInsets.all(16.0),
-        physics: const BouncingScrollPhysics(),
-        children: [
-          queryTextField(),
-          const SizedBox(height: 16.0),
-          searchedListWidget(),
-        ],
-      ),
+      body: Obx(() {
+        return ListView(
+          padding: const EdgeInsets.all(16.0),
+          physics: const BouncingScrollPhysics(),
+          children: [
+            queryTextField(
+              onSubmitted: (query) {
+                controller.searchNews(query);
+              },
+            ),
+            const SizedBox(height: 16.0),
+            searchedListWidget(
+              searchedList: controller.searchedList,
+            ),
+          ],
+        );
+      }),
     );
   }
 }
