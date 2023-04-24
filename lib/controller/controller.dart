@@ -35,13 +35,8 @@ abstract class Controller<T extends UseCase> extends GetxController {
   }
 
   @override
-  void onInit() async {
-    await useCase.init();
-    super.onInit();
-  }
-
-  @override
   void onReady() async {
+    await useCase.init();
     super.onReady();
     _initComputer.complete();
   }

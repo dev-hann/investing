@@ -1,17 +1,16 @@
-import 'dart:math';
-
 import 'package:get/get.dart';
 import 'package:investing/controller/stock_controller.dart';
+import 'package:investing/model/date_time_range.dart';
 import 'package:investing/model/stock/stock.dart';
 import 'package:investing/model/stock/stock_chart.dart';
+import 'package:investing/model/stock/stock_detail.dart';
 import 'package:investing/model/stock/stock_dividend.dart';
 import 'package:investing/model/stock/stock_financial.dart';
-import 'package:investing/view/watch_list_view/detail_view/dividend_view/dividend_view.dart';
+import 'package:investing/view/stock_view/detail_view/dividend_view/dividend_view.dart';
 import 'package:investing/widget/book_mark.dart';
 import 'package:flutter/material.dart';
 import 'package:investing/widget/chart_button.dart';
 import 'package:investing/widget/chart_widget.dart';
-import 'package:investing/widget/loading_widget.dart';
 import 'package:investing/widget/stock_price_builder.dart';
 import 'package:investing/widget/title_widget.dart';
 
@@ -27,25 +26,59 @@ class StockDetailView extends StatefulWidget {
 }
 
 class _StockDetailViewState extends State<StockDetailView> {
-  final controller = StockController.find();
+  final StockController controller = StockController.find();
   late final stock = widget.stock;
-  final Rxn<StockChart> chart = Rxn();
-  final Rxn<StockDividend> dividend = Rxn();
-  final Rxn<StockFinancial> financial = Rxn();
-  final Rx<int> dateTimeRangeIndex = Rx(0);
+  late final Rx<StockDetail> stockDetail = Rx<StockDetail>(
+    StockDetail(dateTimeRange: stock.dateTimeList.first),
+  );
+
+  StockDetail get detailValue => stockDetail.value;
+
   @override
   void initState() {
     super.initState();
-    controller
-        .requestStockChart(
-          stock: stock,
-          dateTimeRange: stock.dateTimeList.first,
-        )
-        .then(chart);
-    controller.requestStockDividend(stock).then(dividend);
-    controller
-        .requestStockFinancial(stock: stock, type: FinancialType.annual)
-        .then(financial);
+    requestStockChart(stock.dateTimeList.first);
+    requestStockFinacial();
+    requestStockDividned();
+  }
+
+  Future requestStockChart(IVDateTimeRange dateTimeRange) async {
+    if (!detailValue.containsChart(dateTimeRange)) {
+      final data = await controller.requestStockChart(
+        stock: stock,
+        dateTimeRange: dateTimeRange,
+      );
+      stockDetail(
+        detailValue.copyWith(
+          dateTimeRange: dateTimeRange,
+          chartMap: {
+            dateTimeRange: data,
+          }..addAll(detailValue.chartMap),
+        ),
+      );
+    }
+  }
+
+  Future requestStockFinacial() async {
+    final financial = await controller.requestStockFinancial(
+      stock: stock,
+      type: FinancialType.annual,
+    );
+    stockDetail(
+      detailValue.copyWith(
+        financial: financial,
+      ),
+    );
+  }
+
+  Future requestStockDividned() async {
+    final dividend = await controller.requestStockDividend(stock);
+
+    stockDetail(
+      detailValue.copyWith(
+        dividend: dividend,
+      ),
+    );
   }
 
   AppBar appBar() {
@@ -98,19 +131,22 @@ class _StockDetailViewState extends State<StockDetailView> {
     );
   }
 
-  Widget chartButtonListView() {
-    return IVChartButton(
-      selectedIndex: dateTimeRangeIndex.value,
-      onTap: (index) {
-        dateTimeRangeIndex(index);
-        controller
-            .requestStockChart(
-              stock: stock,
-              dateTimeRange: stock.dateTimeList[index],
-            )
-            .then(chart);
+  Widget chartButtonListView({
+    required IVDateTimeRange selected,
+    required List<IVDateTimeRange> dateTimeList,
+  }) {
+    final selectedIndex = dateTimeList.indexWhere(
+      (element) {
+        return element.isEqual(selected);
       },
-      dateTimeList: stock.dateTimeList,
+    );
+    return IVChartButton(
+      selectedIndex: selectedIndex,
+      onTap: (index) {
+        final item = dateTimeList[index];
+        requestStockChart(item);
+      },
+      dateTimeList: dateTimeList,
     );
   }
 
@@ -118,6 +154,7 @@ class _StockDetailViewState extends State<StockDetailView> {
     return IVChartWidget(
       stockChart: chart,
       enableGesture: true,
+      showBaseLine: true,
     );
   }
 
@@ -177,9 +214,9 @@ class _StockDetailViewState extends State<StockDetailView> {
     return Scaffold(
       appBar: appBar(),
       body: Obx(() {
-        final dividendValue = dividend.value;
-        final financialValue = financial.value;
-        final chartValue = chart.value;
+        final dividendValue = detailValue.dividend;
+        final financialValue = detailValue.financial;
+        final chartValue = detailValue.chart;
         return ListView(
           padding: const EdgeInsets.all(16.0),
           children: [
@@ -191,7 +228,10 @@ class _StockDetailViewState extends State<StockDetailView> {
               ),
               child: chartWidget(chartValue),
             ),
-            chartButtonListView(),
+            chartButtonListView(
+              selected: detailValue.dateTimeRange,
+              dateTimeList: stock.dateTimeList,
+            ),
             const SizedBox(height: 16.0),
             dividendWidget(dividendValue),
             const SizedBox(height: 16.0),

@@ -5,7 +5,7 @@ import 'package:investing/const/color.dart';
 import 'package:investing/controller/stock_controller.dart';
 import 'package:investing/model/stock/stock.dart';
 import 'package:investing/model/stock/stock_chart.dart';
-import 'package:investing/view/watch_list_view/detail_view/stock_detail_view.dart';
+import 'package:investing/view/stock_view/detail_view/stock_detail_view.dart';
 import 'package:investing/widget/chart_widget.dart';
 import 'package:investing/widget/loading_widget.dart';
 import 'package:investing/widget/stock_price_builder.dart';
@@ -19,11 +19,7 @@ class IndexView extends StatefulWidget {
 }
 
 class _IndexViewState extends State<IndexView> {
-  final controller = StockController.find();
-  @override
-  void initState() {
-    super.initState();
-  }
+  final StockController controller = StockController.find();
 
   Widget item({
     required Stock index,

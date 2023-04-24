@@ -1,7 +1,7 @@
+import 'package:get/get.dart';
 import 'package:investing/const/color.dart';
 import 'package:investing/controller/calendar_controller.dart';
 import 'package:investing/controller/controller.dart';
-import 'package:investing/controller/home_controller.dart';
 import 'package:investing/controller/news_controller.dart';
 import 'package:investing/controller/stock_controller.dart';
 import 'package:investing/repo/event/event_repo.dart';
@@ -12,7 +12,6 @@ import 'package:investing/use_case/news_use_case.dart';
 import 'package:investing/use_case/stock_use_case.dart';
 import 'package:investing/view/home_view/home_view.dart';
 import 'package:flutter/material.dart';
-import 'package:get/route_manager.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 void main() async {
@@ -26,6 +25,25 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
+      initialBinding: BindingsBuilder(
+        () {
+          Controller.put<StockController>(
+            StockController(
+              StockUseCase(StockImpl()),
+            ),
+          );
+          Controller.put<NewsController>(
+            NewsController(
+              NewsUseCase(NewsImpl()),
+            ),
+          );
+          Controller.put<CalendarController>(
+            CalendarController(
+              EventUseCase(EventImpl()),
+            ),
+          );
+        },
+      ),
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         brightness: Brightness.dark,
@@ -40,29 +58,7 @@ class MyApp extends StatelessWidget {
           ),
         ),
       ),
-      home: Builder(builder: (context) {
-        Controller.put<HomeController>(
-          HomeController(
-            StockUseCase(StockImpl()),
-          ),
-        );
-        Controller.put<StockController>(
-          StockController(
-            StockUseCase(StockImpl()),
-          ),
-        );
-        Controller.put<NewsController>(
-          NewsController(
-            NewsUseCase(NewsImpl()),
-          ),
-        );
-        Controller.put<CalendarController>(
-          CalendarController(
-            EventUseCase(EventImpl()),
-          ),
-        );
-        return HomeView();
-      }),
+      home: const HomeView(),
     );
   }
 }

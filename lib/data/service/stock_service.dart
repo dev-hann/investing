@@ -11,23 +11,6 @@ class StockService extends IVService {
     );
   }
 
-  Future<Response> requestStockWithChart({
-    required String symbol,
-    required String assetClass,
-    required String? fromDate,
-    required String? toDate,
-  }) async {
-    final url = "https://api.nasdaq.com/api/quote/$symbol/chart";
-    return get(
-      url,
-      query: {
-        "assetClass": assetClass,
-        "fromdate": fromDate,
-        "todate": toDate,
-      },
-    );
-  }
-
   Future<Response> requestStock({
     required String symbol,
     required String assetClass,

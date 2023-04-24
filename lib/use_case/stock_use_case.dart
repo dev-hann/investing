@@ -87,12 +87,12 @@ class StockUseCase extends UseCase<StockRepo> {
   Future<StockChart> requestStockChart({
     required String symbol,
     required String asset,
-    required IVDateTimeRange? dateTimeRange,
+    required IVDateTimeRange dateTimeRange,
   }) async {
     final res = await repo.requestStockChart(
       symbol: symbol,
       asset: asset,
-      dateTimeRange: dateTimeRange,
+      dateTimeRange: dateTimeRange.inDays == 1 ? null : dateTimeRange,
     );
     return StockChart.fromMap(res["data"]);
   }

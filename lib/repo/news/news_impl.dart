@@ -4,8 +4,8 @@ class NewsImpl extends NewsRepo {
   final NewsService newsService = NewsService();
 
   @override
-  Future requestNewsList() {
-    // TODO: implement requestNewsList
-    throw UnimplementedError();
+  Future requestNewsList(int page) async {
+    final res = await newsService.requestLatestNewsList(page);
+    return res["data"]["rows"];
   }
 }

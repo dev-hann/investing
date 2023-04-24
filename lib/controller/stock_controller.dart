@@ -6,6 +6,7 @@ import 'package:investing/data/db/data_base.dart';
 import 'package:investing/model/date_time_range.dart';
 import 'package:investing/model/stock/stock.dart';
 import 'package:investing/model/stock/stock_chart.dart';
+import 'package:investing/model/stock/stock_detail.dart';
 import 'package:investing/model/stock/stock_dividend.dart';
 import 'package:investing/model/stock/stock_financial.dart';
 import 'package:investing/model/market_status.dart';
@@ -15,11 +16,12 @@ class StockController extends Controller<StockUseCase> {
   StockController(super.useCase);
 
   @override
-  void onReady() {
+  void onReady() async {
+    super.onReady();
+    await useCase.init();
     _initMarketStatus();
     _initIndexList();
     _initFavoriteList();
-    super.onReady();
   }
 
   static StockController find() => Get.find<StockController>();
@@ -57,6 +59,7 @@ class StockController extends Controller<StockUseCase> {
   // Index
   //TODO: make it edit by option button
   final RxList<Stock> indexList = [
+    Stock.nasdaq100(),
     Stock.nasdaq(),
     Stock.snp(),
     Stock.dow(),
@@ -71,7 +74,7 @@ class StockController extends Controller<StockUseCase> {
     await refreshIndexList();
   }
 
-  final RxList<StockChart> indexChartList = <StockChart>[].obs;
+  final RxList<StockChart> indexChartList = RxList(<StockChart>[]);
   Future refreshIndexList() async {
     final res = await useCase.requestStockList(indexList);
     indexList(res);
@@ -153,7 +156,7 @@ class StockController extends Controller<StockUseCase> {
 
   Future<StockChart> requestStockChart({
     required Stock stock,
-    required IVDateTimeRange? dateTimeRange,
+    required IVDateTimeRange dateTimeRange,
   }) {
     return useCase.requestStockChart(
       symbol: stock.symbol,

@@ -8,6 +8,15 @@ class IVDateTimeRange extends Equatable {
   @override
   List<Object?> get props => [begin, end];
 
+  bool isEqual(IVDateTimeRange other) {
+    return isEqualDateTime(begin, other.begin) &&
+        isEqualDateTime(end, other.end);
+  }
+
+  bool isEqualDateTime(DateTime a, DateTime b) {
+    return a.year == b.year && a.month == b.month && a.day == b.day;
+  }
+
   int get inDays => end.difference(begin).inDays;
 
   factory IVDateTimeRange.beforeDay(int day) {

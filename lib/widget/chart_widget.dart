@@ -22,43 +22,49 @@ class IVChartWidget extends StatelessWidget {
   ExtraLinesData? previousPriceLineData({
     required bool show,
     required double previousClosePrice,
+    required double maxLineValue,
+    required double minLineValue,
   }) {
-    if (previousClosePrice == 0 || !show) {
+    if (!show) {
       return null;
     }
 
     return ExtraLinesData(
       horizontalLines: [
-        // HorizontalLine(
-        //   y: maxLineValue ?? 0,
-        //   color: Colors.transparent,
-        //   label: HorizontalLineLabel(
-        //     show: true,
-        //     alignment: Alignment.topRight,
-        //     padding: EdgeInsets.zero,
-        //     style: const TextStyle(
-        //       color: Colors.white,
-        //     ),
-        //     labelResolver: (p0) {
-        //       return p0.y.toString();
-        //     },
-        //   ),
-        // ),
-        // HorizontalLine(
-        //   y: minLineValue ?? 0,
-        //   color: Colors.transparent,
-        //   label: HorizontalLineLabel(
-        //     show: true,
-        //     alignment: Alignment.topRight,
-        //     padding: EdgeInsets.zero,
-        //     style: const TextStyle(
-        //       color: Colors.white,
-        //     ),
-        //     labelResolver: (p0) {
-        //       return p0.y.toString();
-        //     },
-        //   ),
-        // ),
+        HorizontalLine(
+          y: maxLineValue,
+          color: Colors.white,
+          strokeWidth: 0.1,
+          dashArray: [3, 3],
+          label: HorizontalLineLabel(
+            show: true,
+            alignment: Alignment.topRight,
+            padding: EdgeInsets.zero,
+            style: const TextStyle(
+              color: Colors.white,
+            ),
+            labelResolver: (value) {
+              return value.y.toStringAsPrecision(4);
+            },
+          ),
+        ),
+        HorizontalLine(
+          y: minLineValue,
+          color: Colors.white,
+          strokeWidth: 0.1,
+          dashArray: [3, 3],
+          label: HorizontalLineLabel(
+            show: true,
+            alignment: Alignment.bottomRight,
+            padding: EdgeInsets.zero,
+            style: const TextStyle(
+              color: Colors.white,
+            ),
+            labelResolver: (value) {
+              return value.y.toStringAsPrecision(4);
+            },
+          ),
+        ),
         HorizontalLine(
           y: previousClosePrice,
           color: IVColor.blue.withOpacity(0.4),
@@ -195,6 +201,10 @@ class IVChartWidget extends StatelessWidget {
                           extraLinesData: previousPriceLineData(
                             show: showPreviousPrice,
                             previousClosePrice: previousClosePrice,
+                            maxLineValue:
+                                priceChartList.map((e) => e.value).reduce(max),
+                            minLineValue:
+                                priceChartList.map((e) => e.value).reduce(min),
                           ),
                           lineBarsData: lineBarListData(priceChartList),
                         ),

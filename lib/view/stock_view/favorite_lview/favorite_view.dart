@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:get/get.dart';
 import 'package:investing/controller/stock_controller.dart';
-import 'package:investing/view/watch_list_view/detail_view/stock_detail_view.dart';
+import 'package:investing/view/stock_view/detail_view/stock_detail_view.dart';
 import 'package:investing/widget/stock_card.dart';
 import 'package:investing/widget/title_widget.dart';
 

@@ -5,5 +5,5 @@ import 'package:investing/repo/repo.dart';
 part './news_impl.dart';
 
 abstract class NewsRepo extends Repo {
-  Future<dynamic> requestNewsList();
+  Future<dynamic> requestNewsList(int page);
 }

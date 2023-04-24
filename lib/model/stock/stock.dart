@@ -52,14 +52,13 @@ class Stock extends Equatable with DataBaseModelMixin, Comparable<Stock> {
     throw FlutterError("Unknown Stock Type $assetText");
   }
 
-  List<IVDateTimeRange?> get dateTimeList {
+  List<IVDateTimeRange> get dateTimeList {
     switch (type) {
       case StockType.stock:
       case StockType.etf:
       case StockType.majorIndex:
         return [
-          null,
-          // IVDateTimeRange.beforeDay(1),
+          IVDateTimeRange.beforeDay(1),
           IVDateTimeRange.beforeMonth(1),
           IVDateTimeRange.beforeMonth(3),
           IVDateTimeRange.beforeYear(1),
@@ -130,6 +129,13 @@ class Stock extends Equatable with DataBaseModelMixin, Comparable<Stock> {
     return Stock(
       symbol: "INDU",
       name: "DOW",
+      asset: "index",
+    );
+  }
+  factory Stock.nasdaq100() {
+    return Stock(
+      symbol: "NDX",
+      name: "Nasdaq-100",
       asset: "index",
     );
   }

@@ -2,23 +2,40 @@ import 'package:get/get.dart';
 import 'package:investing/controller/controller.dart';
 import 'package:investing/model/news.dart';
 import 'package:investing/use_case/news_use_case.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class NewsController extends Controller<NewsUseCase> {
   NewsController(super.repo);
 
-  final RxList<News> newsList = RxList();
+  static NewsController find() => Get.find<NewsController>();
 
-  Future refreshNewsList() async {
-    final list = useCase.requestNewsList();
+  @override
+  void onReady() {
+    super.onReady();
+    refreshNewsList();
   }
 
-  Future<List<News>> requestNewsList(int page) async {
-    return [];
-    // final res = await newsService.requestLatestNewsList(page);
-    // final list = List<Map<String, dynamic>>.from(
-    //   res["data"]["rows"],
-    // );
-    // return list.map((e) => News.dto(e)).toList();
+  final RefreshController refreshController = RefreshController();
+
+  final RxList<News> newsList = RxList();
+  int _currentPage = 1;
+
+  Future refreshNewsList() async {
+    _currentPage = 0;
+    await requestNextPageNewsList(clearList: true);
+    refreshController.refreshCompleted();
+  }
+
+  Future requestNextPageNewsList({
+    bool clearList = false,
+  }) async {
+    _currentPage++;
+    final list = await useCase.requestlatestNewsList(_currentPage);
+    if (clearList) {
+      newsList.clear();
+    }
+    newsList.addAll(list);
+    refreshController.loadComplete();
   }
 
   Future<List<News>> searchNews(String query) async {

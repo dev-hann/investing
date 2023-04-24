@@ -38,22 +38,6 @@ class StockImpl extends StockRepo {
   }
 
   @override
-  Future requestStockWithChart({
-    required String symbol,
-    required String asset,
-    required String? fromDate,
-    required String? toDate,
-  }) async {
-    final res = await service.requestStockWithChart(
-      symbol: symbol,
-      assetClass: asset,
-      fromDate: fromDate,
-      toDate: toDate,
-    );
-    return res.data;
-  }
-
-  @override
   Future requestStock({
     required String symbol,
     required String asset,

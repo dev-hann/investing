@@ -42,25 +42,13 @@ class News extends Equatable {
 
   factory News.fromMap(Map<String, dynamic> map) {
     return News(
-      index: map['index'] as int,
+      index: map['id'] as int,
       title: map['title'] as String,
       ago: map['ago'] as String,
       publisher: map['publisher'] as String,
       url: map['url'] as String,
       image: map['image'] as String,
       imageDomain: map["imagedomain"] as String,
-    );
-  }
-
-  factory News.dto(Map<String, dynamic> map) {
-    return News(
-      index: map['id'],
-      title: map['title'],
-      ago: map['ago'],
-      publisher: map['publisher'],
-      url: map['url'],
-      imageDomain: map['imagedomain'],
-      image: map["image"],
     );
   }
 }

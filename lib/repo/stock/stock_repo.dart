@@ -15,13 +15,6 @@ abstract class StockRepo extends Repo {
   Future removeStock(String index);
   Future<List> searchStock(String query);
 
-  Future<dynamic> requestStockWithChart({
-    required String symbol,
-    required String asset,
-    required String? fromDate,
-    required String? toDate,
-  });
-
   Future<dynamic> requestStock({
     required String symbol,
     required String asset,
