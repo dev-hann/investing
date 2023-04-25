@@ -1,7 +1,8 @@
 import 'package:investing/controller/stock_controller.dart';
 import 'package:investing/model/stock/stock.dart';
 import 'package:investing/view/stock_view/detail_view/stock_detail_view.dart';
-import 'package:investing/widget/stock_search_card.dart';
+import 'package:investing/widget/book_mark.dart';
+import 'package:investing/widget/stock_card.dart';
 import 'package:investing/widget/text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -50,9 +51,12 @@ class _StockSearchViewState extends State<StockSearchView> {
       itemBuilder: (context, index) {
         final stock = searchedList[index];
         return Card(
-          child: StockSearchCard(
+          child: StockCard(
             stock: stock,
-            query: query,
+            highlight: query,
+            trailing: BookMarkWidget(
+              stock: stock,
+            ),
             onTap: () {
               Get.to(
                 StockDetailView(stock: stock),

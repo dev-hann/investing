@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:get/get.dart';
 import 'package:investing/controller/stock_controller.dart';
+import 'package:investing/model/stock/stock.dart';
 import 'package:investing/view/stock_view/detail_view/stock_detail_view.dart';
+import 'package:investing/view/stock_view/edit_view/edit_view.dart';
 import 'package:investing/widget/stock_card.dart';
+import 'package:investing/widget/stock_price_builder.dart';
 import 'package:investing/widget/title_widget.dart';
 
 class FavoriteView extends StatefulWidget {
@@ -21,11 +24,27 @@ class _FavoriteViewState extends State<FavoriteView> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: TitleWidget(
-        title: const Text("Favorites"),
+        title: Row(
+          children: [
+            const Expanded(child: Text("Favorites")),
+            GestureDetector(
+              onTap: () async {
+                final list = await Get.to(
+                  EditView(
+                    itemList: controller.favoriteList,
+                  ),
+                );
+                if (list != null) {
+                  controller.updateFavoriteList(list);
+                }
+              },
+              child: const Icon(Icons.settings),
+            ),
+          ],
+        ),
         child: Obx(() {
           final favoriteList = controller.favoriteList;
           return ListView.separated(
-            reverse: true,
             physics: const NeverScrollableScrollPhysics(),
             shrinkWrap: true,
             separatorBuilder: (context, index) {
@@ -67,6 +86,24 @@ class _FavoriteViewState extends State<FavoriteView> {
                         StockDetailView(stock: stock),
                       );
                     },
+                    trailing: IVStockPriceBuilder(
+                      stock: stock,
+                      builder:
+                          (indicator, percentageChange, netChage, lastPrice) {
+                        return Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            IntrinsicWidth(
+                              child: Row(
+                                children: [indicator, percentageChange],
+                              ),
+                            ),
+                            lastPrice,
+                          ],
+                        );
+                      },
+                    ),
                   ),
                 ),
               );

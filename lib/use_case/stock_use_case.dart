@@ -24,6 +24,7 @@ class StockUseCase extends UseCase<StockRepo> {
                 name: data["name"],
                 symbol: data["symbol"],
                 asset: data["asset"],
+                order: data["order"],
               ),
       );
     });
@@ -37,6 +38,7 @@ class StockUseCase extends UseCase<StockRepo> {
             name: data["name"],
             symbol: data["symbol"],
             asset: data["asset"],
+            order: data["order"],
           ),
         )
         .toList();
@@ -112,9 +114,20 @@ class StockUseCase extends UseCase<StockRepo> {
       return "$symbol|$asset";
     }).toList();
     final res = await repo.requestStockList(symbolList);
-    return List.from(res["data"]["records"]).map((data) {
-      return Stock.fromMap(data);
-    }).toList();
+    final dataList = List.from(res["data"]["records"]);
+    final List<Stock> stockList = [];
+    for (int index = 0; index < list.length; ++index) {
+      final stock = list[index];
+      final data = dataList[index];
+      stockList.add(
+        stock.copyWith(
+          lastSalePrice: IVNumberFormat(data["lastSale"]).toDouble(),
+          netChange: IVNumberFormat(data["change"]).toDouble(),
+          percentChange: IVNumberFormat(data["pctChange"]).toDouble(),
+        ),
+      );
+    }
+    return stockList;
   }
 
   Future<StockDividend?> requestStockDividend({

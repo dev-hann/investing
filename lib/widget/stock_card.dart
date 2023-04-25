@@ -1,45 +1,55 @@
 import 'package:flutter/material.dart';
+import 'package:highlight_text/highlight_text.dart';
+import 'package:investing/const/color.dart';
 import 'package:investing/model/stock/stock.dart';
-import 'package:investing/widget/stock_price_builder.dart';
 
 class StockCard extends StatelessWidget {
   const StockCard({
     super.key,
     required this.stock,
-    required this.onTap,
+    this.onTap,
+    this.highlight = "",
+    this.leading,
+    this.trailing,
   });
   final Stock stock;
-  final VoidCallback onTap;
+  final VoidCallback? onTap;
+  final String highlight;
+  final Widget? trailing;
+  final Widget? leading;
 
+  Map<String, HighlightedWord> get words => {
+        highlight: HighlightedWord(
+          textStyle: const TextStyle(
+            color: IVColor.orange,
+          ),
+        ),
+      };
   Widget titleText() {
-    return Text(
-      stock.name,
+    return TextHighlight(
+      text: stock.name,
+      words: words,
       maxLines: 1,
       overflow: TextOverflow.ellipsis,
     );
   }
 
   Widget subtitleText() {
-    return Text(stock.symbol);
+    return TextHighlight(
+      text: stock.symbol,
+      words: words,
+    );
   }
 
-  Widget trailingWidget() {
-    return IVStockPriceBuilder(
-      stock: stock,
-      builder: (indicator, percentageChange, netChage, lastPrice) {
-        return Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            IntrinsicWidth(
-              child: Row(
-                children: [indicator, percentageChange],
-              ),
-            ),
-            lastPrice,
-          ],
-        );
-      },
+  Widget? leadingWidget() {
+    if (leading == null) {
+      return null;
+    }
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        leading!,
+      ],
     );
   }
 
@@ -48,9 +58,11 @@ class StockCard extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: ListTile(
+        leading: leadingWidget(),
         title: titleText(),
         subtitle: subtitleText(),
-        trailing: trailingWidget(),
+        trailing: trailing,
+        // trailingWidget(),
       ),
     );
   }

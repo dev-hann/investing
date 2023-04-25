@@ -6,7 +6,6 @@ import 'package:investing/data/db/data_base.dart';
 import 'package:investing/model/date_time_range.dart';
 import 'package:investing/model/stock/stock.dart';
 import 'package:investing/model/stock/stock_chart.dart';
-import 'package:investing/model/stock/stock_detail.dart';
 import 'package:investing/model/stock/stock_dividend.dart';
 import 'package:investing/model/stock/stock_financial.dart';
 import 'package:investing/model/market_status.dart';
@@ -37,23 +36,27 @@ class StockController extends Controller<StockUseCase> {
     refreshFavoriteList();
   }
 
-  void refreshFavoriteList({
-    bool showOverlayLoading = true,
-  }) async {
-    Future load() async {
-      final list = await useCase.requestStockList(
-        useCase.loadStockList(),
-      );
-      favoriteList(list);
-    }
+  void refreshFavoriteList() async {
+    final list = await useCase.requestStockList(
+      useCase.loadStockList(),
+    );
+    list.sort();
+    favoriteList(list);
+  }
 
-    if (showOverlayLoading) {
-      showOverlay(() async {
-        return load();
-      });
-    } else {
-      load();
+  Future updateFavoriteList(List<Stock> list) async {
+    favoriteList(list);
+    for (final stock in list) {
+      updateFavoriteStock(stock);
     }
+  }
+
+  Future updateFavoriteStock(Stock stock) async {
+    await useCase.updateStock(stock);
+  }
+
+  Future removeFavoriteStock(Stock stock) {
+    return useCase.removeStock(stock.index);
   }
 
   // Index
@@ -89,14 +92,6 @@ class StockController extends Controller<StockUseCase> {
       list.add(res);
     }
     indexChartList(list);
-  }
-
-  Future updateFavoriteStock(Stock stock) async {
-    await useCase.updateStock(stock);
-  }
-
-  Future removeFavoriteStock(Stock stock) {
-    return useCase.removeStock(stock.index);
   }
 
   // MarketStatus

@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 
 import 'package:investing/data/db/data_base_model_mixin.dart';
 import 'package:investing/model/date_time_range.dart';
-import 'package:investing/util/number_format.dart';
 
 enum StockType {
   stock,
@@ -21,14 +20,16 @@ enum IndicatorStatus {
 
 class Stock extends Equatable with DataBaseModelMixin, Comparable<Stock> {
   Stock({
+    int? index,
     required this.symbol,
     required this.name,
     required this.asset,
     this.lastSalePrice = 0.0,
     this.netChange = 0.0,
     this.percentChange = 0.0,
-  });
-
+    int? order,
+  }) : order = order ?? -DateTime.now().millisecondsSinceEpoch;
+  final int order;
   final String symbol;
   final String name;
   final String asset;
@@ -97,6 +98,7 @@ class Stock extends Equatable with DataBaseModelMixin, Comparable<Stock> {
       'lastSalePrice': lastSalePrice,
       'netChange': netChange,
       'percentChange': percentChange,
+      'order': order,
     };
   }
 
@@ -112,6 +114,7 @@ class Stock extends Equatable with DataBaseModelMixin, Comparable<Stock> {
         lastSalePrice,
         netChange,
         percentChange,
+        order,
       ];
 
   @override
@@ -194,7 +197,8 @@ class Stock extends Equatable with DataBaseModelMixin, Comparable<Stock> {
 
   @override
   int compareTo(Stock other) {
-    return other.symbol.compareTo(symbol);
+    // return other.order.compareTo(order);
+    return order.compareTo(other.order);
   }
 
   Stock copyWith({
@@ -204,30 +208,32 @@ class Stock extends Equatable with DataBaseModelMixin, Comparable<Stock> {
     double? lastSalePrice,
     double? netChange,
     double? percentChange,
+    int? order,
   }) {
     return Stock(
       symbol: symbol ?? this.symbol,
       name: name ?? this.name,
       asset: asset ?? this.asset,
+      order: order ?? this.order,
       lastSalePrice: lastSalePrice ?? this.lastSalePrice,
       netChange: netChange ?? this.netChange,
       percentChange: percentChange ?? this.percentChange,
     );
   }
 
-  static double _toDouble(String value) {
-    return IVNumberFormat(value).toDouble();
-  }
+  // static double _toDouble(String value) {
+  //   return IVNumberFormat(value).toDouble();
+  // }
 
-  factory Stock.fromMap(Map<String, dynamic> map) {
-    final ticker = List.from(map["ticker"]);
-    return Stock(
-      symbol: ticker.first,
-      name: ticker.last,
-      asset: map["assetclass"],
-      lastSalePrice: _toDouble(map["lastSale"]),
-      netChange: _toDouble(map["change"]),
-      percentChange: _toDouble(map["pctChange"]),
-    );
-  }
+  // factory Stock.fromMap(Map<String, dynamic> map) {
+  //   final ticker = List.from(map["ticker"]);
+  //   return Stock(
+  //     symbol: ticker.first,
+  //     name: ticker.last,
+  //     asset: map["assetclass"],
+  //     lastSalePrice: _toDouble(map["lastSale"]),
+  //     netChange: _toDouble(map["change"]),
+  //     percentChange: _toDouble(map["pctChange"]),
+  //   );
+  // }
 }

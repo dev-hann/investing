@@ -6,6 +6,7 @@ import 'package:investing/controller/stock_controller.dart';
 import 'package:investing/model/stock/stock.dart';
 import 'package:investing/model/stock/stock_chart.dart';
 import 'package:investing/view/stock_view/detail_view/stock_detail_view.dart';
+import 'package:investing/view/stock_view/edit_view/edit_view.dart';
 import 'package:investing/widget/chart_widget.dart';
 import 'package:investing/widget/loading_widget.dart';
 import 'package:investing/widget/stock_price_builder.dart';
@@ -96,9 +97,18 @@ class _IndexViewState extends State<IndexView> {
       title: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: Row(
-          children: const [
-            Expanded(child: Text("Index")),
-            Icon(Icons.settings),
+          children: [
+            const Expanded(child: Text("Index")),
+            GestureDetector(
+              onTap: () async {
+                final list = await Get.to(
+                  EditView(
+                    itemList: controller.indexList,
+                  ),
+                );
+              },
+              child: const Icon(Icons.settings),
+            ),
           ],
         ),
       ),
