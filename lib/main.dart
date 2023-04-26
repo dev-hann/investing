@@ -2,12 +2,15 @@ import 'package:get/get.dart';
 import 'package:investing/const/color.dart';
 import 'package:investing/controller/event_controller.dart';
 import 'package:investing/controller/controller.dart';
+import 'package:investing/controller/market_controller.dart';
 import 'package:investing/controller/news_controller.dart';
 import 'package:investing/controller/stock_controller.dart';
 import 'package:investing/repo/event/event_repo.dart';
+import 'package:investing/repo/market/market_repo.dart';
 import 'package:investing/repo/news/news_repo.dart';
 import 'package:investing/repo/stock/stock_repo.dart';
 import 'package:investing/use_case/event_use_case.dart';
+import 'package:investing/use_case/market_use_case.dart';
 import 'package:investing/use_case/news_use_case.dart';
 import 'package:investing/use_case/stock_use_case.dart';
 import 'package:investing/view/home_view/home_view.dart';
@@ -40,6 +43,11 @@ class MyApp extends StatelessWidget {
           Controller.put<EventController>(
             EventController(
               EventUseCase(EventImpl()),
+            ),
+          );
+          Controller.put<MarketController>(
+            MarketController(
+              MarketUseCase(MarketImpl()),
             ),
           );
         },
