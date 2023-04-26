@@ -25,14 +25,14 @@ class _NewsViewState extends State<NewsView> {
   AppBar appBar() {
     return AppBar(
       title: const Text("News"),
-      // actions: [
-      // IconButton(
-      //   onPressed: () {
-      //     // Get.to(NewsSearchView());
-      //   },
-      //   icon: const Icon(Icons.search),
-      // ),
-      // ],
+      actions: [
+        IconButton(
+          onPressed: () {
+            // Get.to(NewsSearchView());
+          },
+          icon: const Icon(Icons.search),
+        ),
+      ],
     );
   }
 
@@ -62,7 +62,9 @@ class _NewsViewState extends State<NewsView> {
                     child: NewsCard(
                       onTap: () {
                         Get.to(
-                          NewsDetailView(news: news),
+                          NewsDetailView(
+                            url: news.articleDetailURL,
+                          ),
                         );
                       },
                       news: news,

@@ -14,9 +14,7 @@ dependencies:
   flutter_slidable:
   table_calendar:
   pull_to_refresh:
-  flutter_html:
   http:
-  html:
   auto_size_text:
   highlight_text:
   flutter_inappwebview:

@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:investing/const/color.dart';
 import 'package:investing/view/event_view/event_view.dart';
 import 'package:investing/view/news_view/news_view.dart';
+import 'package:investing/view/screener_view/screener_view.dart';
 import 'package:investing/view/stock_view/stock_view.dart';
 import 'package:flutter/material.dart';
 
@@ -31,11 +32,11 @@ class _HomeViewState extends State<HomeView> {
       body: PageView(
         physics: const NeverScrollableScrollPhysics(),
         controller: pageController,
-        children: [
-          const StockView(),
-          const NewsView(),
+        children: const [
+          StockView(),
+          NewsView(),
           EventView(),
-          // FinVizView(),
+          ScreenerView(),
         ],
       ),
       bottomNavigationBar: Obx(() {
@@ -56,10 +57,10 @@ class _HomeViewState extends State<HomeView> {
               icon: Icon(Icons.calendar_month),
               label: "Calendar",
             ),
-            // BottomNavigationBarItem(
-            //   icon: Icon(Icons.map),
-            //   label: "FinViz",
-            // ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.filter_list),
+              label: "Screener",
+            ),
           ],
         );
       }),

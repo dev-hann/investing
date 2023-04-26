@@ -1,41 +1,26 @@
-import 'package:investing/controller/news_controller.dart';
-import 'package:investing/model/news.dart';
-import 'package:investing/view/news_view/detail_view/news_detail_view_model.dart';
-import 'package:investing/view/view.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_html/flutter_html.dart';
-import 'package:html/dom.dart' as dom;
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 
-class NewsDetailView extends View<NewsDetailViewModel, NewsController> {
-  NewsDetailView({
+class NewsDetailView extends StatelessWidget {
+  const NewsDetailView({
     super.key,
-    required News news,
-  }) : super(viewModel: NewsDetailViewModel(news));
+    required this.url,
+  });
+  final String url;
 
   AppBar appBar() {
     return AppBar(
-      title: const Text("News Detail"),
+      title: const Text("News Detail View"),
     );
   }
 
-  Widget titleWidget() {
-    return Text(viewModel.titleText);
-  }
-
   @override
-  Widget body() {
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: appBar(),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            titleWidget(),
-            Html(
-              data: viewModel.bodyHtml,
-              onLinkTap: (String? url, RenderContext context,
-                  Map<String, String> attributes, dom.Element? element) {},
-            ),
-          ],
+      body: InAppWebView(
+        initialUrlRequest: URLRequest(
+          url: Uri.parse(url),
         ),
       ),
     );
