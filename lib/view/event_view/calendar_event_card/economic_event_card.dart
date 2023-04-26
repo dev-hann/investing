@@ -18,7 +18,7 @@ class EconomicEventCard extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(event.gmt),
-        Text(event.country.icon()),
+        Text("${event.country.code} ${event.country.icon()}"),
       ],
     );
   }

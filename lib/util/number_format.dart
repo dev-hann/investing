@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class IVNumberFormat {
@@ -16,5 +17,9 @@ class IVNumberFormat {
 
   static String priceFormat(double price) {
     return NumberFormat.simpleCurrency().format(price);
+  }
+
+  static String indexFormat(double value) {
+    return NumberFormat.currency(symbol: "").format(value);
   }
 }

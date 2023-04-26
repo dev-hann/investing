@@ -8,4 +8,7 @@ class IVColor {
   static const Color red = Color(0xFFFF5252);
   static const Color blue = Colors.blueAccent;
   static const Color grey = Colors.grey;
+
+  static const Color darkWhite = Colors.white54;
+  static const Color white = Colors.white;
 }

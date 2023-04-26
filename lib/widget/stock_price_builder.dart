@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:investing/const/color.dart';
 import 'package:investing/model/stock/stock.dart';
-import 'package:investing/util/number_format.dart';
 
 typedef PriceWidgetBuilder = Widget Function(
-  Widget indicator,
-  Widget percentageChange,
-  Widget netChage,
-  Widget lastPrice,
+  String indicator,
+  double percentageChange,
+  double netChage,
+  double lastPrice,
 );
 
 class IVStockPriceBuilder extends StatelessWidget {
@@ -15,19 +14,9 @@ class IVStockPriceBuilder extends StatelessWidget {
     super.key,
     required this.stock,
     required this.builder,
-    this.indicatorStyle,
-    this.percentageStyle,
-    this.netChangeStyle,
-    this.lastPriceStyle,
-    this.netChangeBracket = false,
   });
   final Stock stock;
   final PriceWidgetBuilder builder;
-  final TextStyle? indicatorStyle;
-  final TextStyle? percentageStyle;
-  final TextStyle? netChangeStyle;
-  final TextStyle? lastPriceStyle;
-  final bool netChangeBracket;
   TextStyle get style {
     switch (stock.indicatorStatus) {
       case IndicatorStatus.up:
@@ -55,15 +44,14 @@ class IVStockPriceBuilder extends StatelessWidget {
     if (stock.isEmpty) {
       return const SizedBox();
     }
-    final netChange = stock.netChange;
-    final netChagneText = netChangeBracket ? "($netChange)" : "$netChange";
-    String percentageChangText = "${stock.percentChange}%";
-    final lastPriceText = IVNumberFormat.priceFormat(stock.lastSalePrice);
-    return builder(
-      Text(indicatorText(), style: indicatorStyle ?? style),
-      Text(percentageChangText, style: percentageStyle ?? style),
-      Text(netChagneText, style: netChangeStyle ?? style),
-      Text(lastPriceText, style: lastPriceStyle ?? style),
+    return DefaultTextStyle(
+      style: style,
+      child: builder(
+        indicatorText(),
+        stock.percentChange,
+        stock.netChange,
+        stock.lastSalePrice,
+      ),
     );
   }
 }

@@ -13,7 +13,7 @@ class EventService extends IVService {
           "date": dateTime,
         },
       );
-      return res.data["data"]["rows"];
+      return res.data;
     } catch (e) {
       throw FlutterError(e.toString());
     }
@@ -28,7 +28,7 @@ class EventService extends IVService {
           "date": dateTime,
         },
       );
-      return res.data["data"]["rows"];
+      return res.data;
     } catch (e) {
       throw FlutterError(e.toString());
     }
@@ -43,7 +43,7 @@ class EventService extends IVService {
           "date": dateTime,
         },
       );
-      return res.data["data"]["rows"];
+      return res.data;
     } catch (e) {
       throw FlutterError(e.toString());
     }

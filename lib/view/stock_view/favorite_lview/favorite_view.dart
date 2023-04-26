@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:get/get.dart';
 import 'package:investing/controller/stock_controller.dart';
-import 'package:investing/model/stock/stock.dart';
+import 'package:investing/util/number_format.dart';
 import 'package:investing/view/stock_view/detail_view/stock_detail_view.dart';
 import 'package:investing/view/stock_view/edit_view/edit_view.dart';
 import 'package:investing/widget/stock_card.dart';
 import 'package:investing/widget/stock_price_builder.dart';
 import 'package:investing/widget/title_widget.dart';
+
+// TODO: add directory func
 
 class FavoriteView extends StatefulWidget {
   const FavoriteView({super.key});
@@ -44,6 +46,14 @@ class _FavoriteViewState extends State<FavoriteView> {
         ),
         child: Obx(() {
           final favoriteList = controller.favoriteList;
+          if (favoriteList.isEmpty) {
+            return SizedBox(
+              height: Get.height / 3,
+              child: const Center(
+                child: Text("Favorite List is Empty!"),
+              ),
+            );
+          }
           return ListView.separated(
             physics: const NeverScrollableScrollPhysics(),
             shrinkWrap: true,
@@ -96,10 +106,15 @@ class _FavoriteViewState extends State<FavoriteView> {
                           children: [
                             IntrinsicWidth(
                               child: Row(
-                                children: [indicator, percentageChange],
+                                children: [
+                                  Text(indicator),
+                                  Text("$percentageChange%"),
+                                ],
                               ),
                             ),
-                            lastPrice,
+                            Text(
+                              IVNumberFormat.priceFormat(lastPrice),
+                            ),
                           ],
                         );
                       },

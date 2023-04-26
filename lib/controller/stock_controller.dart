@@ -28,18 +28,21 @@ class StockController extends Controller<StockUseCase> {
   Stream<IVDataBaseEvent<Stock>> get favoriteStream => useCase.favoriteStream();
 
   // Favorite
-  final RxList<Stock> favoriteList = <Stock>[].obs;
+  final RxList<Stock> favoriteList = RxList<Stock>();
   Future<void> _initFavoriteList() async {
     favoriteStream.listen((event) async {
-      refreshFavoriteList();
+      refreshFavoriteList(updateData: !event.deleted);
     });
     refreshFavoriteList();
   }
 
-  void refreshFavoriteList() async {
-    final list = await useCase.requestStockList(
-      useCase.loadStockList(),
-    );
+  void refreshFavoriteList({
+    bool updateData = true,
+  }) async {
+    List<Stock> list = useCase.loadStockList();
+    if (updateData) {
+      list = await useCase.requestStockList(list);
+    }
     list.sort();
     favoriteList(list);
   }
@@ -61,7 +64,7 @@ class StockController extends Controller<StockUseCase> {
 
   // Index
   //TODO: make it edit by option button
-  final RxList<Stock> indexList = [
+  final RxList<Stock> indexList = RxList([
     Stock.nasdaq100(),
     Stock.nasdaq(),
     Stock.snp(),
@@ -72,7 +75,7 @@ class StockController extends Controller<StockUseCase> {
     Stock.copper(),
     Stock.naturalGas(),
     Stock.crudeOil(),
-  ].obs;
+  ]);
   Future _initIndexList() async {
     await refreshIndexList();
   }

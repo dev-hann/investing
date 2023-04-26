@@ -6,6 +6,7 @@ import 'package:investing/model/stock/stock_chart.dart';
 import 'package:investing/model/stock/stock_detail.dart';
 import 'package:investing/model/stock/stock_dividend.dart';
 import 'package:investing/model/stock/stock_financial.dart';
+import 'package:investing/util/number_format.dart';
 import 'package:investing/view/stock_view/detail_view/dividend_view/dividend_view.dart';
 import 'package:investing/widget/book_mark.dart';
 import 'package:flutter/material.dart';
@@ -107,18 +108,19 @@ class _StockDetailViewState extends State<StockDetailView> {
           builder: (context) {
             return IVStockPriceBuilder(
               stock: stock,
-              lastPriceStyle: Theme.of(context).textTheme.titleLarge,
-              netChangeBracket: true,
               builder: (indicator, percentageChange, netChage, lastPrice) {
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    lastPrice,
+                    Text(
+                      IVNumberFormat.priceFormat(lastPrice),
+                      style: Theme.of(context).textTheme.titleLarge,
+                    ),
                     Row(
                       children: [
-                        indicator,
-                        percentageChange,
-                        netChage,
+                        Text(indicator),
+                        Text("$percentageChange%"),
+                        Text("($netChage)"),
                       ],
                     )
                   ],

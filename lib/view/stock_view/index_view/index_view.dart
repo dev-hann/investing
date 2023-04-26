@@ -5,6 +5,7 @@ import 'package:investing/const/color.dart';
 import 'package:investing/controller/stock_controller.dart';
 import 'package:investing/model/stock/stock.dart';
 import 'package:investing/model/stock/stock_chart.dart';
+import 'package:investing/util/number_format.dart';
 import 'package:investing/view/stock_view/detail_view/stock_detail_view.dart';
 import 'package:investing/view/stock_view/edit_view/edit_view.dart';
 import 'package:investing/widget/chart_widget.dart';
@@ -45,7 +46,6 @@ class _IndexViewState extends State<IndexView> {
               padding: const EdgeInsets.all(8.0),
               child: Builder(
                 builder: (context) {
-                  final textTheme = Theme.of(context).textTheme;
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -61,19 +61,20 @@ class _IndexViewState extends State<IndexView> {
                       ),
                       IVStockPriceBuilder(
                         stock: index,
-                        lastPriceStyle: textTheme.titleMedium,
-                        netChangeBracket: true,
                         builder:
                             (indicator, percentageChange, netChage, lastPrice) {
                           return Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              lastPrice,
+                              Text(
+                                IVNumberFormat.indexFormat(lastPrice),
+                                style: Theme.of(context).textTheme.titleMedium,
+                              ),
                               Row(
                                 children: [
-                                  indicator,
-                                  percentageChange,
-                                  netChage,
+                                  Text(indicator),
+                                  Text("$percentageChange%"),
+                                  Text("($netChage)"),
                                 ],
                               ),
                             ],
@@ -101,11 +102,11 @@ class _IndexViewState extends State<IndexView> {
             const Expanded(child: Text("Index")),
             GestureDetector(
               onTap: () async {
-                final list = await Get.to(
-                  EditView(
-                    itemList: controller.indexList,
-                  ),
-                );
+                // final list = await Get.to(
+                //   EditView(
+                //     itemList: controller.indexList,
+                //   ),
+                // );
               },
               child: const Icon(Icons.settings),
             ),

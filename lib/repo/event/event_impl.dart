@@ -5,12 +5,10 @@ class EventImpl extends EventRepo {
   @override
   Future<List> requestEconomicEventList(DateTime dateTime) async {
     try {
-      final list = List.from(
-        await eventService.requestEconomicEventList(
-          IVDateTimeFormat(dateTime).dateTimeFormat()!,
-        ),
+      final res = await await eventService.requestEconomicEventList(
+        IVDateTimeFormat(dateTime).dateTimeFormat()!,
       );
-      return list;
+      return List.from(res["data"]["rows"]);
     } catch (e) {
       return [];
     }
@@ -19,12 +17,10 @@ class EventImpl extends EventRepo {
   @override
   Future<List> requestDvidendEventList(DateTime dateTime) async {
     try {
-      final list = List.from(
-        await eventService.requestDvidendEventList(
-          IVDateTimeFormat(dateTime).dateTimeFormat()!,
-        ),
+      final res = await await eventService.requestDvidendEventList(
+        IVDateTimeFormat(dateTime).dateTimeFormat()!,
       );
-      return list;
+      return List.from(res["data"]["calendar"]["rows"]);
     } catch (e) {
       return [];
     }
@@ -33,12 +29,10 @@ class EventImpl extends EventRepo {
   @override
   Future<List> requestEarningEventList(DateTime dateTime) async {
     try {
-      final list = List.from(
-        await eventService.requestEarningEventList(
-          IVDateTimeFormat(dateTime).dateTimeFormat()!,
-        ),
+      final res = await eventService.requestEarningEventList(
+        IVDateTimeFormat(dateTime).dateTimeFormat()!,
       );
-      return list;
+      return List.from(res["data"]["rows"]);
     } catch (e) {
       return [];
     }

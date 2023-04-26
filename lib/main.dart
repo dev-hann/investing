@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
 import 'package:investing/const/color.dart';
-import 'package:investing/controller/calendar_controller.dart';
+import 'package:investing/controller/event_controller.dart';
 import 'package:investing/controller/controller.dart';
 import 'package:investing/controller/news_controller.dart';
 import 'package:investing/controller/stock_controller.dart';
@@ -37,8 +37,8 @@ class MyApp extends StatelessWidget {
               NewsUseCase(NewsImpl()),
             ),
           );
-          Controller.put<CalendarController>(
-            CalendarController(
+          Controller.put<EventController>(
+            EventController(
               EventUseCase(EventImpl()),
             ),
           );
@@ -48,6 +48,10 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         brightness: Brightness.dark,
         primaryColor: IVColor.orange,
+        tabBarTheme: const TabBarTheme(
+          labelColor: IVColor.white,
+          unselectedLabelColor: IVColor.darkWhite,
+        ),
         appBarTheme: const AppBarTheme(
           centerTitle: true,
         ),
