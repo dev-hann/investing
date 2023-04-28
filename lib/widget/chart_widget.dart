@@ -44,7 +44,7 @@ class IVChartWidget extends StatelessWidget {
               color: Colors.white,
             ),
             labelResolver: (value) {
-              return value.y.toStringAsPrecision(4);
+              return value.y.toStringAsFixed(2);
             },
           ),
         ),
@@ -61,7 +61,7 @@ class IVChartWidget extends StatelessWidget {
               color: Colors.white,
             ),
             labelResolver: (value) {
-              return value.y.toStringAsPrecision(4);
+              return value.y.toStringAsFixed(2);
             },
           ),
         ),

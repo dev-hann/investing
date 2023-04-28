@@ -7,7 +7,6 @@ import 'package:investing/model/stock/stock.dart';
 import 'package:investing/model/stock/stock_chart.dart';
 import 'package:investing/util/number_format.dart';
 import 'package:investing/view/stock_view/detail_view/stock_detail_view.dart';
-import 'package:investing/view/stock_view/edit_view/edit_view.dart';
 import 'package:investing/widget/chart_widget.dart';
 import 'package:investing/widget/loading_widget.dart';
 import 'package:investing/widget/stock_price_builder.dart';

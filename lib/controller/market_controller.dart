@@ -16,8 +16,7 @@ class MarketController extends Controller<MarketUseCase> {
   @override
   void onReady() {
     refreshMarketData();
-    // refreshMarketPercentData();
-    refreshMarketPercentRealTimeData();
+    refreshMarketPercentData();
     super.onReady();
   }
 
@@ -34,16 +33,16 @@ class MarketController extends Controller<MarketUseCase> {
   Future<Map<String, List<double>>> requestMarketChartData(
       List<String> symbolList) async {
     final Map<String, List<double>> res = {};
-    final emptySymbolList = [];
+    final tmpSymbolList = [];
 
     for (final symbol in symbolList) {
       if (marketChartData.containsKey(symbolList)) {
         res[symbol] = marketChartData[symbol]!;
       } else {
-        emptySymbolList.add(symbol);
+        tmpSymbolList.add(symbol);
       }
     }
-    if (emptySymbolList.isNotEmpty) {
+    if (tmpSymbolList.isNotEmpty) {
       final data = await useCase.requestChartData(symbolList);
       for (final entry in data.entries) {
         final key = entry.key;

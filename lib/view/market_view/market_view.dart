@@ -27,6 +27,7 @@ class _MarketViewState extends State<MarketView> {
       body: Obx(
         () {
           final list = controller.marketDataList;
+          final percentData = controller.marketPercentData;
           return ListView.builder(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
             itemCount: list.length,
@@ -44,11 +45,16 @@ class _MarketViewState extends State<MarketView> {
                   ),
                   child: SectorView(
                     onTap: (symbolList) async {
-                      final res =
-                          await controller.requestMarketChartData(symbolList);
+                      // TODO: Future Work
+                      // Get.to(
+                      //   SectorDetailView(
+                      //     sectorName: marketData.name,
+                      //     symbolList: symbolList,
+                      //   ),
+                      // );
                     },
                     sectorList: marketData.childeren,
-                    percentData: controller.marketPercentData,
+                    percentData: percentData,
                   ),
                 ),
               );

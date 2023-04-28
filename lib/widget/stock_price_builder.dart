@@ -20,7 +20,7 @@ class IVStockPriceBuilder extends StatelessWidget {
   TextStyle get style {
     switch (stock.indicatorStatus) {
       case IndicatorStatus.up:
-        return const TextStyle(color: IVColor.darkRed);
+        return const TextStyle(color: IVColor.lightRed);
       case IndicatorStatus.down:
         return const TextStyle(color: IVColor.blue);
       case IndicatorStatus.same:

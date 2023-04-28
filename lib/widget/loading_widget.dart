@@ -9,9 +9,10 @@ class IVLoadingWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ColoredBox(
-      color: background ?? Colors.black.withOpacity(0.4),
-      child: const Center(
+    return const ColoredBox(
+      color: Colors.transparent,
+      // color: background ?? Colors.black.withOpacity(0.4),
+      child: Center(
         child: CircularProgressIndicator(),
       ),
     );
