@@ -28,13 +28,29 @@ class _MarketViewState extends State<MarketView> {
         () {
           final list = controller.marketDataList;
           return ListView.builder(
-            padding: const EdgeInsets.all(16.0),
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
             itemCount: list.length,
             itemBuilder: (context, index) {
-              final item = list[index];
-              return TitleWidget(
-                title: Text(item.name),
-                child: SectorView(sectorList: item.childeren),
+              final marketData = list[index];
+              return Padding(
+                padding: const EdgeInsets.symmetric(vertical: 4.0),
+                child: TitleWidget(
+                  gap: 0.0,
+                  title: Center(
+                    child: Text(
+                      marketData.name,
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ),
+                  ),
+                  child: SectorView(
+                    onTap: (symbolList) async {
+                      final res =
+                          await controller.requestMarketChartData(symbolList);
+                    },
+                    sectorList: marketData.childeren,
+                    percentData: controller.marketPercentData,
+                  ),
+                ),
               );
             },
           );

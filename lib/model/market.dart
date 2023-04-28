@@ -52,9 +52,8 @@ class MarketSector extends Market<MarketItem> {
       .fold(0, (previousValue, element) => previousValue + element);
 }
 
-class MarketItem extends Equatable {
-  const MarketItem(this.name, this.description, this.value);
-  final String name;
+class MarketItem extends Market {
+  MarketItem(String name, this.description, this.value) : super(name, []);
   final String description;
   final int value;
 
@@ -75,9 +74,5 @@ class MarketItem extends Equatable {
   }
 
   @override
-  List<Object?> get props => [
-        name,
-        description,
-        value,
-      ];
+  int get sumValue => value;
 }

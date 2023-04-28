@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 class TitleWidget extends StatelessWidget {
   const TitleWidget({
     super.key,
+    this.gap = 8.0,
     required this.title,
     required this.child,
   });
   final Widget title;
+  final double gap;
   final Widget child;
 
   @override
@@ -18,7 +20,7 @@ class TitleWidget extends StatelessWidget {
           style: Theme.of(context).textTheme.titleLarge!,
           child: title,
         ),
-        const SizedBox(height: 8.0),
+        SizedBox(height: gap),
         child,
       ],
     );

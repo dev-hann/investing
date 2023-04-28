@@ -28,6 +28,8 @@ dependencies:
   dio:
   intl:
 
+  logger:
+
   # StateManager
   get:
 
