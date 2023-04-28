@@ -79,4 +79,9 @@ class StockService extends IVService {
       },
     );
   }
+
+  Future<Response> requestStockCompany(String symbol) {
+    final url = "https://api.nasdaq.com/api/company/$symbol/company-profile";
+    return get(url);
+  }
 }

@@ -61,11 +61,7 @@ class _NewsViewState extends State<NewsView> {
                     padding: const EdgeInsets.all(16.0),
                     child: NewsCard(
                       onTap: () {
-                        Get.to(
-                          NewsDetailView(
-                            url: news.articleDetailURL,
-                          ),
-                        );
+                        Get.to(NewsDetailView(news: news));
                       },
                       news: news,
                     ),

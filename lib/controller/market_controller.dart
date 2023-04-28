@@ -17,6 +17,7 @@ class MarketController extends Controller<MarketUseCase> {
   void onReady() {
     refreshMarketData();
     refreshMarketPercentData();
+    refreshMarketPercentRealTimeData();
     super.onReady();
   }
 
@@ -71,5 +72,7 @@ class MarketController extends Controller<MarketUseCase> {
       map.addEntries(data.entries);
     }
     marketPercentData(map);
+    await Future.delayed(Duration(seconds: 5));
+    refreshMarketPercentRealTimeData();
   }
 }

@@ -16,7 +16,6 @@ class HomeView extends StatefulWidget {
 
 class _HomeViewState extends State<HomeView> {
   final PageController pageController = PageController(keepPage: true);
-
   final RxInt currentPage = RxInt(0);
 
   @override

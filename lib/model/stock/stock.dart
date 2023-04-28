@@ -2,6 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 
 import 'package:investing/data/db/data_base_model_mixin.dart';
+import 'package:investing/model/chart.dart';
 import 'package:investing/model/date_time_range.dart';
 
 enum StockType {
@@ -53,6 +54,23 @@ class Stock extends Equatable with DataBaseModelMixin, Comparable<Stock> {
     throw FlutterError("Unknown Stock Type $assetText");
   }
 
+  List<ChartRangeType> get chartRangeTypeList {
+    switch (type) {
+      case StockType.stock:
+      case StockType.etf:
+      case StockType.majorIndex:
+        return ChartRangeType.values.toList();
+      case StockType.fixedIncome:
+      case StockType.commodity:
+        return [
+          ChartRangeType.oneMonth,
+          ChartRangeType.oneYear,
+          ChartRangeType.all,
+        ];
+    }
+  }
+
+  @Deprecated("will be deprecated. use [chartRangeTypeList] instead.")
   List<IVDateTimeRange> get dateTimeList {
     switch (type) {
       case StockType.stock:

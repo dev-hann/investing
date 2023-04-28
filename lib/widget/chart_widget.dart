@@ -44,7 +44,7 @@ class IVChartWidget extends StatelessWidget {
               color: Colors.white,
             ),
             labelResolver: (value) {
-              return value.y.toStringAsFixed(2);
+              return "Max: ${value.y.toStringAsFixed(2)}";
             },
           ),
         ),
@@ -61,7 +61,7 @@ class IVChartWidget extends StatelessWidget {
               color: Colors.white,
             ),
             labelResolver: (value) {
-              return value.y.toStringAsFixed(2);
+              return "Min: ${value.y.toStringAsFixed(2)}";
             },
           ),
         ),
@@ -76,8 +76,8 @@ class IVChartWidget extends StatelessWidget {
             style: const TextStyle(
               color: Colors.white,
             ),
-            labelResolver: (p0) {
-              return p0.y.toString();
+            labelResolver: (value) {
+              return "Closed: ${value.y.toStringAsFixed(2)}";
             },
           ),
         ),
@@ -126,9 +126,13 @@ class IVChartWidget extends StatelessWidget {
     );
   }
 
-  List<LineChartBarData> lineBarListData(List<IVChart> priceChartList) {
+  List<LineChartBarData> lineBarListData({
+    required double netChange,
+    required List<IVChart> priceChartList,
+  }) {
     return [
       LineChartBarData(
+        color: IVColor.stockColor(netChange),
         // belowBarData: BarAreaData(
         //   show: true,
         //   spotsLine: BarAreaSpotsLine(),
@@ -206,7 +210,10 @@ class IVChartWidget extends StatelessWidget {
                             minLineValue:
                                 priceChartList.map((e) => e.value).reduce(min),
                           ),
-                          lineBarsData: lineBarListData(priceChartList),
+                          lineBarsData: lineBarListData(
+                            netChange: chart.netChange,
+                            priceChartList: priceChartList,
+                          ),
                         ),
                       ),
                     );

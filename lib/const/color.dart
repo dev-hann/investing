@@ -19,23 +19,13 @@ class IVColor {
   static const Color green = Color(0xFF529C57);
   static const Color lightGreen = Color(0xFF65C967);
 
-  static Color? stockColor(double value) {
-    if (value == 0) {
-      return null;
-    }
-    if (value <= -3) {
+  static Color stockColor(double netChange) {
+    if (netChange > 0.0) {
       return IVColor.lightRed;
-    } else if (value < -2) {
-      return IVColor.red;
-    } else if (value < -0) {
-      return IVColor.darkRed;
-    } else if (value > 3) {
-      return IVColor.lightGreen;
-    } else if (value > 2) {
-      return IVColor.green;
-    } else if (value > 0) {
-      return IVColor.darkGreen;
     }
-    return null;
+    if (netChange < 0.0) {
+      return IVColor.blue;
+    }
+    return IVColor.grey;
   }
 }

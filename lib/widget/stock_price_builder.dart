@@ -17,16 +17,6 @@ class IVStockPriceBuilder extends StatelessWidget {
   });
   final Stock stock;
   final PriceWidgetBuilder builder;
-  TextStyle get style {
-    switch (stock.indicatorStatus) {
-      case IndicatorStatus.up:
-        return const TextStyle(color: IVColor.lightRed);
-      case IndicatorStatus.down:
-        return const TextStyle(color: IVColor.blue);
-      case IndicatorStatus.same:
-        return const TextStyle(color: IVColor.grey);
-    }
-  }
 
   String indicatorText() {
     switch (stock.indicatorStatus) {
@@ -45,7 +35,7 @@ class IVStockPriceBuilder extends StatelessWidget {
       return const SizedBox();
     }
     return DefaultTextStyle(
-      style: style,
+      style: TextStyle(color: IVColor.stockColor(stock.netChange)),
       child: builder(
         indicatorText(),
         stock.percentChange,

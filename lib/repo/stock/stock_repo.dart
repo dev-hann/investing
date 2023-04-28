@@ -38,4 +38,6 @@ abstract class StockRepo extends Repo {
     required String asset,
     required IVDateTimeRange? dateTimeRange,
   });
+
+  Future<dynamic> reqeustStockCompany(String symbol);
 }

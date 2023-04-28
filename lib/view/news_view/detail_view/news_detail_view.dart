@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+import 'package:investing/model/news.dart';
 
 class NewsDetailView extends StatelessWidget {
   const NewsDetailView({
     super.key,
-    required this.url,
+    required this.news,
   });
-  final String url;
+  final News news;
 
   AppBar appBar() {
     return AppBar(
@@ -20,7 +21,7 @@ class NewsDetailView extends StatelessWidget {
       appBar: appBar(),
       body: InAppWebView(
         initialUrlRequest: URLRequest(
-          url: Uri.parse(url),
+          url: Uri.parse(news.articleDetailURL),
         ),
       ),
     );

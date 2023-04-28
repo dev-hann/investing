@@ -99,4 +99,10 @@ class StockImpl extends StockRepo {
     );
     return res.data;
   }
+
+  @override
+  Future reqeustStockCompany(String symbol) async {
+    final res = await service.requestStockCompany(symbol);
+    return res.data["data"];
+  }
 }

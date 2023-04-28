@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:investing/model/chart.dart';
 
 class IVDateTimeRange extends Equatable {
   const IVDateTimeRange(this.begin, this.end);
@@ -39,5 +40,21 @@ class IVDateTimeRange extends Equatable {
       DateTime(now.year - year, now.month, now.day),
       now,
     );
+  }
+
+  static IVDateTimeRange? fromRangeType(ChartRangeType type) {
+    switch (type) {
+      case ChartRangeType.realTime:
+      case ChartRangeType.oneDay:
+        return null;
+      case ChartRangeType.oneMonth:
+        return IVDateTimeRange.beforeMonth(1);
+      case ChartRangeType.threeMonth:
+        return IVDateTimeRange.beforeMonth(3);
+      case ChartRangeType.oneYear:
+        return IVDateTimeRange.beforeYear(1);
+      case ChartRangeType.all:
+        return IVDateTimeRange.beforeYear(100);
+    }
   }
 }

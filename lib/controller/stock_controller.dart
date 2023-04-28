@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:get/get.dart';
 import 'package:investing/controller/controller.dart';
 import 'package:investing/data/db/data_base.dart';
+import 'package:investing/model/stock/stock_company.dart';
 import 'package:investing/model/date_time_range.dart';
 import 'package:investing/model/stock/stock.dart';
 import 'package:investing/model/stock/stock_chart.dart';
@@ -90,7 +91,8 @@ class StockController extends Controller<StockUseCase> {
       final res = await useCase.requestStockChart(
         symbol: stock.symbol,
         asset: stock.asset,
-        dateTimeRange: stock.dateTimeList.first,
+        dateTimeRange:
+            IVDateTimeRange.fromRangeType(stock.chartRangeTypeList.first),
       );
       list.add(res);
     }
@@ -154,12 +156,16 @@ class StockController extends Controller<StockUseCase> {
 
   Future<StockChart> requestStockChart({
     required Stock stock,
-    required IVDateTimeRange dateTimeRange,
+    required IVDateTimeRange? dateTimeRange,
   }) {
     return useCase.requestStockChart(
       symbol: stock.symbol,
       asset: stock.asset,
       dateTimeRange: dateTimeRange,
     );
+  }
+
+  Future<StockCompany> reqeustStockCompany(Stock stock) {
+    return useCase.reqeustStockCompany(stock.symbol);
   }
 }

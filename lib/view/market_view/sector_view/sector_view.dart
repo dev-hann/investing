@@ -6,7 +6,7 @@ import 'package:investing/const/color.dart';
 import 'package:investing/model/market.dart';
 import 'package:investing/widget/title_widget.dart';
 
-class SectorView extends StatelessWidget {
+class SectorView extends StatefulWidget {
   const SectorView({
     super.key,
     required this.sectorList,
@@ -16,6 +16,31 @@ class SectorView extends StatelessWidget {
   final List<MarketSector> sectorList;
   final Map<String, double> percentData;
   final Function(List<String> symbolList) onTap;
+
+  @override
+  State<SectorView> createState() => _SectorViewState();
+}
+
+class _SectorViewState extends State<SectorView> {
+  Color? stockColor(double value) {
+    if (value == 0) {
+      return null;
+    }
+    if (value <= -3) {
+      return IVColor.lightRed;
+    } else if (value < -2) {
+      return IVColor.red;
+    } else if (value < -0) {
+      return IVColor.darkRed;
+    } else if (value > 3) {
+      return IVColor.lightGreen;
+    } else if (value > 2) {
+      return IVColor.green;
+    } else if (value > 0) {
+      return IVColor.darkGreen;
+    }
+    return null;
+  }
 
   Widget sectorWidget(MarketSector sector) {
     final children = sector.childeren;
@@ -31,14 +56,14 @@ class SectorView extends StatelessWidget {
       ),
       child: GestureDetector(
         onTap: () {
-          onTap(children.map((e) => e.name).toList());
+          widget.onTap(children.map((e) => e.name).toList());
         },
         child: SizedBox(
           height: 25,
           child: Row(
               children:
                   children.sublist(0, min(6, children.length)).map((item) {
-            final percent = percentData[item.name] ?? 0.0;
+            final percent = widget.percentData[item.name] ?? 0.0;
             return Expanded(
               flex: pow(item.sumValue, 1 / 3).floor(),
               child: Row(
@@ -49,7 +74,7 @@ class SectorView extends StatelessWidget {
                   ),
                   Expanded(
                     child: ColoredBox(
-                      color: IVColor.stockColor(percent) ?? Colors.transparent,
+                      color: stockColor(percent) ?? Colors.transparent,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -81,7 +106,7 @@ class SectorView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: sectorList.map((e) => sectorWidget(e)).toList(),
+      children: widget.sectorList.map((e) => sectorWidget(e)).toList(),
     );
   }
 }

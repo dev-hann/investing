@@ -47,4 +47,22 @@ class NewsService extends IVService {
     );
     return res.data;
   }
+
+  Future<Response> searchStockNewsList({
+    required String symbol,
+    required String asset,
+    required int page,
+    required int stride,
+  }) async {
+    const url = "https://api.nasdaq.com/api/news/topic/articlebysymbol";
+    return get(
+      url,
+      query: {
+        "q": "$symbol|$asset",
+        "offset": page - 1,
+        "limit": stride,
+        "fallback": false,
+      },
+    );
+  }
 }

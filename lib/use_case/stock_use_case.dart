@@ -1,4 +1,5 @@
 import 'package:investing/data/db/data_base.dart';
+import 'package:investing/model/stock/stock_company.dart';
 import 'package:investing/model/date_time_range.dart';
 import 'package:investing/model/market_status.dart';
 import 'package:investing/model/stock/stock.dart';
@@ -89,12 +90,12 @@ class StockUseCase extends UseCase<StockRepo> {
   Future<StockChart> requestStockChart({
     required String symbol,
     required String asset,
-    required IVDateTimeRange dateTimeRange,
+    required IVDateTimeRange? dateTimeRange,
   }) async {
     final res = await repo.requestStockChart(
       symbol: symbol,
       asset: asset,
-      dateTimeRange: dateTimeRange.inDays == 1 ? null : dateTimeRange,
+      dateTimeRange: dateTimeRange,
     );
     return StockChart.fromMap(res["data"]);
   }
@@ -163,5 +164,10 @@ class StockUseCase extends UseCase<StockRepo> {
     } catch (e) {
       return null;
     }
+  }
+
+  Future<StockCompany> reqeustStockCompany(String symbol) async {
+    final res = await repo.reqeustStockCompany(symbol);
+    return StockCompany.fromMap(res);
   }
 }

@@ -1,5 +1,14 @@
 import 'package:equatable/equatable.dart';
 
+enum ChartRangeType {
+  realTime,
+  oneDay,
+  oneMonth,
+  threeMonth,
+  oneYear,
+  all,
+}
+
 class IVChart extends Comparable<IVChart> with EquatableMixin {
   IVChart(
     this.dateTime,

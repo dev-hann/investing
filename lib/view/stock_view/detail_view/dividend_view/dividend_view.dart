@@ -1,33 +1,72 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:investing/controller/stock_controller.dart';
+import 'package:investing/model/stock/stock.dart';
 import 'package:investing/model/stock/stock_dividend.dart';
+import 'package:investing/view/stock_view/detail_view/dividend_detail_view/dividend_detail_view.dart';
+import 'package:investing/widget/title_widget.dart';
 
-class DividendView extends StatelessWidget {
+class DividendView extends StatefulWidget {
   const DividendView({
     super.key,
-    required this.dividend,
+    required this.stock,
   });
-  final StockDividend dividend;
+  final Stock stock;
 
-  AppBar appBar() {
-    return AppBar(
-      title: const Text("Dividend Detail"),
-    );
+  @override
+  State<DividendView> createState() => _DividendViewState();
+}
+
+class _DividendViewState extends State<DividendView> {
+  final StockController controller = StockController.find();
+  final Rxn<StockDividend> dividend = Rxn();
+
+  @override
+  void initState() {
+    super.initState();
+    controller.requestStockDividend(widget.stock).then(dividend);
   }
 
   @override
   Widget build(BuildContext context) {
-    final list = dividend.histoyList;
-    return Scaffold(
-      appBar: appBar(),
-      body: ListView.builder(
-        itemCount: list.length,
-        itemBuilder: (context, index) {
-          final item = list[index];
-          return Text(
-            item.toString(),
-          );
-        },
-      ),
-    );
+    return Obx(() {
+      final dividendValue = dividend.value;
+      if (dividendValue == null) {
+        return const SizedBox();
+      }
+      return TitleWidget(
+        title: const Text("Dividend"),
+        child: Column(
+          children: [
+            Row(
+              children: [
+                const Text("Annual Dividend"),
+                Text(dividendValue.annualizedDividend.toString()),
+              ],
+            ),
+            Row(
+              children: [
+                const Text("Dividend Ratio"),
+                Text(dividendValue.yield.toString()),
+              ],
+            ),
+            Row(
+              children: [
+                const Text("Ex Dividend Date"),
+                Text(dividendValue.exDividendDate.toString()),
+              ],
+            ),
+            ElevatedButton(
+              onPressed: () {
+                controller.bottomSheet(
+                  DividendDetailView(dividend: dividendValue),
+                );
+              },
+              child: const Text("More"),
+            )
+          ],
+        ),
+      );
+    });
   }
 }

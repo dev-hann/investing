@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:investing/controller/controller.dart';
 import 'package:investing/model/news.dart';
+import 'package:investing/model/stock/stock.dart';
 import 'package:investing/use_case/news_use_case.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
@@ -43,5 +44,15 @@ class NewsController extends Controller<NewsUseCase> {
   Future searchNews(String query) async {
     final list = await useCase.searchNewList(query);
     searchedList(list);
+  }
+
+  Future<List<News>> searchStockNewsList({
+    required Stock stock,
+    required int page,
+  }) {
+    return useCase.searchStockNewsList(
+      stock: stock,
+      page: page,
+    );
   }
 }
