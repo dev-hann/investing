@@ -8,6 +8,7 @@ import 'package:investing/controller/market_controller.dart';
 import 'package:investing/model/market.dart';
 import 'package:investing/widget/title_widget.dart';
 
+// TODO: (Future Work) make view more compatable (like Finviz HeatMap)
 class MarketView extends StatefulWidget {
   const MarketView({super.key});
 

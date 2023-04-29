@@ -1,4 +1,3 @@
-import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:investing/controller/stock_controller.dart';
@@ -34,9 +33,12 @@ class _CompanyViewState extends State<CompanyView> {
       if (companyValue == null) {
         return const SizedBox();
       }
-      return const TitleWidget(
-        title: Text("Company Profile"),
-        child: Text("!!"),
+      return Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8.0),
+        child: TitleWidget(
+          title: Text("Company Profile"),
+          child: Text("!!"),
+        ),
       );
     });
   }

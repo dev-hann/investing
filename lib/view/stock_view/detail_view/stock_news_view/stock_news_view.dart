@@ -4,6 +4,7 @@ import 'package:investing/controller/news_controller.dart';
 import 'package:investing/model/news.dart';
 import 'package:investing/model/stock/stock.dart';
 import 'package:investing/view/news_view/detail_view/news_detail_view.dart';
+import 'package:investing/widget/text_button.dart';
 import 'package:investing/widget/title_widget.dart';
 
 class StockNewsView extends StatefulWidget {
@@ -58,19 +59,23 @@ class _StockNewsViewState extends State<StockNewsView> {
       if (list.isEmpty) {
         return const SizedBox();
       }
-      return Column(
-        children: [
-          TitleWidget(
-            title: const Text("News"),
-            child: Column(
-              children: newsList.sublist(0, 3).map(item).toList(),
+      return Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8.0),
+        child: Column(
+          children: [
+            TitleWidget.withButton(
+              title: const Text("News"),
+              trailing: IVTextButton.more(
+                onTap: () {
+                  // controller.bottomSheet();
+                },
+              ),
+              child: Column(
+                children: newsList.sublist(0, 3).map(item).toList(),
+              ),
             ),
-          ),
-          ElevatedButton(
-            onPressed: () {},
-            child: const Text("More"),
-          ),
-        ],
+          ],
+        ),
       );
     });
   }

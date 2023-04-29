@@ -19,7 +19,6 @@ class StockController extends Controller<StockUseCase> {
   void onReady() async {
     super.onReady();
     await useCase.init();
-    _initMarketStatus();
     _initIndexList();
     _initFavoriteList();
   }
@@ -101,26 +100,6 @@ class StockController extends Controller<StockUseCase> {
 
   // MarketStatus
   final Rx<MarketStatus?> marketStatus = Rx(null);
-
-  // late Timer? _marketTimer;
-  Future _initMarketStatus() async {
-    final status = await useCase.requestMarketStatus();
-    marketStatus(status);
-    // if (marketStatus!.isOpened) {
-    //   return;
-    // }
-    // final now = DateTime.now();
-    // final leftDuration = now.difference(marketStatus.preMarketOpen);
-    // _marketTimer = Timer.periodic(leftDuration, (timer) {
-    //   // Open Market!
-    //   _initMarketStatus();
-    //   _marketTimer?.cancel();
-    // });
-  }
-
-  Future refreshMarkStatus() async {
-    marketStatus(await useCase.requestMarketStatus());
-  }
 
   // Search
   Future<List<Stock>> searchStock(String query) async {

@@ -1,8 +1,10 @@
+import 'dart:async';
 import 'dart:math';
 
 import 'package:get/get.dart';
 import 'package:investing/controller/controller.dart';
 import 'package:investing/model/market.dart';
+import 'package:investing/model/market_status.dart';
 import 'package:investing/use_case/market_use_case.dart';
 
 class MarketController extends Controller<MarketUseCase> {
@@ -15,6 +17,7 @@ class MarketController extends Controller<MarketUseCase> {
 
   @override
   void onReady() {
+    refreshMarketStatus();
     refreshMarketData();
     refreshMarketPercentData();
     refreshMarketPercentRealTimeData();
@@ -74,5 +77,21 @@ class MarketController extends Controller<MarketUseCase> {
     marketPercentData(map);
     await Future.delayed(Duration(seconds: 5));
     refreshMarketPercentRealTimeData();
+  }
+
+  final Rxn<MarketStatus?> marketStatus = Rxn();
+  late Timer _marketTimer;
+  Future refreshMarketStatus() async {
+    final status = await useCase.requestMarketStatus();
+    marketStatus(status);
+    if (!status.isOpened) {
+      final now = DateTime.now();
+      final leftDuration = now.difference(status.preMarketOpen);
+      _marketTimer = Timer.periodic(leftDuration, (_) {
+        // Open Market!
+        refreshMarketStatus();
+        _marketTimer.cancel();
+      });
+    }
   }
 }

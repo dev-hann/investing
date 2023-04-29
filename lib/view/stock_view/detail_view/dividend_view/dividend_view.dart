@@ -4,6 +4,7 @@ import 'package:investing/controller/stock_controller.dart';
 import 'package:investing/model/stock/stock.dart';
 import 'package:investing/model/stock/stock_dividend.dart';
 import 'package:investing/view/stock_view/detail_view/dividend_detail_view/dividend_detail_view.dart';
+import 'package:investing/widget/text_button.dart';
 import 'package:investing/widget/title_widget.dart';
 
 class DividendView extends StatefulWidget {
@@ -34,37 +35,39 @@ class _DividendViewState extends State<DividendView> {
       if (dividendValue == null) {
         return const SizedBox();
       }
-      return TitleWidget(
-        title: const Text("Dividend"),
-        child: Column(
-          children: [
-            Row(
-              children: [
-                const Text("Annual Dividend"),
-                Text(dividendValue.annualizedDividend.toString()),
-              ],
-            ),
-            Row(
-              children: [
-                const Text("Dividend Ratio"),
-                Text(dividendValue.yield.toString()),
-              ],
-            ),
-            Row(
-              children: [
-                const Text("Ex Dividend Date"),
-                Text(dividendValue.exDividendDate.toString()),
-              ],
-            ),
-            ElevatedButton(
-              onPressed: () {
-                controller.bottomSheet(
-                  DividendDetailView(dividend: dividendValue),
-                );
-              },
-              child: const Text("More"),
-            )
-          ],
+      return Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8.0),
+        child: TitleWidget.withButton(
+          title: const Text("Dividend"),
+          trailing: IVTextButton.more(
+            onTap: () {
+              controller.bottomSheet(
+                DividendDetailView(dividend: dividendValue),
+              );
+            },
+          ),
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  const Text("Annual Dividend"),
+                  Text(dividendValue.annualizedDividend.toString()),
+                ],
+              ),
+              Row(
+                children: [
+                  const Text("Dividend Ratio"),
+                  Text(dividendValue.yield.toString()),
+                ],
+              ),
+              Row(
+                children: [
+                  const Text("Ex Dividend Date"),
+                  Text(dividendValue.exDividendDate.toString()),
+                ],
+              ),
+            ],
+          ),
         ),
       );
     });

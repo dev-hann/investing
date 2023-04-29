@@ -10,6 +10,26 @@ class TitleWidget extends StatelessWidget {
   final Widget title;
   final double gap;
   final Widget child;
+  static Widget withButton({
+    required Widget title,
+    required Widget trailing,
+    required Widget child,
+  }) {
+    return TitleWidget(
+      title: Row(
+        children: [
+          Expanded(child: title),
+          Builder(builder: (context) {
+            return DefaultTextStyle(
+              style: Theme.of(context).textTheme.labelLarge!,
+              child: trailing,
+            );
+          }),
+        ],
+      ),
+      child: child,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {

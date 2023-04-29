@@ -24,11 +24,6 @@ class StockService extends IVService {
     );
   }
 
-  Future<Response> requestMarketStatus() {
-    const url = "https://api.nasdaq.com/api/market-info";
-    return get(url);
-  }
-
   Future<Response> requestStockList(List<String> symbolList) {
     final q = symbolList.map((e) => "symbol=$e").join("&");
     final url = "https://api.nasdaq.com/api/quote/basic?$q";

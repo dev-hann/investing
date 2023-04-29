@@ -36,10 +36,13 @@ class _FinancialViewState extends State<FinancialView> {
       if (financialValue == null) {
         return const SizedBox();
       }
-      return TitleWidget(
-        title: const Text("Financial"),
-        child: Text(
-          financialValue.balanceTable.toString(),
+      return Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8.0),
+        child: TitleWidget(
+          title: const Text("Financial"),
+          child: Text(
+            financialValue.balanceTable.toString(),
+          ),
         ),
       );
     });

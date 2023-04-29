@@ -17,16 +17,25 @@ class StockDetailView extends StatelessWidget {
   final Stock stock;
 
   AppBar appBar() {
+    Widget bookmarkWidget() {
+      final type = stock.type;
+      if (type == StockType.majorIndex ||
+          type == StockType.commodity ||
+          type == StockType.fixedIncome) {
+        return const SizedBox();
+      }
+      return IconButton(
+        onPressed: () {},
+        icon: BookMarkWidget(
+          stock: stock,
+        ),
+      );
+    }
+
     return AppBar(
       title: const Text("Stock Detail"),
       actions: [
-        // TODO: hide when stock is IndexType
-        IconButton(
-          onPressed: () {},
-          icon: BookMarkWidget(
-            stock: stock,
-          ),
-        ),
+        bookmarkWidget(),
       ],
     );
   }
@@ -75,13 +84,9 @@ class StockDetailView extends StatelessWidget {
         children: [
           titleText(),
           ChartView(stock: stock),
-          const SizedBox(height: 16.0),
           DividendView(stock: stock),
-          const SizedBox(height: 16.0),
           StockNewsView(stock: stock),
-          const SizedBox(height: 16.0),
           FinancialView(stock: stock),
-          const SizedBox(height: 16.0),
           CompanyView(stock: stock)
         ],
       ),

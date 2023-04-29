@@ -26,4 +26,10 @@ class MarketImpl extends MarketRepo {
     final res = await service.requestChartData(symbolList);
     return res.data;
   }
+
+  @override
+  Future requestMarketStatus() async {
+    final res = await service.requestMarketStatus();
+    return res.data;
+  }
 }

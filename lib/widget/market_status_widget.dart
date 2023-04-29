@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:investing/const/color.dart';
+import 'package:investing/controller/market_controller.dart';
 import 'package:investing/controller/stock_controller.dart';
 import 'package:investing/model/market_status.dart';
 
@@ -48,7 +49,7 @@ class MarketStatusWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = StockController.find();
+    final controller = MarketController.find();
     return Obx(() {
       final status = controller.marketStatus.value;
       if (status == null) {

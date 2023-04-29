@@ -100,11 +100,6 @@ class StockUseCase extends UseCase<StockRepo> {
     return StockChart.fromMap(res["data"]);
   }
 
-  Future<MarketStatus> requestMarketStatus() async {
-    final res = await repo.requestMarketStatus();
-    return MarketStatus.fromMap(res);
-  }
-
   Future<List<Stock>> requestStockList(List<Stock> list) async {
     if (list.isEmpty) {
       return [];

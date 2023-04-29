@@ -50,12 +50,6 @@ class StockImpl extends StockRepo {
   }
 
   @override
-  Future requestMarketStatus() async {
-    final res = await service.requestMarketStatus();
-    return res.data;
-  }
-
-  @override
   Future requestStockList(List<String> symbolList) async {
     final res = await service.requestStockList(symbolList);
     return res.data;

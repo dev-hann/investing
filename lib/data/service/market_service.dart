@@ -31,4 +31,9 @@ class MarketService extends IVService {
       },
     );
   }
+
+  Future<Response> requestMarketStatus() {
+    const url = "https://api.nasdaq.com/api/market-info";
+    return get(url);
+  }
 }

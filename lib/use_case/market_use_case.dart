@@ -1,4 +1,5 @@
 import 'package:investing/model/market.dart';
+import 'package:investing/model/market_status.dart';
 import 'package:investing/repo/market/market_repo.dart';
 import 'package:investing/use_case/use_case.dart';
 import 'package:investing/util/number_format.dart';
@@ -34,5 +35,10 @@ class MarketUseCase extends UseCase<MarketRepo> {
       List<String> symbolList) async {
     return Map<String, List<dynamic>>.from(
         await repo.requestChartData(symbolList));
+  }
+
+  Future<MarketStatus> requestMarketStatus() async {
+    final res = await repo.requestMarketStatus();
+    return MarketStatus.fromMap(res);
   }
 }
