@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:investing/const/color.dart';
 import 'package:investing/controller/market_controller.dart';
 import 'package:investing/model/market.dart';
+import 'package:investing/view/market_view/sector_view/sector_view.dart';
 import 'package:investing/widget/title_widget.dart';
 
 // TODO: (Future Work) make view more compatable (like Finviz HeatMap)
@@ -115,6 +116,16 @@ class _MarketViewState extends State<MarketView> {
         () {
           final list = controller.marketDataList;
           final percentData = controller.marketPercentData;
+          // return RotatedBox(
+          //   quarterTurns: 1,
+          //   child: SectorView(
+          //       key: UniqueKey(),
+          //       valueList: list[0].childeren.map((element) {
+          //         print(element.name);
+          //         return element.sumValue;
+          //       }).toList()),
+          // );
+
           return SingleChildScrollView(
             padding: const EdgeInsets.all(16.0),
             child: Column(

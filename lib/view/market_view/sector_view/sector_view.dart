@@ -1,13 +1,141 @@
+import 'dart:collection';
 import 'dart:math';
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+
 import 'package:investing/const/color.dart';
 import 'package:investing/model/market.dart';
 import 'package:investing/widget/title_widget.dart';
 
+class _SectorRatio extends LinkedListEntry<_SectorRatio> {
+  _SectorRatio(
+    this.value,
+    this.isOverHalf,
+  );
+  final int value;
+  final bool isOverHalf;
+}
+
 class SectorView extends StatefulWidget {
   const SectorView({
+    Key? key,
+    required this.valueList,
+  }) : super(key: key);
+  final List<int> valueList;
+
+  @override
+  State<SectorView> createState() => _SectorViewState();
+}
+
+//TODO: (Future Work) Fucking Hard..
+class _SectorViewState extends State<SectorView> {
+  late final List<int> normalizedRatioList = widget.valueList;
+  final LinkedList<_SectorRatio> ratioList = LinkedList();
+
+  @override
+  void initState() {
+    super.initState();
+    final valueList = widget.valueList;
+    int sumValue = valueList.fold(0, (a, b) => a + b);
+    for (int index = 0; index < valueList.length; index += 1) {
+      final value = valueList[index];
+      final ratio = ((value / sumValue) * 100).toInt();
+      sumValue -= value;
+      ratioList.add(_SectorRatio(ratio, value > sumValue));
+    }
+  }
+
+  Widget layout(_SectorRatio sectorRatio) {
+    final next = sectorRatio.next;
+    if (next == null) {
+      return ColoredBox(
+        color: Colors.primaries[Random().nextInt(15)],
+        child: Center(
+          child: Text(
+            sectorRatio.toString(),
+          ),
+        ),
+      );
+    }
+    final ratio = sectorRatio.value;
+
+    return LayoutBuilder(
+      builder: (context, constriatns) {
+        final width = constriatns.maxWidth;
+        final height = constriatns.maxHeight;
+        final bool isRow = width > height;
+        final List<Widget> children = [
+          Expanded(
+            flex: ratio,
+            child: Builder(builder: (context) {
+              if (sectorRatio.isOverHalf) {
+                return ColoredBox(
+                  color: Colors.primaries[Random().nextInt(15)],
+                  child: Center(
+                    child: Text(
+                      sectorRatio.toString(),
+                    ),
+                  ),
+                );
+              }
+              return isRow
+                  ? Column(
+                      children: [
+                        ColoredBox(
+                          color: Colors.primaries[Random().nextInt(15)],
+                          child: Center(
+                            child: Text(
+                              sectorRatio.toString(),
+                            ),
+                          ),
+                        ),
+                        ColoredBox(
+                          color: Colors.primaries[Random().nextInt(15)],
+                          child: Center(
+                            child: Text(
+                              sectorRatio.toString(),
+                            ),
+                          ),
+                        )
+                      ],
+                    )
+                  : Row();
+            }),
+          ),
+          Expanded(
+            flex: 100 - ratio,
+            child: layout(next),
+          ),
+        ];
+        return SizedBox(
+          width: width,
+          height: height,
+          child: Builder(
+            builder: (context) {
+              if (isRow) {
+                return Row(
+                  children: children,
+                );
+              }
+              return Column(
+                children: children,
+              );
+            },
+          ),
+        );
+      },
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return layout(ratioList.first);
+  }
+}
+
+class SectorViewOld extends StatefulWidget {
+  const SectorViewOld({
     super.key,
     required this.sectorList,
     required this.percentData,
@@ -18,10 +146,10 @@ class SectorView extends StatefulWidget {
   final Function(List<String> symbolList) onTap;
 
   @override
-  State<SectorView> createState() => _SectorViewState();
+  State<SectorViewOld> createState() => _SectorViewOldState();
 }
 
-class _SectorViewState extends State<SectorView> {
+class _SectorViewOldState extends State<SectorViewOld> {
   Color? stockColor(double value) {
     if (value == 0) {
       return null;
