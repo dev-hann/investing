@@ -6,7 +6,6 @@ import 'package:get/get.dart';
 import 'package:investing/const/color.dart';
 import 'package:investing/controller/market_controller.dart';
 import 'package:investing/model/market.dart';
-import 'package:investing/view/market_view/sector_view/sector_view.dart';
 import 'package:investing/widget/title_widget.dart';
 
 // TODO: (Future Work) make view more compatable (like Finviz HeatMap)
