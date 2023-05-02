@@ -36,7 +36,7 @@ class _HomeViewState extends State<HomeView> {
           StockView(),
           NewsView(),
           EventView(),
-          ScreenerView(),
+          // ScreenerView(),
           MarketView(),
         ],
       ),
@@ -58,10 +58,10 @@ class _HomeViewState extends State<HomeView> {
               icon: Icon(Icons.calendar_month),
               label: "Calendar",
             ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.filter_list),
-              label: "Screener",
-            ),
+            // BottomNavigationBarItem(
+            //   icon: Icon(Icons.filter_list),
+            //   label: "Screener",
+            // ),
             BottomNavigationBarItem(
               icon: Icon(Icons.map),
               label: "Map",

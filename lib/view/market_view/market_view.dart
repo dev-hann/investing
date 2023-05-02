@@ -137,7 +137,7 @@ class _MarketViewState extends State<MarketView> {
                               sector: sector,
                               percentData: percentData,
                               onTap: () {
-                                // TODO: Future Work
+                                // TODO: (Future Work) make Sector Detail View
                                 // Get.to(
                                 //   SectorDetailView(
                                 //     sectorName: marketData.name,

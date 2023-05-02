@@ -99,16 +99,16 @@ class _IndexViewState extends State<IndexView> {
         child: Row(
           children: [
             const Expanded(child: Text("Index")),
-            GestureDetector(
-              onTap: () async {
-                // final list = await Get.to(
-                //   EditView(
-                //     itemList: controller.indexList,
-                //   ),
-                // );
-              },
-              child: const Icon(Icons.settings),
-            ),
+            // GestureDetector(
+            //   onTap: () async {
+            //     // final list = await Get.to(
+            //     //   EditView(
+            //     //     itemList: controller.indexList,
+            //     //   ),
+            //     // );
+            //   },
+            //   child: const Icon(Icons.settings),
+            // ),
           ],
         ),
       ),
