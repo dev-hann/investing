@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:investing/model/stock/stock_dividend.dart';
 import 'package:investing/util/date_time_format.dart';
 import 'package:investing/util/number_format.dart';
-import 'package:investing/widget/data_row.dart';
 
 class DividendDetailView extends StatelessWidget {
   const DividendDetailView({
@@ -23,6 +22,8 @@ class DividendDetailView extends StatelessWidget {
   }) {
     return DefaultTextStyle(
       style: style ?? const TextStyle(),
+      textAlign: TextAlign.center,
+      maxLines: 1,
       child: Row(
         children:
             valueList.map((e) => Expanded(child: Center(child: e))).toList(),
@@ -42,9 +43,9 @@ class DividendDetailView extends StatelessWidget {
             dateRow(
               style: Theme.of(context).textTheme.titleMedium,
               valueList: const [
-                Text("Ex Dividend Day", maxLines: 1),
-                Text("Pay Day", maxLines: 1),
-                Text("Yield", maxLines: 1),
+                Text("Ex Dividend Day"),
+                Text("Pay Day"),
+                Text("Yield"),
               ],
             ),
             const SizedBox(height: 8.0),
@@ -64,7 +65,12 @@ class DividendDetailView extends StatelessWidget {
                     valueList: [
                       Text(declarationText),
                       Text(paymentText),
-                      Text(IVNumberFormat.priceFormat(item.amount)),
+                      Text(
+                        IVNumberFormat.priceFormat(
+                          item.amount,
+                          decimalDigits: 5,
+                        ),
+                      ),
                     ],
                   );
                 },

@@ -49,7 +49,7 @@ class _ChartViewState extends State<ChartView> {
       selected: selected,
       onTap: (type) {
         if (type == ChartRangeType.realTime) {
-          // TODO:(Fturue Work) make Live Chart view
+          // TODO:(Future Work) make Live Chart view
           return;
         }
         requestStockChart(type);

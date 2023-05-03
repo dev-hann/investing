@@ -36,8 +36,13 @@ class _CompanyViewState extends State<CompanyView> {
       return Padding(
         padding: const EdgeInsets.symmetric(vertical: 8.0),
         child: TitleWidget(
-          title: Text("Company Profile"),
-          child: Text("!!"),
+          title: const Text("Company Profile"),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(companyValue.description),
+            ],
+          ),
         ),
       );
     });

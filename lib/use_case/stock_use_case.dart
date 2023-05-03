@@ -1,7 +1,6 @@
 import 'package:investing/data/db/data_base.dart';
 import 'package:investing/model/stock/stock_company.dart';
 import 'package:investing/model/date_time_range.dart';
-import 'package:investing/model/market_status.dart';
 import 'package:investing/model/stock/stock.dart';
 import 'package:investing/model/stock/stock_chart.dart';
 import 'package:investing/model/stock/stock_dividend.dart';
@@ -161,8 +160,12 @@ class StockUseCase extends UseCase<StockRepo> {
     }
   }
 
-  Future<StockCompany> reqeustStockCompany(String symbol) async {
-    final res = await repo.reqeustStockCompany(symbol);
-    return StockCompany.fromMap(res);
+  Future<StockCompany?> reqeustStockCompany(String symbol) async {
+    try {
+      final res = await repo.reqeustStockCompany(symbol);
+      return StockCompany.fromMap(res);
+    } catch (e) {
+      return null;
+    }
   }
 }

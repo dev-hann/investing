@@ -15,8 +15,12 @@ class IVNumberFormat {
         0.0;
   }
 
-  static String priceFormat(double price) {
-    return NumberFormat.simpleCurrency().format(price);
+  static String priceFormat(
+    double price, {
+    int decimalDigits = 2,
+  }) {
+    return NumberFormat.simpleCurrency(decimalDigits: decimalDigits)
+        .format(price);
   }
 
   static String indexFormat(double value) {

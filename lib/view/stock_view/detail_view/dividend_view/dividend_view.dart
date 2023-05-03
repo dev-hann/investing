@@ -4,7 +4,8 @@ import 'package:investing/controller/stock_controller.dart';
 import 'package:investing/model/stock/stock.dart';
 import 'package:investing/model/stock/stock_dividend.dart';
 import 'package:investing/util/date_time_format.dart';
-import 'package:investing/view/stock_view/detail_view/dividend_detail_view/dividend_detail_view.dart';
+import 'package:investing/util/number_format.dart';
+import 'package:investing/view/stock_view/detail_view/dividend_view/dividend_detail_view.dart';
 import 'package:investing/widget/data_row.dart';
 import 'package:investing/widget/text_button.dart';
 import 'package:investing/widget/title_widget.dart';
@@ -52,11 +53,15 @@ class _DividendViewState extends State<DividendView> {
             children: [
               IVDateRow(
                 title: const Text("Annual Dividend"),
-                data: Text(dividendValue.annualizedDividend.toString()),
+                data: Text(
+                  IVNumberFormat.priceFormat(
+                    dividendValue.annualizedDividend,
+                  ),
+                ),
               ),
               IVDateRow(
                 title: const Text("Dividend Ratio"),
-                data: Text(dividendValue.yield.toString()),
+                data: Text("${dividendValue.yield.toString()}%"),
               ),
               Builder(
                 builder: (context) {

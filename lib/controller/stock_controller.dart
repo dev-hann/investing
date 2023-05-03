@@ -144,7 +144,7 @@ class StockController extends Controller<StockUseCase> {
     );
   }
 
-  Future<StockCompany> reqeustStockCompany(Stock stock) {
+  Future<StockCompany?> reqeustStockCompany(Stock stock) {
     return useCase.reqeustStockCompany(stock.symbol);
   }
 }

@@ -4,6 +4,7 @@ import 'package:investing/controller/news_controller.dart';
 import 'package:investing/model/news.dart';
 import 'package:investing/model/stock/stock.dart';
 import 'package:investing/view/news_view/detail_view/news_detail_view.dart';
+import 'package:investing/view/stock_view/detail_view/stock_news_view/stock_news_detail_view.dart';
 import 'package:investing/widget/text_button.dart';
 import 'package:investing/widget/title_widget.dart';
 
@@ -67,7 +68,11 @@ class _StockNewsViewState extends State<StockNewsView> {
               title: const Text("News"),
               trailing: IVTextButton.more(
                 onTap: () {
-                  // controller.bottomSheet();
+                  controller.bottomSheet(
+                    StockNewsDetailView(
+                      stock: widget.stock,
+                    ),
+                  );
                 },
               ),
               child: Column(

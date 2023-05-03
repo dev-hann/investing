@@ -59,7 +59,7 @@ class NewsService extends IVService {
       url,
       query: {
         "q": "$symbol|$asset",
-        "offset": page - 1,
+        "offset": (page - 1) * stride,
         "limit": stride,
         "fallback": false,
       },

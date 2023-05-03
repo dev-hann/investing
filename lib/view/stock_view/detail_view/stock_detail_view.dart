@@ -86,7 +86,7 @@ class StockDetailView extends StatelessWidget {
           ChartView(stock: stock),
           DividendView(stock: stock),
           StockNewsView(stock: stock),
-          FinancialView(stock: stock),
+          // FinancialView(stock: stock),
           CompanyView(stock: stock)
         ],
       ),
