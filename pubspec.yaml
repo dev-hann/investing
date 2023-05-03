@@ -10,25 +10,25 @@ dependencies:
     sdk: flutter
   cupertino_icons: ^1.0.2
 
+  # UI
   reorderables:
   flutter_slidable:
   table_calendar:
   pull_to_refresh:
-  http:
   auto_size_text:
   highlight_text:
   flutter_inappwebview:
+  shimmer_animation: ^2.1.0
+  fl_chart:
 
   # DataBase
   hive_flutter:
 
-  fl_chart:
-
+  # Utils
   equatable:
   dio:
   intl:
-
-  logger:
+  http:
 
   # StateManager
   get:

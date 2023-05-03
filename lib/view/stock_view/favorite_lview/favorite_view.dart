@@ -6,6 +6,7 @@ import 'package:investing/controller/stock_controller.dart';
 import 'package:investing/util/number_format.dart';
 import 'package:investing/view/stock_view/detail_view/stock_detail_view.dart';
 import 'package:investing/view/stock_view/edit_view/edit_view.dart';
+import 'package:investing/widget/shimmer.dart';
 import 'package:investing/widget/stock_card.dart';
 import 'package:investing/widget/stock_price_builder.dart';
 import 'package:investing/widget/title_widget.dart';
@@ -46,6 +47,19 @@ class _FavoriteViewState extends State<FavoriteView> {
         ),
         child: Obx(() {
           final favoriteList = controller.favoriteList;
+          if (controller.favoriteLoading.isTrue) {
+            return ListView.separated(
+              physics: const NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
+              separatorBuilder: (context, index) {
+                return const SizedBox(height: 8.0);
+              },
+              itemCount: 100,
+              itemBuilder: (context, index) {
+                return IVShimmer.listTile();
+              },
+            );
+          }
           if (favoriteList.isEmpty) {
             return SizedBox(
               height: Get.height / 3,

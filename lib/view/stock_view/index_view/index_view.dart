@@ -8,7 +8,7 @@ import 'package:investing/model/stock/stock_chart.dart';
 import 'package:investing/util/number_format.dart';
 import 'package:investing/view/stock_view/detail_view/stock_detail_view.dart';
 import 'package:investing/widget/chart_widget.dart';
-import 'package:investing/widget/loading_widget.dart';
+import 'package:investing/widget/shimmer.dart';
 import 'package:investing/widget/stock_price_builder.dart';
 import 'package:investing/widget/title_widget.dart';
 
@@ -21,6 +21,23 @@ class IndexView extends StatefulWidget {
 
 class _IndexViewState extends State<IndexView> {
   final StockController controller = StockController.find();
+
+  Widget loadingItem() {
+    final width = Get.width / 2.5;
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 4.0),
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          color: IVColor.blueGrey,
+          borderRadius: BorderRadius.circular(16.0),
+        ),
+        child: IVShimmer(
+          width: width,
+          height: width,
+        ),
+      ),
+    );
+  }
 
   Widget item({
     required Stock index,
@@ -94,23 +111,9 @@ class _IndexViewState extends State<IndexView> {
   @override
   Widget build(BuildContext context) {
     return TitleWidget(
-      title: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-        child: Row(
-          children: [
-            const Expanded(child: Text("Index")),
-            // GestureDetector(
-            //   onTap: () async {
-            //     // final list = await Get.to(
-            //     //   EditView(
-            //     //     itemList: controller.indexList,
-            //     //   ),
-            //     // );
-            //   },
-            //   child: const Icon(Icons.settings),
-            // ),
-          ],
-        ),
+      title: const Padding(
+        padding: EdgeInsets.symmetric(horizontal: 16.0),
+        child: Text("Index"),
       ),
       child: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
@@ -119,8 +122,13 @@ class _IndexViewState extends State<IndexView> {
         child: Obx(() {
           final indexList = controller.indexList;
           final chartList = controller.indexChartList;
-          if (indexList.isEmpty) {
-            return const IVLoadingWidget();
+          if (controller.indexLoading.isTrue) {
+            return Row(
+              children: [
+                for (int index = 0; index < indexList.length; ++index)
+                  loadingItem(),
+              ],
+            );
           }
           return Row(
             children: [
