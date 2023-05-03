@@ -11,29 +11,33 @@ class MarketController extends Controller<MarketUseCase> {
   MarketController(super.useCase);
 
   static MarketController find() => Get.find<MarketController>();
-  final RxList<MarketData> marketDataList = RxList();
-  final RxMap<String, double> marketPercentData = RxMap();
-  final RxMap<String, List<double>> marketChartData = RxMap();
 
   @override
   void onReady() {
-    refreshMarketStatus();
+    refreshMarketStatus().then((value) {
+      final marketStatusValue = marketStatus.value!;
+      if (marketStatusValue.isOpened) {
+        return refreshMarketPercentRealTimeData();
+      }
+      return refreshMarketPercentData();
+    });
     refreshMarketData();
-    refreshMarketPercentData();
-    refreshMarketPercentRealTimeData();
     super.onReady();
   }
 
+  final RxList<MarketData> marketDataList = RxList();
   Future refreshMarketData() async {
     final data = await useCase.requestMarketData();
     marketDataList(data);
   }
 
+  final RxMap<String, double> marketPercentData = RxMap();
   Future refreshMarketPercentData() async {
     final data = await useCase.requestMarketPercentData();
     marketPercentData(data);
   }
 
+  final RxMap<String, List<double>> marketChartData = RxMap();
   Future<Map<String, List<double>>> requestMarketChartData(
       List<String> symbolList) async {
     final Map<String, List<double>> res = {};
@@ -75,10 +79,11 @@ class MarketController extends Controller<MarketUseCase> {
       map.addEntries(data.entries);
     }
     marketPercentData(map);
-    await Future.delayed(Duration(seconds: 5));
+    await Future.delayed(const Duration(seconds: 5));
     refreshMarketPercentRealTimeData();
   }
 
+  // MarketStatus
   final Rxn<MarketStatus?> marketStatus = Rxn();
   late Timer _marketTimer;
   Future refreshMarketStatus() async {
@@ -92,6 +97,8 @@ class MarketController extends Controller<MarketUseCase> {
         refreshMarketStatus();
         _marketTimer.cancel();
       });
+      return;
     }
+    Get.snackbar("Market Status", "Market is Opened!");
   }
 }

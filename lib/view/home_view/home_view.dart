@@ -3,7 +3,7 @@ import 'package:investing/const/color.dart';
 import 'package:investing/view/event_view/event_view.dart';
 import 'package:investing/view/market_view/market_view.dart';
 import 'package:investing/view/news_view/news_view.dart';
-import 'package:investing/view/screener_view/screener_view.dart';
+import 'package:investing/view/setting_view/setting_view.dart';
 import 'package:investing/view/stock_view/stock_view.dart';
 import 'package:flutter/material.dart';
 
@@ -38,6 +38,7 @@ class _HomeViewState extends State<HomeView> {
           EventView(),
           // ScreenerView(),
           MarketView(),
+          SettingView()
         ],
       ),
       bottomNavigationBar: Obx(() {
@@ -65,6 +66,10 @@ class _HomeViewState extends State<HomeView> {
             BottomNavigationBarItem(
               icon: Icon(Icons.map),
               label: "Map",
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.person),
+              label: "Setting",
             ),
           ],
         );

@@ -8,17 +8,20 @@ class CustomTextfield extends StatelessWidget {
     this.onChanged,
     this.hintText,
     this.textInputAction,
+    this.autoFocus = false,
   });
   final TextEditingController? controller;
   final Function(String text)? onSubmitted;
   final Function(String text)? onChanged;
   final TextInputAction? textInputAction;
   final String? hintText;
+  final bool autoFocus;
 
   @override
   Widget build(BuildContext context) {
     return TextField(
       controller: controller,
+      autofocus: autoFocus,
       onChanged: onChanged,
       onSubmitted: onSubmitted,
       textInputAction: textInputAction,

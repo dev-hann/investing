@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:investing/const/color.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
 
 class IVShimmer extends StatelessWidget {
@@ -7,10 +8,12 @@ class IVShimmer extends StatelessWidget {
     this.width,
     this.height,
     this.radius = const BorderRadius.all(Radius.circular(16.0)),
+    this.background = IVColor.blueGrey,
   });
   final double? width;
   final double? height;
   final BorderRadius radius;
+  final Color background;
 
   factory IVShimmer.listTile() {
     return const IVShimmer(

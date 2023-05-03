@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:investing/const/color.dart';
 import 'package:investing/controller/market_controller.dart';
-import 'package:investing/controller/stock_controller.dart';
 import 'package:investing/model/market_status.dart';
 
 class MarketStatusWidget extends StatelessWidget {

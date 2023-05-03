@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:get/get.dart';
 import 'package:investing/const/color.dart';
+import 'package:investing/controller/market_controller.dart';
 import 'package:investing/controller/stock_controller.dart';
 import 'package:investing/util/number_format.dart';
 import 'package:investing/view/stock_view/detail_view/stock_detail_view.dart';
@@ -20,7 +21,41 @@ class FavoriteView extends StatefulWidget {
 }
 
 class _FavoriteViewState extends State<FavoriteView> {
-  final controller = StockController.find();
+  final stockController = StockController.find();
+  final marketController = MarketController.find();
+
+  @override
+  void initState() {
+    super.initState();
+    marketController.marketStatus.listen((status) {
+      if (status!.isOpened) {
+        stockController.refreshRealTimeFavoriteList();
+      }
+    });
+  }
+
+  Widget loadingWidget() {
+    return ListView.separated(
+      physics: const NeverScrollableScrollPhysics(),
+      shrinkWrap: true,
+      separatorBuilder: (context, index) {
+        return const SizedBox(height: 8.0);
+      },
+      itemCount: 100,
+      itemBuilder: (context, index) {
+        return IVShimmer.listTile();
+      },
+    );
+  }
+
+  Widget emptyWidget() {
+    return SizedBox(
+      height: Get.height / 3,
+      child: const Center(
+        child: Text("Favorite List is Empty!"),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,11 +69,11 @@ class _FavoriteViewState extends State<FavoriteView> {
               onTap: () async {
                 final list = await Get.to(
                   EditView(
-                    itemList: controller.favoriteList,
+                    itemList: stockController.favoriteList,
                   ),
                 );
                 if (list != null) {
-                  controller.updateFavoriteList(list);
+                  stockController.updateFavoriteList(list);
                 }
               },
               child: const Icon(Icons.settings),
@@ -46,27 +81,12 @@ class _FavoriteViewState extends State<FavoriteView> {
           ],
         ),
         child: Obx(() {
-          final favoriteList = controller.favoriteList;
-          if (controller.favoriteLoading.isTrue) {
-            return ListView.separated(
-              physics: const NeverScrollableScrollPhysics(),
-              shrinkWrap: true,
-              separatorBuilder: (context, index) {
-                return const SizedBox(height: 8.0);
-              },
-              itemCount: 100,
-              itemBuilder: (context, index) {
-                return IVShimmer.listTile();
-              },
-            );
+          final favoriteList = stockController.favoriteList;
+          if (stockController.favoriteLoading.isTrue) {
+            return loadingWidget();
           }
           if (favoriteList.isEmpty) {
-            return SizedBox(
-              height: Get.height / 3,
-              child: const Center(
-                child: Text("Favorite List is Empty!"),
-              ),
-            );
+            return emptyWidget();
           }
           return ListView.separated(
             physics: const NeverScrollableScrollPhysics(),
@@ -94,7 +114,7 @@ class _FavoriteViewState extends State<FavoriteView> {
                         onPressed: (context) async {
                           await Future.delayed(
                               const Duration(milliseconds: 300));
-                          controller.removeFavoriteStock(stock);
+                          stockController.removeFavoriteStock(stock);
                         },
                         backgroundColor: const Color(0xFFFE4A49),
                         foregroundColor: Colors.white,

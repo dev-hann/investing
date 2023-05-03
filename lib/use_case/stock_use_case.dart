@@ -64,7 +64,8 @@ class StockUseCase extends UseCase<StockRepo> {
         name: List.from(data["name"]).first,
         asset: data["asset"],
       );
-      if (!searchedList.contains(item)) {
+
+      if (!searchedList.map((e) => e.symbol).contains(item.symbol)) {
         searchedList.add(item);
       }
     }

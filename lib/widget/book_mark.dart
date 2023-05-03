@@ -19,18 +19,16 @@ class BookMarkWidget extends StatelessWidget {
     final controller = StockController.find();
     return Obx(() {
       final favoriteList = controller.favoriteList;
-      final isContains = favoriteList.indexWhere(
-            (element) {
-              return element.isEquals(stock);
-            },
-          ) !=
-          -1;
+      final index = favoriteList.indexWhere((element) {
+        return element.isEquals(stock);
+      });
+      final isContains = index != -1;
       return GestureDetector(
-        onTap: () {
+        onTap: () async {
           if (isContains) {
-            controller.removeFavoriteStock(stock);
+            await controller.removeFavoriteStock(stock);
           } else {
-            controller.updateFavoriteStock(stock);
+            await controller.updateFavoriteStock(stock);
           }
         },
         child: Icon(

@@ -34,6 +34,7 @@ class _StockSearchViewState extends State<StockSearchView> {
         controller: queryController,
         textInputAction: TextInputAction.search,
         onSubmitted: onSubmitted,
+        autoFocus: true,
         hintText: "Aa",
       ),
     );

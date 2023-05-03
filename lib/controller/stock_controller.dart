@@ -2,51 +2,52 @@ import 'dart:async';
 
 import 'package:get/get.dart';
 import 'package:investing/controller/controller.dart';
-import 'package:investing/data/db/data_base.dart';
 import 'package:investing/model/stock/stock_company.dart';
 import 'package:investing/model/date_time_range.dart';
 import 'package:investing/model/stock/stock.dart';
 import 'package:investing/model/stock/stock_chart.dart';
 import 'package:investing/model/stock/stock_dividend.dart';
 import 'package:investing/model/stock/stock_financial.dart';
-import 'package:investing/model/market_status.dart';
 import 'package:investing/use_case/stock_use_case.dart';
 
 class StockController extends Controller<StockUseCase> {
   StockController(super.useCase);
+  static StockController find() => Get.find<StockController>();
 
   @override
   void onReady() async {
-    super.onReady();
     await useCase.init();
+    super.onReady();
     _initIndexList();
     _initFavoriteList();
   }
-
-  static StockController find() => Get.find<StockController>();
-
-  Stream<IVDataBaseEvent<Stock>> get favoriteStream => useCase.favoriteStream();
 
   // Favorite
   final RxBool favoriteLoading = true.obs;
   final RxList<Stock> favoriteList = RxList<Stock>();
   Future<void> _initFavoriteList() async {
-    favoriteStream.listen((event) async {
-      refreshFavoriteList(updateData: !event.deleted);
+    useCase.favoriteStream().listen((event) async {
+      if (event.deleted) {
+        favoriteList.removeWhere((element) => event.key == element.index);
+        return;
+      }
+      refreshFavoriteList();
     });
     refreshFavoriteList();
   }
 
-  void refreshFavoriteList({
-    bool updateData = true,
-  }) async {
+  Future refreshFavoriteList() async {
     List<Stock> list = useCase.loadStockList();
-    if (updateData) {
-      list = await useCase.requestStockList(list);
-    }
+    list = await useCase.requestStockList(list);
     list.sort();
     favoriteList(list);
     favoriteLoading(false);
+  }
+
+  void refreshRealTimeFavoriteList() async {
+    await refreshFavoriteList();
+    await Future.delayed(const Duration(seconds: 2));
+    refreshRealTimeFavoriteList();
   }
 
   Future updateFavoriteList(List<Stock> list) async {
@@ -56,8 +57,8 @@ class StockController extends Controller<StockUseCase> {
     }
   }
 
-  Future updateFavoriteStock(Stock stock) async {
-    await useCase.updateStock(stock);
+  Future updateFavoriteStock(Stock stock) {
+    return useCase.updateStock(stock);
   }
 
   Future removeFavoriteStock(Stock stock) {
@@ -102,8 +103,11 @@ class StockController extends Controller<StockUseCase> {
     indexLoading(false);
   }
 
-  // MarketStatus
-  final Rx<MarketStatus?> marketStatus = Rx(null);
+  Future refreshRealTimeIndexList() async {
+    await refreshIndexList();
+    await Future.delayed(const Duration(seconds: 10));
+    refreshRealTimeIndexList();
+  }
 
   // Search
   Future<List<Stock>> searchStock(String query) async {
@@ -115,7 +119,6 @@ class StockController extends Controller<StockUseCase> {
   }
 
   // Stock Detail
-
   Future<StockDividend?> requestStockDividend(Stock stock) async {
     try {
       return useCase.requestStockDividend(

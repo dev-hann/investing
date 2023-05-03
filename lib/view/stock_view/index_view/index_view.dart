@@ -2,6 +2,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:investing/const/color.dart';
+import 'package:investing/controller/market_controller.dart';
 import 'package:investing/controller/stock_controller.dart';
 import 'package:investing/model/stock/stock.dart';
 import 'package:investing/model/stock/stock_chart.dart';
@@ -20,21 +21,26 @@ class IndexView extends StatefulWidget {
 }
 
 class _IndexViewState extends State<IndexView> {
-  final StockController controller = StockController.find();
+  final stockController = StockController.find();
+  final marketController = MarketController.find();
+
+  @override
+  void initState() {
+    super.initState();
+    marketController.marketStatus.listen((status) {
+      if (status!.isOpened) {
+        stockController.refreshRealTimeIndexList();
+      }
+    });
+  }
 
   Widget loadingItem() {
     final width = Get.width / 2.5;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 4.0),
-      child: DecoratedBox(
-        decoration: BoxDecoration(
-          color: IVColor.blueGrey,
-          borderRadius: BorderRadius.circular(16.0),
-        ),
-        child: IVShimmer(
-          width: width,
-          height: width,
-        ),
+      child: IVShimmer(
+        width: width,
+        height: width,
       ),
     );
   }
@@ -120,9 +126,9 @@ class _IndexViewState extends State<IndexView> {
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         scrollDirection: Axis.horizontal,
         child: Obx(() {
-          final indexList = controller.indexList;
-          final chartList = controller.indexChartList;
-          if (controller.indexLoading.isTrue) {
+          final indexList = stockController.indexList;
+          final chartList = stockController.indexChartList;
+          if (stockController.indexLoading.isTrue) {
             return Row(
               children: [
                 for (int index = 0; index < indexList.length; ++index)

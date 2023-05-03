@@ -19,6 +19,7 @@ class MarketStatus extends Equatable {
     this.isBusinessDay = true,
     this.status = "",
   });
+
   final DateTime preMarketOpen;
   final DateTime preMarketClose;
   final DateTime marketOpen;
@@ -47,6 +48,8 @@ class MarketStatus extends Equatable {
         afterHourMarketClose,
         isBusinessDay,
         status,
+        // for Test
+        DateTime.now(),
       ];
 
   factory MarketStatus.fromMap(Map<String, dynamic> map) {
