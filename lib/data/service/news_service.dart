@@ -26,17 +26,6 @@ class NewsService extends IVService {
     return res.data;
   }
 
-  Future<List> searchNews(String query) async {
-    const url = "https://api.nasdaq.com/api/search/site";
-    final res = await get(
-      url,
-      query: {
-        "query": query,
-      },
-    );
-    return List.from(res.data["data"]["news"]["value"]);
-  }
-
   Future searchNewsList(String query) async {
     const url = "https://api.nasdaq.com/api/search/site";
     final res = await get(

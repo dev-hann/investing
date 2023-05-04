@@ -6,7 +6,7 @@ part './news_impl.dart';
 
 abstract class NewsRepo extends Repo {
   Future<dynamic> requestNewsList(int page);
-  Future<dynamic> searchNewsList(String query);
+  Future<List> searchNewsList(String query);
 
   Future<dynamic> searchStockNewsList({
     required String symbol,

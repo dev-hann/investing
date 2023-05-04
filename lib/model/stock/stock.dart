@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 
 import 'package:investing/data/db/data_base_model_mixin.dart';
 import 'package:investing/model/chart.dart';
-import 'package:investing/model/date_time_range.dart';
 
 enum StockType {
   stock,
@@ -66,29 +65,6 @@ class Stock extends Equatable with DataBaseModelMixin, Comparable<Stock> {
           ChartRangeType.oneMonth,
           ChartRangeType.oneYear,
           ChartRangeType.all,
-        ];
-    }
-  }
-
-  @Deprecated("will be deprecated. use [chartRangeTypeList] instead.")
-  List<IVDateTimeRange> get dateTimeList {
-    switch (type) {
-      case StockType.stock:
-      case StockType.etf:
-      case StockType.majorIndex:
-        return [
-          IVDateTimeRange.beforeDay(1),
-          IVDateTimeRange.beforeMonth(1),
-          IVDateTimeRange.beforeMonth(3),
-          IVDateTimeRange.beforeYear(1),
-          IVDateTimeRange.beforeYear(100),
-        ];
-      case StockType.fixedIncome:
-      case StockType.commodity:
-        return [
-          IVDateTimeRange.beforeMonth(3),
-          IVDateTimeRange.beforeYear(1),
-          IVDateTimeRange.beforeYear(100),
         ];
     }
   }
@@ -238,20 +214,4 @@ class Stock extends Equatable with DataBaseModelMixin, Comparable<Stock> {
       percentChange: percentChange ?? this.percentChange,
     );
   }
-
-  // static double _toDouble(String value) {
-  //   return IVNumberFormat(value).toDouble();
-  // }
-
-  // factory Stock.fromMap(Map<String, dynamic> map) {
-  //   final ticker = List.from(map["ticker"]);
-  //   return Stock(
-  //     symbol: ticker.first,
-  //     name: ticker.last,
-  //     asset: map["assetclass"],
-  //     lastSalePrice: _toDouble(map["lastSale"]),
-  //     netChange: _toDouble(map["change"]),
-  //     percentChange: _toDouble(map["pctChange"]),
-  //   );
-  // }
 }

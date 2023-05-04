@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:investing/controller/news_controller.dart';
 import 'package:investing/model/news.dart';
+import 'package:investing/view/news_view/detail_view/news_detail_view.dart';
 import 'package:investing/widget/news_card.dart';
 import 'package:investing/widget/text_field.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +15,7 @@ class NewsSearchView extends StatefulWidget {
 
 class _NewsSearchViewState extends State<NewsSearchView> {
   final NewsController controller = NewsController.find();
+  final RxList<News> searchedList = RxList();
 
   AppBar appBar() {
     return AppBar(
@@ -26,7 +28,9 @@ class _NewsSearchViewState extends State<NewsSearchView> {
   }) {
     return Card(
       child: CustomTextfield(
+        textInputAction: TextInputAction.search,
         onSubmitted: onSubmitted,
+        autoFocus: true,
         hintText: "Aa",
       ),
     );
@@ -44,9 +48,9 @@ class _NewsSearchViewState extends State<NewsSearchView> {
         return NewsCard(
           news: news,
           onTap: () async {
-            // Get.to(
-            //   StockDetailView(stock: news),
-            // );
+            Get.to(
+              NewsDetailView(news: news),
+            );
           },
         );
       },
@@ -66,13 +70,14 @@ class _NewsSearchViewState extends State<NewsSearchView> {
           physics: const BouncingScrollPhysics(),
           children: [
             queryTextField(
-              onSubmitted: (query) {
-                controller.searchNews(query);
+              onSubmitted: (query) async {
+                final list = await controller.searchNews(query);
+                searchedList(list);
               },
             ),
             const SizedBox(height: 16.0),
             searchedListWidget(
-              searchedList: controller.searchedList,
+              searchedList: searchedList,
             ),
           ],
         );

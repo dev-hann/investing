@@ -9,14 +9,12 @@ class NewsUseCase extends UseCase<NewsRepo> {
   Future<List<News>> requestlatestNewsList(int page) async {
     final res = await repo.requestNewsList(page);
     final list = List.from(res);
-    return list.map((e) => News.fromMap(e)).toList();
+    return list.map((e) => News.latest(e)).toList();
   }
 
   Future<List<News>> searchNewList(String query) async {
-    final res = await repo.searchNewsList(query);
-    return List.from(res["data"]["news"]["value"])
-        .map((e) => News.fromMap(e))
-        .toList();
+    final list = await repo.searchNewsList(query);
+    return list.map((e) => News.search(e)).toList();
   }
 
   Future<List<News>> searchStockNewsList({
@@ -28,6 +26,6 @@ class NewsUseCase extends UseCase<NewsRepo> {
       asset: stock.asset,
       page: page,
     );
-    return List.from(res).map((e) => News.fromMap(e)).toList();
+    return List.from(res).map((e) => News.latest(e)).toList();
   }
 }

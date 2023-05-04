@@ -40,10 +40,8 @@ class NewsController extends Controller<NewsUseCase> {
   }
 
 // Search
-  final RxList<News> searchedList = RxList();
-  Future searchNews(String query) async {
-    final list = await useCase.searchNewList(query);
-    searchedList(list);
+  Future<List<News>> searchNews(String query) async {
+    return await useCase.searchNewList(query);
   }
 
   Future<List<News>> searchStockNewsList({

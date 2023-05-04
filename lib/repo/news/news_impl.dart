@@ -10,9 +10,9 @@ class NewsImpl extends NewsRepo {
   }
 
   @override
-  Future searchNewsList(String query) async {
+  Future<List> searchNewsList(String query) async {
     final res = await service.searchNewsList(query);
-    return res["data"]["rows"];
+    return List.from(res["data"]["news"]["value"]);
   }
 
   @override

@@ -1,5 +1,6 @@
 import 'package:investing/controller/news_controller.dart';
 import 'package:investing/view/news_view/detail_view/news_detail_view.dart';
+import 'package:investing/view/news_view/search_view.dart/news_search_view.dart';
 import 'package:investing/widget/news_card.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -28,7 +29,7 @@ class _NewsViewState extends State<NewsView> {
       actions: [
         IconButton(
           onPressed: () {
-            // Get.to(NewsSearchView());
+            Get.to(const NewsSearchView());
           },
           icon: const Icon(Icons.search),
         ),
