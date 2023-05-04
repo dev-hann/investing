@@ -21,6 +21,7 @@ Let's make Money with `Investing` APP.
 ### Marcket News
 
 * Latest News List
+* Search News
 
 ### Event Calendar
 
@@ -28,15 +29,20 @@ Let's make Money with `Investing` APP.
 * Earnings
 * Dividends
 
-### :construction: Screener
-
-Work In Progress.
-
 ### Market Map
 
 * HeatMap S&P500 View
 
-### License
+### Setting
+
+* Screener(Work In Progress)
+
+## Future Work
+
+* RealTime Update
+* Improve Chart View
+
+## License
 
 ```text
 MIT License
