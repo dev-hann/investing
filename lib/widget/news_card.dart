@@ -26,9 +26,18 @@ class _NewsCardState extends State<NewsCard> {
   }
 
   Widget subtitleWidget() {
-    return Text(
-      "${widget.news.publisher}: ${widget.news.ago}..",
-      style: Get.textTheme.bodySmall,
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          widget.news.publisher,
+          style: Get.textTheme.bodySmall,
+        ),
+        Text(
+          widget.news.created ?? "",
+          style: Get.textTheme.bodySmall,
+        ),
+      ],
     );
   }
 

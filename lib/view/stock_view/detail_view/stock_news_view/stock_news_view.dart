@@ -47,7 +47,7 @@ class _StockNewsViewState extends State<StockNewsView> {
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
-          subtitle: Text(news.ago ?? ""),
+          subtitle: Text(news.created ?? ""),
         ),
       ),
     );
