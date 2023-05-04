@@ -18,7 +18,7 @@ Let's make Money with `Investing` APP.
   * Financial Data
   * Company Profile
 
-### Marcket News
+### Market News
 
 * Latest News List
 * Search News
