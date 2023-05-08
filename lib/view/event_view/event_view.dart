@@ -22,25 +22,6 @@ class _EventViewState extends State<EventView> {
   final EventController controller = EventController.find();
   final ScrollController scrollController = ScrollController();
 
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   requestEventList();
-  // }
-
-  // void requestEventList({
-  //   CalendarEventType? newEventType,
-  //   DateTime? newDateTime,
-  // }) async {
-  //   eventList.value = null;
-  //   controller
-  //       .requestEventList(
-  //         newEventType: newEventType,
-  //         newDateTime: newDateTime,
-  //       )
-  //       .then(eventList);
-  // }
-
   void jumpToTop() {
     scrollController.animateTo(
       0,
@@ -49,11 +30,12 @@ class _EventViewState extends State<EventView> {
     );
   }
 
-  AppBar appBar(List<CalendarEventType> typeList) {
+  AppBar appBar() {
+    const typeList = CalendarEventType.values;
     return AppBar(
       title: GestureDetector(
         onTap: jumpToTop,
-        child: const Text("Calendar"),
+        child: const Text("Event"),
       ),
       actions: [
         IconButton(
@@ -170,7 +152,7 @@ class _EventViewState extends State<EventView> {
         initialIndex: typeList.indexWhere((element) => element == type),
         length: typeList.length,
         child: Scaffold(
-          appBar: appBar(typeList),
+          appBar: appBar(),
           body: ListView(
             controller: scrollController,
             physics: const BouncingScrollPhysics(),

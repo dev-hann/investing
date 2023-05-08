@@ -57,7 +57,7 @@ class _HomeViewState extends State<HomeView> {
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.calendar_month),
-              label: "Calendar",
+              label: "Event",
             ),
             // BottomNavigationBarItem(
             //   icon: Icon(Icons.filter_list),

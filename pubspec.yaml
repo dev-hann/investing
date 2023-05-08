@@ -20,6 +20,7 @@ dependencies:
   flutter_inappwebview:
   shimmer_animation: ^2.1.0
   fl_chart:
+  treemap:
 
   # DataBase
   hive_flutter:

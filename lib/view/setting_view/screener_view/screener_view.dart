@@ -8,8 +8,16 @@ class ScreenerView extends StatefulWidget {
 }
 
 class _ScreenerViewState extends State<ScreenerView> {
+  AppBar appBar() {
+    return AppBar(
+      title: const Text("Screener"),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return const SizedBox();
+    return Scaffold(
+      appBar: appBar(),
+    );
   }
 }

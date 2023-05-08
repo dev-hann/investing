@@ -7,6 +7,7 @@ import 'package:investing/const/color.dart';
 import 'package:investing/controller/market_controller.dart';
 import 'package:investing/model/market.dart';
 import 'package:investing/widget/title_widget.dart';
+import 'package:treemap/treemap.dart';
 
 // TODO: (Future Work) make view more compatable (like Finviz HeatMap)
 class MarketView extends StatefulWidget {
@@ -115,15 +116,46 @@ class _MarketViewState extends State<MarketView> {
         () {
           final list = controller.marketDataList;
           final percentData = controller.marketPercentData;
-          // return RotatedBox(
-          //   quarterTurns: 1,
-          //   child: SectorView(
-          //       key: UniqueKey(),
-          //       valueList: list[0].childeren.map((element) {
-          //         print(element.name);
-          //         return element.sumValue;
-          //       }).toList()),
-          // );
+          return RotatedBox(
+            quarterTurns: 1,
+            child: DefaultTextStyle(
+              style: const TextStyle(fontSize: 10),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              child: TreeMapLayout(
+                round: true,
+                children: list
+                    .map(
+                      (element) => TreeNode.leaf(
+                        options: TreeNodeOptions(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(element.name),
+                              Expanded(
+                                child: TreeMapLayout(
+                                  children: element.childeren
+                                      .map(
+                                        (e) => TreeNode.leaf(
+                                          value: e.sumValue,
+                                          options: TreeNodeOptions(
+                                            child: Text(e.name),
+                                          ),
+                                        ),
+                                      )
+                                      .toList(),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        value: element.sumValue,
+                      ),
+                    )
+                    .toList(),
+              ),
+            ),
+          );
 
           return SingleChildScrollView(
             padding: const EdgeInsets.all(16.0),

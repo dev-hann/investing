@@ -424,6 +424,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.4.16"
+  treemap:
+    dependency: "direct main"
+    description:
+      name: treemap
+      sha256: "35911432e5738d2ca82dd564fc8e27061f047c005daa7aa06a755af527390f8b"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.4.0"
   typed_data:
     dependency: transitive
     description:
