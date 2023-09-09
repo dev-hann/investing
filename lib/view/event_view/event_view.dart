@@ -19,22 +19,11 @@ class EventView extends StatefulWidget {
 }
 
 class _EventViewState extends State<EventView> {
-  final EventController controller = EventController.find();
-  final ScrollController scrollController = ScrollController();
-
-  void jumpToTop() {
-    scrollController.animateTo(
-      0,
-      duration: const Duration(milliseconds: 300),
-      curve: Curves.easeIn,
-    );
-  }
-
   AppBar appBar() {
     const typeList = CalendarEventType.values;
     return AppBar(
       title: GestureDetector(
-        onTap: jumpToTop,
+        // onTap: jumpToTop,
         child: const Text("Event"),
       ),
       actions: [
@@ -47,8 +36,8 @@ class _EventViewState extends State<EventView> {
       ],
       bottom: TabBar(
         onTap: (index) async {
-          jumpToTop();
-          controller.refreshEventList(newEventType: typeList[index]);
+          // jumpToTop();
+          // controller.refreshEventList(newEventType: typeList[index]);
           // requestEventList(newEventType: typeList[index]);
         },
         tabs: typeList
@@ -60,8 +49,10 @@ class _EventViewState extends State<EventView> {
     );
   }
 
-  Widget calendarWidget() {
-    final selectedDateTime = controller.dateTime.value;
+  Widget calendarWidget({
+    required DateTime selectedDateTime,
+    required Function(DateTime dateTime) onTapDateTime,
+  }) {
     return Card(
       child: TableCalendar(
         calendarFormat: CalendarFormat.twoWeeks,
@@ -82,7 +73,7 @@ class _EventViewState extends State<EventView> {
         },
         onPageChanged: (dateTime) {},
         onDaySelected: (selectedDay, focusedDay) {
-          controller.refreshEventList(newDateTime: selectedDay);
+          onTapDateTime(selectedDay);
         },
       ),
     );
@@ -91,6 +82,7 @@ class _EventViewState extends State<EventView> {
   Widget eventListView({
     required CalendarEventType eventType,
     required List<CalendarEvent>? eventList,
+    required DateTime selectedDatetime,
   }) {
     if (eventList == null) {
       return const IVLoadingWidget(
@@ -106,7 +98,7 @@ class _EventViewState extends State<EventView> {
         children: [
           Expanded(
             child: Text(
-                "${IVDateTimeFormat(controller.dateTime.value).dateTimeFormat()} (${eventList.length})"),
+                "${IVDateTimeFormat(selectedDatetime).dateTimeFormat()} (${eventList.length})"),
           ),
           // TODO: make filter
           GestureDetector(
@@ -144,25 +136,32 @@ class _EventViewState extends State<EventView> {
 
   @override
   Widget build(BuildContext context) {
-    return Obx(() {
+    return GetBuilder<EventController>(builder: (controller) {
       final typeList = CalendarEventType.values.toList();
-      final type = controller.eventType.value;
-      final eventList = controller.eventList.value;
+      final type = controller.eventType;
+      final eventList = controller.eventList;
+      final selectedDateTime = controller.dateTime;
       return DefaultTabController(
         initialIndex: typeList.indexWhere((element) => element == type),
         length: typeList.length,
         child: Scaffold(
           appBar: appBar(),
           body: ListView(
-            controller: scrollController,
+            controller: controller.scrollController,
             physics: const BouncingScrollPhysics(),
             padding: const EdgeInsets.all(16.0),
             children: [
-              calendarWidget(),
+              calendarWidget(
+                onTapDateTime: (dateTime) {
+                  controller.refreshEventList(newDateTime: dateTime);
+                },
+                selectedDateTime: selectedDateTime,
+              ),
               const SizedBox(height: 16.0),
               eventListView(
                 eventType: type,
                 eventList: eventList,
+                selectedDatetime: selectedDateTime,
               ),
             ],
           ),

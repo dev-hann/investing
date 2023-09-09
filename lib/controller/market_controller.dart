@@ -21,7 +21,7 @@ class MarketController extends Controller<MarketUseCase> {
     //   }
     //   return refreshMarketPercentData();
     // });
-    // refreshMarketData();
+    refreshMarketData();
     super.onReady();
   }
 

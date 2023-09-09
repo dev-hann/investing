@@ -13,29 +13,27 @@ class NewsController extends Controller<NewsUseCase> {
   @override
   void onReady() {
     super.onReady();
-    // refreshNewsList();
+    refreshNewsList();
   }
 
   final RefreshController refreshController = RefreshController();
+  final List<News> _newsList = [];
+  List<News> get newsList => _newsList;
 
-  final RxList<News> newsList = RxList();
   int _currentPage = 1;
 
   Future refreshNewsList() async {
-    _currentPage = 0;
-    await requestNextPageNewsList(clearList: true);
+    _currentPage = 1;
+    _newsList.clear();
+    final list = await useCase.requestlatestNewsList(_currentPage);
+    newsList.addAll(list);
     refreshController.refreshCompleted();
   }
 
-  Future requestNextPageNewsList({
-    bool clearList = false,
-  }) async {
+  Future requestNextPageNewsList() async {
     _currentPage++;
     final list = await useCase.requestlatestNewsList(_currentPage);
-    if (clearList) {
-      newsList.clear();
-    }
-    newsList.addAll(list);
+    _newsList.addAll(list);
     refreshController.loadComplete();
   }
 

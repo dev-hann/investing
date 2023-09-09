@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:investing/controller/controller.dart';
 import 'package:investing/model/calendar/calendar_event.dart';
@@ -7,16 +8,16 @@ typedef CalendarEventData = Map<String, List<CalendarEvent>>;
 
 class EventController extends Controller<EventUseCase> {
   EventController(super.useCase);
-
   static EventController find() => Get.find<EventController>();
-  final RxMap<CalendarEventType, CalendarEventData> eventData = RxMap();
-  final Rx<DateTime> dateTime = Rx(DateTime.now());
-  final Rx<CalendarEventType> eventType = Rx(CalendarEventType.economics);
-  final Rxn<List<CalendarEvent>> eventList = Rxn();
+  final Map<CalendarEventType, CalendarEventData> eventData = {};
+  DateTime dateTime = DateTime.now();
+  CalendarEventType eventType = CalendarEventType.economics;
+  List<CalendarEvent>? eventList;
+  final ScrollController scrollController = ScrollController();
 
   @override
   void onReady() {
-    // refreshEventList();
+    refreshEventList();
     super.onReady();
   }
 
@@ -24,15 +25,16 @@ class EventController extends Controller<EventUseCase> {
     CalendarEventType? newEventType,
     DateTime? newDateTime,
   }) async {
-    final e = newEventType ?? eventType.value;
-    final d = newDateTime ?? dateTime.value;
-    dateTime(d);
-    eventType(e);
+    final e = newEventType ?? eventType;
+    final d = newDateTime ?? dateTime;
+    dateTime = d;
+    eventType = e;
 
     if (!eventData.containsKey(e)) {
       eventData[e] = {};
     }
-    eventList.value = null;
+    eventList = null;
+    update();
     final List<CalendarEvent> tmpList = [];
     final data = eventData[e]!;
     final key = CalendarEvent.key(d);
@@ -56,6 +58,15 @@ class EventController extends Controller<EventUseCase> {
       eventData.update(e, (value) => data);
       tmpList.addAll(eventList);
     }
-    eventList(tmpList);
+    eventList = tmpList;
+    update();
+  }
+
+  void jumpToTop() {
+    scrollController.animateTo(
+      0,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeIn,
+    );
   }
 }

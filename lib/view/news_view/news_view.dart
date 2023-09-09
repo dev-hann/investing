@@ -18,11 +18,6 @@ class NewsView extends StatefulWidget {
 class _NewsViewState extends State<NewsView> {
   final NewsController controller = NewsController.find();
 
-  @override
-  void initState() {
-    super.initState();
-  }
-
   AppBar appBar() {
     return AppBar(
       title: const Text("News"),
@@ -41,15 +36,15 @@ class _NewsViewState extends State<NewsView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: appBar(),
-      body: Obx(() {
-        final list = controller.newsList;
-        return SmartRefresher(
-          enablePullDown: true,
-          enablePullUp: true,
-          onLoading: controller.requestNextPageNewsList,
-          onRefresh: controller.refreshNewsList,
-          controller: controller.refreshController,
-          child: ListView.builder(
+      body: SmartRefresher(
+        enablePullDown: true,
+        enablePullUp: true,
+        onLoading: controller.requestNextPageNewsList,
+        onRefresh: controller.refreshNewsList,
+        controller: controller.refreshController,
+        child: GetBuilder<NewsController>(builder: (controller) {
+          final list = controller.newsList;
+          return ListView.builder(
             physics: const BouncingScrollPhysics(),
             padding: const EdgeInsets.all(16.0),
             itemCount: list.length,
@@ -70,9 +65,9 @@ class _NewsViewState extends State<NewsView> {
                 ),
               );
             },
-          ),
-        );
-      }),
+          );
+        }),
+      ),
     );
   }
 }
