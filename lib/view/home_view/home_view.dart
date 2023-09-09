@@ -19,7 +19,7 @@ class _HomeViewState extends State<HomeView> {
   Widget build(BuildContext context) {
     return GetBuilder<HomeController>(
       builder: (controller) {
-        final currentIndex = controller.currentIndex;
+        final currentIndex = controller.currentPage.index;
         return Scaffold(
           body: Builder(builder: (context) {
             return const [

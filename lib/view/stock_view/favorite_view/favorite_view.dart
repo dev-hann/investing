@@ -2,37 +2,26 @@ import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:get/get.dart';
 import 'package:investing/const/color.dart';
-import 'package:investing/controller/market_controller.dart';
-import 'package:investing/controller/stock_controller.dart';
+import 'package:investing/model/stock/stock.dart';
 import 'package:investing/util/number_format.dart';
-import 'package:investing/view/stock_view/detail_view/stock_detail_view.dart';
-import 'package:investing/view/stock_view/edit_view/edit_view.dart';
 import 'package:investing/widget/shimmer.dart';
 import 'package:investing/widget/stock_card.dart';
 import 'package:investing/widget/stock_price_builder.dart';
 import 'package:investing/widget/title_widget.dart';
 
 // TODO: (Future Work)  make Favorite Directory
-class FavoriteView extends StatefulWidget {
-  const FavoriteView({super.key});
-
-  @override
-  State<FavoriteView> createState() => _FavoriteViewState();
-}
-
-class _FavoriteViewState extends State<FavoriteView> {
-  final stockController = StockController.find();
-  final marketController = MarketController.find();
-
-  @override
-  void initState() {
-    super.initState();
-    marketController.marketStatus.listen((status) {
-      if (status!.isOpened) {
-        stockController.refreshRealTimeFavoriteList();
-      }
-    });
-  }
+class FavoriteView extends StatelessWidget {
+  const FavoriteView({
+    super.key,
+    required this.favoriteList,
+    required this.onTapStock,
+    required this.onTapEdit,
+    required this.onTapRemove,
+  });
+  final List<Stock>? favoriteList;
+  final Function(Stock stock) onTapStock;
+  final VoidCallback onTapEdit;
+  final Function(Stock stock) onTapRemove;
 
   Widget loadingWidget() {
     return ListView.separated(
@@ -66,26 +55,27 @@ class _FavoriteViewState extends State<FavoriteView> {
           children: [
             const Expanded(child: Text("Favorites")),
             GestureDetector(
-              onTap: () async {
-                final list = await Get.to(
-                  EditView(
-                    itemList: stockController.favoriteList,
-                  ),
-                );
-                if (list != null) {
-                  stockController.updateFavoriteList(list);
-                }
-              },
+              onTap: onTapEdit,
+              //  () async {
+              //   // final list = await Get.to(
+              //   //   EditView(
+              //   //     itemList: stockController.favoriteList,
+              //   //   ),
+              //   // );
+              //   // if (list != null) {
+              //   //   stockController.updateFavoriteList(list);
+              //   // }
+              // },
               child: const Icon(Icons.settings),
             ),
           ],
         ),
-        child: Obx(() {
-          final favoriteList = stockController.favoriteList;
-          if (stockController.favoriteLoading.isTrue) {
+        child: Builder(builder: (context) {
+          final list = favoriteList;
+          if (list == null) {
             return loadingWidget();
           }
-          if (favoriteList.isEmpty) {
+          if (list.isEmpty) {
             return emptyWidget();
           }
           return ListView.separated(
@@ -94,9 +84,9 @@ class _FavoriteViewState extends State<FavoriteView> {
             separatorBuilder: (context, index) {
               return const SizedBox(height: 8.0);
             },
-            itemCount: favoriteList.length,
+            itemCount: list.length,
             itemBuilder: (context, index) {
-              final stock = favoriteList[index];
+              final stock = list[index];
               return Card(
                 clipBehavior: Clip.hardEdge,
                 child: Slidable(
@@ -111,10 +101,8 @@ class _FavoriteViewState extends State<FavoriteView> {
                         label: 'Share',
                       ),
                       SlidableAction(
-                        onPressed: (context) async {
-                          await Future.delayed(
-                              const Duration(milliseconds: 300));
-                          stockController.removeFavoriteStock(stock);
+                        onPressed: (context) {
+                          onTapRemove(stock);
                         },
                         backgroundColor: const Color(0xFFFE4A49),
                         foregroundColor: Colors.white,
@@ -126,9 +114,7 @@ class _FavoriteViewState extends State<FavoriteView> {
                   child: StockCard(
                     stock: stock,
                     onTap: () {
-                      Get.to(
-                        StockDetailView(stock: stock),
-                      );
+                      onTapStock(stock);
                     },
                     trailing: IVStockPriceBuilder(
                       stock: stock,

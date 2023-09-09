@@ -14,14 +14,14 @@ class MarketController extends Controller<MarketUseCase> {
 
   @override
   void onReady() {
-    refreshMarketStatus().then((value) {
-      final marketStatusValue = marketStatus.value!;
-      if (marketStatusValue.isOpened) {
-        return refreshMarketPercentRealTimeData();
-      }
-      return refreshMarketPercentData();
-    });
-    refreshMarketData();
+    // refreshMarketStatus().then((value) {
+    //   final marketStatusValue = marketStatus.value!;
+    //   if (marketStatusValue.isOpened) {
+    //     return refreshMarketPercentRealTimeData();
+    //   }
+    //   return refreshMarketPercentData();
+    // });
+    // refreshMarketData();
     super.onReady();
   }
 

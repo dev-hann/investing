@@ -16,7 +16,7 @@ class EventController extends Controller<EventUseCase> {
 
   @override
   void onReady() {
-    refreshEventList();
+    // refreshEventList();
     super.onReady();
   }
 

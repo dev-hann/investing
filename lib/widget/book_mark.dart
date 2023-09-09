@@ -16,26 +16,19 @@ class BookMarkWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = StockController.find();
-    return Obx(() {
-      final favoriteList = controller.favoriteList;
-      final index = favoriteList.indexWhere((element) {
-        return element.isEquals(stock);
-      });
-      final isContains = index != -1;
-      return GestureDetector(
-        onTap: () async {
-          if (isContains) {
-            await controller.removeFavoriteStock(stock);
-          } else {
-            await controller.updateFavoriteStock(stock);
-          }
-        },
-        child: Icon(
-          isContains ? Icons.bookmark : Icons.bookmark_border,
-          color: isContains ? activeColor : color,
-        ),
-      );
-    });
+    return GetBuilder<StockController>(
+      builder: (controller) {
+        final isContains = controller.isContains(stock);
+        return GestureDetector(
+          onTap: () {
+            controller.toggleFavoriteStock(stock);
+          },
+          child: Icon(
+            isContains ? Icons.bookmark : Icons.bookmark_border,
+            color: isContains ? activeColor : color,
+          ),
+        );
+      },
+    );
   }
 }

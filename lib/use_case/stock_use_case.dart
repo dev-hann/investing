@@ -1,4 +1,3 @@
-import 'package:investing/data/db/data_base.dart';
 import 'package:investing/model/stock/stock_company.dart';
 import 'package:investing/model/date_time_range.dart';
 import 'package:investing/model/stock/stock.dart';
@@ -12,21 +11,9 @@ import 'package:investing/util/number_format.dart';
 class StockUseCase extends UseCase<StockRepo> {
   StockUseCase(super.repo);
 
-  Stream<IVDataBaseEvent<Stock>> favoriteStream() {
-    return repo.favoriteStream().map((event) {
-      final data = event.data;
-      return IVDataBaseEvent(
-        event.deleted,
-        event.key,
-        data == null
-            ? null
-            : Stock(
-                name: data["name"],
-                symbol: data["symbol"],
-                asset: data["asset"],
-                order: data["order"],
-              ),
-      );
+  Stream<List<Stock>> favoriteListStream() {
+    return repo.favoriteListStream().map((event) {
+      return event.map((e) => Stock.fromMap(e)).toList();
     });
   }
 
@@ -46,12 +33,15 @@ class StockUseCase extends UseCase<StockRepo> {
     return list;
   }
 
-  Future updateStock(Stock data) {
-    return repo.updateStock(data);
+  Future updateStock(Stock stock) {
+    return repo.updateStock(
+      symbol: stock.symbol,
+      data: stock.toMap(),
+    );
   }
 
-  Future removeStock(String index) {
-    return repo.removeStock(index);
+  Future removeStock(Stock stock) {
+    return repo.removeStock(stock.symbol);
   }
 
   Future<List<Stock>> searchStock(String query) async {

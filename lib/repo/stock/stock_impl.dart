@@ -2,7 +2,6 @@ part of stock_repo;
 
 class StockImpl extends StockRepo {
   final StockService service = StockService();
-
   final IVDataBase favoriteDB = IVDataBase("Favorite");
 
   @override
@@ -12,8 +11,8 @@ class StockImpl extends StockRepo {
   }
 
   @override
-  Stream<IVDataBaseEvent> favoriteStream() {
-    return favoriteDB.stream;
+  Stream<List<dynamic>> favoriteListStream() {
+    return favoriteDB.stream.map((event) => favoriteDB.loadStockList());
   }
 
   @override
@@ -27,8 +26,14 @@ class StockImpl extends StockRepo {
   }
 
   @override
-  Future updateStock<T extends DataBaseModelMixin>(T data) async {
-    return favoriteDB.updateStock(data);
+  Future updateStock({
+    required String symbol,
+    required Map<String, dynamic> data,
+  }) async {
+    return favoriteDB.updateStock(
+      symbol: symbol,
+      data: data,
+    );
   }
 
   @override

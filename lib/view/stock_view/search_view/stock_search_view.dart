@@ -1,4 +1,4 @@
-import 'package:investing/controller/stock_controller.dart';
+import 'package:investing/controller/stock_search_contrller.dart';
 import 'package:investing/model/stock/stock.dart';
 import 'package:investing/view/stock_view/detail_view/stock_detail_view.dart';
 import 'package:investing/widget/book_mark.dart';
@@ -6,18 +6,10 @@ import 'package:investing/widget/stock_card.dart';
 import 'package:investing/widget/text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:investing/widget/title_widget.dart';
 
-class StockSearchView extends StatefulWidget {
+class StockSearchView extends StatelessWidget {
   const StockSearchView({super.key});
-
-  @override
-  State<StockSearchView> createState() => _StockSearchViewState();
-}
-
-class _StockSearchViewState extends State<StockSearchView> {
-  final controller = StockController.find();
-  final queryController = TextEditingController();
-  final searchedList = RxList<Stock>();
 
   AppBar appBar() {
     return AppBar(
@@ -42,33 +34,34 @@ class _StockSearchViewState extends State<StockSearchView> {
 
   Widget searchedListWidget({
     required String query,
-    required List<Stock> searchedList,
-    required List<Stock> favoriteList,
+    required List<Stock>? searchList,
   }) {
-    return ListView.separated(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      itemCount: searchedList.length,
-      itemBuilder: (context, index) {
-        final stock = searchedList[index];
-        return Card(
-          child: StockCard(
-            stock: stock,
-            highlight: query,
-            trailing: BookMarkWidget(
+    if (searchList == null) {
+      return const Text("init View");
+    }
+    if (searchList.isEmpty) {
+      return const Text("Result Empty View");
+    }
+    return Column(
+      children: searchList.map((stock) {
+        return Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8.0),
+          child: Card(
+            child: StockCard(
               stock: stock,
+              highlight: query,
+              trailing: BookMarkWidget(
+                stock: stock,
+              ),
+              onTap: () {
+                Get.to(
+                  StockDetailView(stock: stock),
+                );
+              },
             ),
-            onTap: () {
-              Get.to(
-                StockDetailView(stock: stock),
-              );
-            },
           ),
         );
-      },
-      separatorBuilder: (context, index) {
-        return const SizedBox(height: 16.0);
-      },
+      }).toList(),
     );
   }
 
@@ -76,35 +69,40 @@ class _StockSearchViewState extends State<StockSearchView> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        FocusManager.instance.primaryFocus?.unfocus();
+        primaryFocus?.unfocus();
       },
       child: Scaffold(
         appBar: appBar(),
-        body: Obx(() {
-          return ListView(
-            padding: const EdgeInsets.all(16.0),
-            physics: const BouncingScrollPhysics(),
-            children: [
-              queryTextField(
-                queryController: queryController,
-                onSubmitted: (query) async {
-                  if (query.isEmpty) {
-                    return;
-                  }
-                  final list = await controller.searchStock(query);
-                  searchedList.clear();
-                  searchedList.addAll(list);
-                },
-              ),
-              const SizedBox(height: 16.0),
-              searchedListWidget(
-                query: queryController.text,
-                searchedList: searchedList,
-                favoriteList: controller.favoriteList,
-              ),
-            ],
-          );
-        }),
+        body: GetBuilder<StockSearchController>(
+          builder: (controller) {
+            final searchList = controller.searchList;
+            final queryController = controller.queryController;
+            return ListView(
+              padding: const EdgeInsets.all(16.0),
+              physics: const BouncingScrollPhysics(),
+              children: [
+                queryTextField(
+                  queryController: queryController,
+                  onSubmitted: (query) {
+                    if (query.isEmpty) {
+                      return;
+                    }
+                    controller.searchStock(query);
+                  },
+                ),
+                const SizedBox(height: 16.0),
+                TitleWidget(
+                  title: const Text("Result"),
+                  child: searchedListWidget(
+                    query: queryController.text,
+                    searchList: searchList,
+                    //  controller.favoriteList,
+                  ),
+                ),
+              ],
+            );
+          },
+        ),
       ),
     );
   }

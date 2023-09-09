@@ -1,5 +1,3 @@
-import 'package:equatable/equatable.dart';
-import 'package:investing/data/db/data_base_model_mixin.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 class IVDataBase {
@@ -10,53 +8,28 @@ class IVDataBase {
     _box = await Hive.openBox(name);
   }
 
-  Future updateStock<T extends DataBaseModelMixin>(T model) {
-    return _box.put(model.index, model.toMap());
+  Future updateStock({
+    required String symbol,
+    required Map<String, dynamic> data,
+  }) {
+    return _box.put(symbol, data);
   }
 
-  List<Map<String, dynamic>> loadStockList() {
-    return _box.values
-        .toList()
-        .map((e) => Map<String, dynamic>.from(e))
-        .toList();
+  List<dynamic> loadStockList() {
+    return _box.values.toList();
   }
 
-  dynamic loadStock(String index) {
-    return _box.get(index);
+  dynamic loadStock(String symbol) {
+    return _box.get(symbol);
   }
 
   Future clear() {
     return _box.clear();
   }
 
-  Stream<IVDataBaseEvent> get stream => _box.watch().map<IVDataBaseEvent>(
-        (event) {
-          return IVDataBaseEvent<dynamic>(
-            event.deleted,
-            event.key,
-            event.value,
-          );
-        },
-      );
+  Stream get stream => _box.watch();
 
-  Future removeStock(String stockIndex) {
-    return _box.delete(stockIndex);
+  Future removeStock(String symbol) {
+    return _box.delete(symbol);
   }
-}
-
-class IVDataBaseEvent<T> extends Equatable {
-  const IVDataBaseEvent(
-    this.deleted,
-    this.key,
-    this.data,
-  );
-  final bool deleted;
-  final String key;
-  final T? data;
-
-  @override
-  List<Object?> get props => [
-        deleted,
-        data,
-      ];
 }

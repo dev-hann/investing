@@ -1,7 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 
-import 'package:investing/data/db/data_base_model_mixin.dart';
 import 'package:investing/model/chart.dart';
 
 enum StockType {
@@ -18,9 +17,8 @@ enum IndicatorStatus {
   same,
 }
 
-class Stock extends Equatable with DataBaseModelMixin, Comparable<Stock> {
+class Stock extends Equatable with Comparable<Stock> {
   Stock({
-    int? index,
     required this.symbol,
     required this.name,
     required this.asset,
@@ -83,19 +81,6 @@ class Stock extends Equatable with DataBaseModelMixin, Comparable<Stock> {
     return IndicatorStatus.down;
   }
 
-  @override
-  Map<String, dynamic> toMap() {
-    return <String, dynamic>{
-      'symbol': symbol,
-      'name': name,
-      'asset': asset,
-      'lastSalePrice': lastSalePrice,
-      'netChange': netChange,
-      'percentChange': percentChange,
-      'order': order,
-    };
-  }
-
   bool isEquals(Stock other) {
     return symbol == other.symbol;
   }
@@ -110,9 +95,6 @@ class Stock extends Equatable with DataBaseModelMixin, Comparable<Stock> {
         percentChange,
         order,
       ];
-
-  @override
-  String get index => symbol;
 
   factory Stock.snp() {
     return Stock(
@@ -212,6 +194,31 @@ class Stock extends Equatable with DataBaseModelMixin, Comparable<Stock> {
       lastSalePrice: lastSalePrice ?? this.lastSalePrice,
       netChange: netChange ?? this.netChange,
       percentChange: percentChange ?? this.percentChange,
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'order': order,
+      'symbol': symbol,
+      'name': name,
+      'asset': asset,
+      'lastSalePrice': lastSalePrice,
+      'netChange': netChange,
+      'percentChange': percentChange,
+    };
+  }
+
+  factory Stock.fromMap(dynamic data) {
+    final map = Map<String, dynamic>.from(data);
+    return Stock(
+      order: map['order'] as int,
+      symbol: map['symbol'] as String,
+      name: map['name'] as String,
+      asset: map['asset'] as String,
+      lastSalePrice: map['lastSalePrice'] as double,
+      netChange: map['netChange'] as double,
+      percentChange: map['percentChange'] as double,
     );
   }
 }

@@ -1,7 +1,6 @@
 library stock_repo;
 
 import 'package:investing/data/db/data_base.dart';
-import 'package:investing/data/db/data_base_model_mixin.dart';
 import 'package:investing/data/service/service.dart';
 import 'package:investing/model/date_time_range.dart';
 import 'package:investing/repo/repo.dart';
@@ -9,10 +8,14 @@ import 'package:investing/util/date_time_format.dart';
 part './stock_impl.dart';
 
 abstract class StockRepo extends Repo {
-  Stream<IVDataBaseEvent> favoriteStream();
+  Stream<List<dynamic>> favoriteListStream();
   List loadStockList();
-  Future updateStock<T extends DataBaseModelMixin>(T data);
-  Future removeStock(String index);
+  Future updateStock({
+    required String symbol,
+    required Map<String, dynamic> data,
+  });
+  Future removeStock(String symbol);
+
   Future<List> searchStock(String query);
 
   Future<dynamic> requestStock({

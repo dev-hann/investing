@@ -12,7 +12,7 @@ import 'package:investing/use_case/stock_use_case.dart';
 
 class StockController extends Controller<StockUseCase> {
   StockController(super.useCase);
-  static StockController find() => Get.find<StockController>();
+  static StockController find() => Get.find();
 
   @override
   void onReady() async {
@@ -23,15 +23,21 @@ class StockController extends Controller<StockUseCase> {
   }
 
   // Favorite
-  final RxBool favoriteLoading = true.obs;
-  final RxList<Stock> favoriteList = RxList<Stock>();
+  List<Stock>? _favoriteList;
+  List<Stock>? get favoriteList => _favoriteList;
+  bool isContains(Stock stock) {
+    if (_favoriteList == null) {
+      return false;
+    }
+    final index =
+        _favoriteList!.indexWhere((element) => element.isEquals(stock));
+    return index != -1;
+  }
+
   Future<void> _initFavoriteList() async {
-    useCase.favoriteStream().listen((event) async {
-      if (event.deleted) {
-        favoriteList.removeWhere((element) => event.key == element.index);
-        return;
-      }
-      refreshFavoriteList();
+    useCase.favoriteListStream().listen((event) async {
+      _favoriteList = event;
+      update();
     });
     refreshFavoriteList();
   }
@@ -40,8 +46,8 @@ class StockController extends Controller<StockUseCase> {
     List<Stock> list = useCase.loadStockList();
     list = await useCase.requestStockList(list);
     list.sort();
-    favoriteList(list);
-    favoriteLoading(false);
+    _favoriteList = list;
+    update();
   }
 
   void refreshRealTimeFavoriteList() async {
@@ -50,24 +56,25 @@ class StockController extends Controller<StockUseCase> {
     refreshRealTimeFavoriteList();
   }
 
-  Future updateFavoriteList(List<Stock> list) async {
-    favoriteList(list);
-    for (final stock in list) {
-      updateFavoriteStock(stock);
+  // Future updateFavoriteList(List<Stock> list) async {
+  //   favoriteList(list);
+  //   for (final stock in list) {
+  //     updateFavoriteStock(stock);
+  //   }
+  // }
+
+  Future toggleFavoriteStock(Stock stock) async {
+    if (isContains(stock)) {
+      await useCase.removeStock(stock);
+    } else {
+      await useCase.updateStock(stock);
     }
-  }
-
-  Future updateFavoriteStock(Stock stock) {
-    return useCase.updateStock(stock);
-  }
-
-  Future removeFavoriteStock(Stock stock) {
-    return useCase.removeStock(stock.index);
   }
 
   // Index
   //TODO: make it edit by option button
-  final RxList<Stock> indexList = RxList([
+
+  List<Stock> _indexList = RxList([
     Stock.nasdaq100(),
     Stock.nasdaq(),
     Stock.snp(),
@@ -79,43 +86,21 @@ class StockController extends Controller<StockUseCase> {
     Stock.naturalGas(),
     Stock.crudeOil(),
   ]);
+  List<Stock> get indexList => _indexList;
   Future _initIndexList() async {
     await refreshIndexList();
   }
 
-  final RxBool indexLoading = true.obs;
-  final RxList<StockChart> indexChartList = RxList(<StockChart>[]);
   Future refreshIndexList() async {
     final res = await useCase.requestStockList(indexList);
-    indexList(res);
-    final list = <StockChart>[];
-    for (int index = 0; index < indexList.length; ++index) {
-      final stock = indexList[index];
-      final res = await useCase.requestStockChart(
-        symbol: stock.symbol,
-        asset: stock.asset,
-        dateTimeRange:
-            IVDateTimeRange.fromRangeType(stock.chartRangeTypeList.first),
-      );
-      list.add(res);
-    }
-    indexChartList(list);
-    indexLoading(false);
+    _indexList = res;
+    update();
   }
 
   Future refreshRealTimeIndexList() async {
     await refreshIndexList();
     await Future.delayed(const Duration(seconds: 10));
     refreshRealTimeIndexList();
-  }
-
-  // Search
-  Future<List<Stock>> searchStock(String query) async {
-    return showOverlay(
-      () async {
-        return await useCase.searchStock(query);
-      },
-    );
   }
 
   // Stock Detail

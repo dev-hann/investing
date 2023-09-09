@@ -13,7 +13,7 @@ class NewsController extends Controller<NewsUseCase> {
   @override
   void onReady() {
     super.onReady();
-    refreshNewsList();
+    // refreshNewsList();
   }
 
   final RefreshController refreshController = RefreshController();

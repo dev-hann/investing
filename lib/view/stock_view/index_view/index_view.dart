@@ -2,37 +2,19 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:investing/const/color.dart';
-import 'package:investing/controller/market_controller.dart';
-import 'package:investing/controller/stock_controller.dart';
 import 'package:investing/model/stock/stock.dart';
-import 'package:investing/model/stock/stock_chart.dart';
 import 'package:investing/util/number_format.dart';
 import 'package:investing/view/stock_view/detail_view/stock_detail_view.dart';
-import 'package:investing/widget/chart_widget.dart';
 import 'package:investing/widget/shimmer.dart';
 import 'package:investing/widget/stock_price_builder.dart';
 import 'package:investing/widget/title_widget.dart';
 
-class IndexView extends StatefulWidget {
-  const IndexView({super.key});
-
-  @override
-  State<IndexView> createState() => _IndexViewState();
-}
-
-class _IndexViewState extends State<IndexView> {
-  final stockController = StockController.find();
-  final marketController = MarketController.find();
-
-  @override
-  void initState() {
-    super.initState();
-    marketController.marketStatus.listen((status) {
-      if (status!.isOpened) {
-        stockController.refreshRealTimeIndexList();
-      }
-    });
-  }
+class IndexView extends StatelessWidget {
+  const IndexView({
+    super.key,
+    required this.indexList,
+  });
+  final List<Stock>? indexList;
 
   Widget loadingItem() {
     final width = Get.width / 2.5;
@@ -47,7 +29,6 @@ class _IndexViewState extends State<IndexView> {
 
   Widget item({
     required Stock index,
-    required StockChart chart,
   }) {
     return GestureDetector(
       onTap: () {
@@ -71,15 +52,14 @@ class _IndexViewState extends State<IndexView> {
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      IgnorePointer(
-                        child: IVChartWidget(
-                          stockChart: chart,
-                          showBaseLine: false,
-                        ),
-                      ),
-                      AutoSizeText(
-                        index.name,
-                        maxLines: 1,
+                      Row(
+                        children: [
+                          AutoSizeText(
+                            index.name,
+                            maxLines: 1,
+                          ),
+                          const Icon(Icons.arrow_forward_ios)
+                        ],
                       ),
                       IVStockPriceBuilder(
                         stock: index,
@@ -125,27 +105,21 @@ class _IndexViewState extends State<IndexView> {
         physics: const BouncingScrollPhysics(),
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         scrollDirection: Axis.horizontal,
-        child: Obx(() {
-          final indexList = stockController.indexList;
-          final chartList = stockController.indexChartList;
-          if (stockController.indexLoading.isTrue) {
+        child: Builder(
+          builder: (context) {
+            final list = indexList;
+            if (list == null) {
+              return Row(
+                children: [
+                  for (int index = 0; index < 10; ++index) loadingItem(),
+                ],
+              );
+            }
             return Row(
-              children: [
-                for (int index = 0; index < indexList.length; ++index)
-                  loadingItem(),
-              ],
+              children: list.map((e) => item(index: e)).toList(),
             );
-          }
-          return Row(
-            children: [
-              for (int index = 0; index < chartList.length; ++index)
-                item(
-                  index: indexList[index],
-                  chart: chartList[index],
-                ),
-            ],
-          );
-        }),
+          },
+        ),
       ),
     );
   }

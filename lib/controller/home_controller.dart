@@ -14,10 +14,11 @@ class HomeController extends Controller<HomeUseCase> {
   HomeController(super.useCase);
   static HomeController find() => Get.find();
 
-  int currentIndex = 0;
+  int _currentIndex = 0;
+  PageType get currentPage => PageType.values[_currentIndex];
 
   void moveToPage(PageType pageType) {
-    currentIndex = pageType.index;
+    _currentIndex = pageType.index;
     update();
   }
 }

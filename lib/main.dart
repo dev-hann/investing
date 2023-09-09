@@ -7,6 +7,7 @@ import 'package:investing/controller/market_controller.dart';
 import 'package:investing/controller/news_controller.dart';
 import 'package:investing/controller/setting_controller.dart';
 import 'package:investing/controller/stock_controller.dart';
+import 'package:investing/controller/stock_search_contrller.dart';
 import 'package:investing/repo/event/event_repo.dart';
 import 'package:investing/repo/home/home_repo.dart';
 import 'package:investing/repo/market/market_repo.dart';
@@ -46,10 +47,12 @@ class MyApp extends StatelessWidget {
               SettingUseCase(SettingImpl()),
             ),
           );
+          final stockUseCase = StockUseCase(StockImpl());
           Controller.put<StockController>(
-            StockController(
-              StockUseCase(StockImpl()),
-            ),
+            StockController(stockUseCase),
+          );
+          Controller.put<StockSearchController>(
+            StockSearchController(stockUseCase),
           );
           Controller.put<NewsController>(
             NewsController(
