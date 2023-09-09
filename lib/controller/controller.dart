@@ -43,23 +43,4 @@ abstract class Controller<T extends UseCase> extends GetxController {
   static T put<T extends Controller>(T controller) {
     return Get.put<T>(controller);
   }
-
-  final List _idList = [];
-  void addViewID(dynamic viewID) {
-    if (!_idList.contains(viewID)) {
-      _idList.add(viewID);
-    }
-  }
-
-  void removeViewID(dynamic viewID) {
-    _idList.remove(viewID);
-  }
-
-  void updateView() {
-    update([..._idList]);
-  }
-
-  void updateViewByID(dynamic viewID) {
-    update([viewID]);
-  }
 }

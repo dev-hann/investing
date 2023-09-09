@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-import 'package:investing/const/color.dart';
+import 'package:investing/controller/home_controller.dart';
 import 'package:investing/view/event_view/event_view.dart';
 import 'package:investing/view/market_view/market_view.dart';
 import 'package:investing/view/news_view/news_view.dart';
@@ -15,65 +15,55 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
-  final PageController pageController = PageController(keepPage: true);
-  final RxInt currentPage = RxInt(0);
-
-  @override
-  void initState() {
-    super.initState();
-    pageController.addListener(() {
-      currentPage(pageController.page?.round());
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: PageView(
-        physics: const NeverScrollableScrollPhysics(),
-        controller: pageController,
-        children: const [
-          StockView(),
-          NewsView(),
-          EventView(),
-          // ScreenerView(),
-          MarketView(),
-          SettingView()
-        ],
-      ),
-      bottomNavigationBar: Obx(() {
-        return BottomNavigationBar(
-          onTap: pageController.jumpToPage,
-          currentIndex: currentPage.value,
-          selectedItemColor: IVColor.orange,
-          items: const [
-            BottomNavigationBarItem(
-              icon: Icon(Icons.star_border),
-              label: "WatchList",
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.newspaper_outlined),
-              label: "News",
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.calendar_month),
-              label: "Event",
-            ),
-            // BottomNavigationBarItem(
-            //   icon: Icon(Icons.filter_list),
-            //   label: "Screener",
-            // ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.map),
-              label: "Map",
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.person),
-              label: "Setting",
-            ),
-          ],
+    return GetBuilder<HomeController>(
+      builder: (controller) {
+        final currentIndex = controller.currentIndex;
+        return Scaffold(
+          body: Builder(builder: (context) {
+            return const [
+              StockView(),
+              NewsView(),
+              EventView(),
+              MarketView(),
+              SettingView()
+            ][currentIndex];
+          }),
+          bottomNavigationBar: NavigationBar(
+            selectedIndex: currentIndex,
+            onDestinationSelected: (index) {
+              controller.moveToPage(PageType.values[index]);
+            },
+            destinations: const [
+              NavigationDestination(
+                icon: Icon(Icons.star_border),
+                label: "WatchList",
+              ),
+              NavigationDestination(
+                icon: Icon(Icons.newspaper_outlined),
+                label: "News",
+              ),
+              NavigationDestination(
+                icon: Icon(Icons.calendar_month),
+                label: "Event",
+              ),
+              // BottomNavigationBarItem(
+              //   icon: Icon(Icons.filter_list),
+              //   label: "Screener",
+              // ),
+              NavigationDestination(
+                icon: Icon(Icons.map),
+                label: "Map",
+              ),
+              NavigationDestination(
+                icon: Icon(Icons.person),
+                label: "Setting",
+              ),
+            ],
+          ),
         );
-      }),
+      },
     );
   }
 }
