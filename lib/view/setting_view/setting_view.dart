@@ -1,10 +1,6 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:investing/controller/setting_controller.dart';
-import 'package:investing/util/navigator.dart';
-import 'package:investing/view/setting_view/screener_view/screener_view.dart';
 
 class SettingView extends ConsumerWidget {
   const SettingView({super.key});
@@ -30,12 +26,6 @@ class SettingView extends ConsumerWidget {
                     : ThemeMode.light;
               },
               value: isDarkMode,
-            ),
-            ListTile(
-              onTap: () {
-                unawaited(pushView(context, const ScreenerView()));
-              },
-              title: const Text('Screener'),
             ),
           ],
         ),

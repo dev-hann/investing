@@ -9,6 +9,10 @@ All notable changes to this project are documented here. Format follows [Keep a 
 - Controller unit tests via `ProviderContainer` (`test/controller_test.dart`) — the first tests that exercise controllers without a widget tree.
 - Testing guide (`docs/TESTING.md`): hermetic-test principles, per-layer strategy, repo-override pattern for IO notifiers.
 - **Live heatmap percents via Alpaca IEX WebSocket** ([ADR-0006](docs/adr/0006-alpaca-realtime-quotes.md)): quotes streamed per symbol with exact percent math against previous closes, auto-reconnect, and a last-known-good Hive cache that colors the map instantly on cold start. Credentials live in a gitignored asset, `assets/config/alpaca.json` (template: `alpaca.example.json`), loaded at startup by `IVConfig` — without the file the app falls back to a single Finviz percent fetch. Live REST smoke test auto-skips when the file is absent (`test/alpaca_service_test.dart`).
+- **Market movers screen** via the keyless Nasdaq screener endpoint ([ADR-0007](docs/adr/0007-nasdaq-screener-movers.md)): Advancers / Decliners / Most Active tabs, per-category lazy loading with shimmer + retry; reachable from the new Movers section on the Market tab.
+- **Offline last-known-good caching** for the news first page and calendar events (Hive): network failures now fall back to the previously fetched rows instead of an empty screen.
+- HTTP hardening in `IVService`: 10s/15s connect/receive timeouts, browser-like headers, and a response interceptor that surfaces Nasdaq `status.rCode != 200` envelopes as errors.
+- Pull-to-refresh on the WatchList; loading shimmer on the Market tab.
 
 ### Changed
 
@@ -16,10 +20,17 @@ All notable changes to this project are documented here. Format follows [Keep a 
 - Navigation moved from `Get.to`/`Get.back` to the `Navigator` (`pushView` helper in `util/navigator.dart`); dialogs via `showDialog`; bottom sheets via `showModalBottomSheet`; snackbars via global `scaffoldMessengerKey`.
 - Screen-local reactive state (`Rx`/`Obx` in views) converted to `setState`; reactive widgets are now `ConsumerWidget`/`ConsumerStatefulWidget`.
 - Market data sources: heatmap structure still Finviz/Nasdaq; percents now Alpaca live or Finviz fallback. Removed the dead 5-second polling chain (controller → use case → repo → service).
+- **Market tab rework**: the old single-heatmap "Map" tab is now a Market tab with heatmap, sector performance list (tap → sector detail with sparklines), and movers entry points; the Screener entry moved here from Settings.
+- `SectorDetailView` revived with per-symbol sparklines and change percents; `FinancialView` re-enabled in the stock detail page.
+- Favorite swipe-delete and the edit (reorder) flow are wired to the controller — previously no-op callbacks.
+- Event calendar `lastDay` is now dynamic (was pinned to 2024); news search directory renamed to `search_view/` (was `search_view.dart/`).
+- Refresh chains (favorites, indices, market data/status, news) keep the last-known state on network errors; market-status timer no longer schedules negative durations and no longer spams the "Market is Opened!" snackbar.
+- Repo layer returns typed models across all four domains — JSON parsing no longer leaks above `repo/`; typo methods renamed (`requestStockChart`, `requestStockCompany`, `requestDividendEventList`); deprecated unused `requestStock` removed.
 
 ### Removed
 
 - `get` dependency.
+- Dead experimental `SectorView` (superseded by the `any_treemap` heatmap).
 
 ## [1.0.0] — 2026-10-18
 

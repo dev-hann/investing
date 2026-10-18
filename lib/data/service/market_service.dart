@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:investing/data/service/service.dart';
+import 'package:investing/model/market.dart';
 
 class MarketService extends IVService {
   Future<Response<dynamic>> requestMarketData() {
@@ -21,5 +22,24 @@ class MarketService extends IVService {
   Future<Response<dynamic>> requestMarketStatus() {
     const url = 'https://api.nasdaq.com/api/market-info';
     return get(url);
+  }
+
+  /// Top movers from the keyless Nasdaq screener endpoint
+  /// (gainers / losers / most active).
+  Future<Response<dynamic>> requestMovers(MarketMoverCategory category) {
+    const url = 'https://api.nasdaq.com/api/screener/stocks';
+    return get(
+      url,
+      query: <String, dynamic>{
+        'tableonly': 'true',
+        'limit': '40',
+        'offset': '0',
+        'marketstatus': switch (category) {
+          MarketMoverCategory.advancers => 'gainers',
+          MarketMoverCategory.decliners => 'losers',
+          MarketMoverCategory.actives => 'mostactive',
+        },
+      },
+    );
   }
 }

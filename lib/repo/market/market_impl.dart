@@ -52,6 +52,27 @@ class MarketImpl extends MarketRepo {
   }
 
   @override
+  Future<List<Stock>> requestMovers(MarketMoverCategory category) async {
+    final res = await service.requestMovers(category);
+    final rows =
+        (((res.data as Map<String, dynamic>)['data']
+                    as Map<String, dynamic>)['rows']
+                as List<dynamic>)
+            .cast<Map<String, dynamic>>();
+    return [
+      for (final row in rows)
+        Stock(
+          symbol: row['symbol'] as String,
+          name: row['name'] as String,
+          asset: 'stocks',
+          lastSalePrice: IVNumberFormat(row['lastsale'] as String?).toDouble(),
+          netChange: IVNumberFormat(row['netchange'] as String?).toDouble(),
+          percentChange: IVNumberFormat(row['pctchange'] as String?).toDouble(),
+        ),
+    ];
+  }
+
+  @override
   bool get isRealTimeConfigured => alpacaService.isConfigured;
 
   @override

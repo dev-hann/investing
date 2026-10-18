@@ -1,5 +1,8 @@
 import 'package:equatable/equatable.dart';
 
+/// Market movers categories served by the Nasdaq screener endpoint.
+enum MarketMoverCategory { advancers, decliners, actives }
+
 abstract class Market<T> extends Equatable {
   const Market(this.name, this.childeren);
   final String name;

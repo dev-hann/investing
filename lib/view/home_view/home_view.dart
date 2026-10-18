@@ -44,11 +44,7 @@ class HomeView extends ConsumerWidget {
             icon: Icon(Icons.calendar_month),
             label: 'Event',
           ),
-          // BottomNavigationBarItem(
-          //   icon: Icon(Icons.filter_list),
-          //   label: "Screener",
-          // ),
-          NavigationDestination(icon: Icon(Icons.map), label: 'Map'),
+          NavigationDestination(icon: Icon(Icons.query_stats), label: 'Market'),
           NavigationDestination(icon: Icon(Icons.person), label: 'Setting'),
         ],
       ),

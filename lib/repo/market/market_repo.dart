@@ -7,7 +7,9 @@ import 'package:investing/data/service/market_service.dart';
 import 'package:investing/model/market.dart';
 import 'package:investing/model/market_status.dart';
 import 'package:investing/model/quote.dart';
+import 'package:investing/model/stock/stock.dart';
 import 'package:investing/repo/repo.dart';
+import 'package:investing/util/number_format.dart';
 part 'market_impl.dart';
 
 abstract class MarketRepo extends Repo {
@@ -18,6 +20,9 @@ abstract class MarketRepo extends Repo {
   Future<Map<String, List<double>>> requestChartData(List<String> symbolList);
 
   Future<MarketStatus> requestMarketStatus();
+
+  /// Top movers (gainers / losers / most active) from the Nasdaq screener.
+  Future<List<Stock>> requestMovers(MarketMoverCategory category);
 
   /// Whether Alpaca credentials were provided via `--dart-define`.
   bool get isRealTimeConfigured;

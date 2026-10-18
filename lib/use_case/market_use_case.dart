@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:investing/model/market.dart';
 import 'package:investing/model/market_status.dart';
+import 'package:investing/model/stock/stock.dart';
 import 'package:investing/repo/market/market_repo.dart';
 import 'package:investing/use_case/use_case.dart';
 
@@ -67,6 +68,10 @@ class MarketUseCase extends UseCase<MarketRepo> {
 
   Future<MarketStatus> requestMarketStatus() {
     return repo.requestMarketStatus();
+  }
+
+  Future<List<Stock>> requestMovers(MarketMoverCategory category) {
+    return repo.requestMovers(category);
   }
 }
 

@@ -4,6 +4,7 @@ import 'package:investing/controller/market_controller.dart';
 import 'package:investing/model/market.dart';
 import 'package:investing/model/market_status.dart';
 import 'package:investing/model/quote.dart';
+import 'package:investing/model/stock/stock.dart';
 import 'package:investing/repo/market/market_repo.dart';
 import 'package:investing/use_case/market_use_case.dart';
 
@@ -42,6 +43,11 @@ class _FakeMarketRepo extends MarketRepo {
 
   @override
   Future<MarketStatus> requestMarketStatus() {
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<List<Stock>> requestMovers(MarketMoverCategory category) {
     throw UnimplementedError();
   }
 
