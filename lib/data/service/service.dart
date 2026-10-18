@@ -1,6 +1,7 @@
 library;
 
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 
 part './news_service.dart';
 part './stock_service.dart';
@@ -33,7 +34,7 @@ abstract class IVService {
       );
     } catch (e) {
       if (e is DioException) {
-        print("URL: ${e.requestOptions.uri}");
+        debugPrint("URL: ${e.requestOptions.uri}");
       }
       rethrow;
     }

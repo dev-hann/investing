@@ -1,8 +1,11 @@
 # Investing
 
-Let's make Money with `Investing` APP.
+Let's make Money with `Investing` APP — a Flutter stock market information app powered by the Nasdaq public API.
 
-<img src="https://github.com/yoehwan/investing/blob/main/screenshot/4.jpg?raw=true" width="30%"> <img src="https://github.com/yoehwan/investing/blob/main/screenshot/1.jpg?raw=true" width="30%"> <img src="https://github.com/yoehwan/investing/blob/main/screenshot/3.jpg?raw=true" width="30%"> <img src="https://github.com/yoehwan/investing/blob/main/screenshot/5.jpg?raw=true" width="30%"> <img src="https://github.com/yoehwan/investing/blob/main/screenshot/6.jpg?raw=true" width="30%"> <img src="https://github.com/yoehwan/investing/blob/main/screenshot/7.jpg?raw=true" width="30%"> <img src="https://github.com/yoehwan/investing/blob/main/screenshot/9.jpg?raw=true" width="30%">
+[![CI](https://github.com/dev-hann/investing/actions/workflows/ci.yml/badge.svg)](https://github.com/dev-hann/investing/actions/workflows/ci.yml)
+[![Release](https://github.com/dev-hann/investing/actions/workflows/release.yml/badge.svg)](https://github.com/dev-hann/investing/actions/workflows/release.yml)
+
+<img src="screenshot/4.jpg" width="30%"> <img src="screenshot/1.jpg" width="30%"> <img src="screenshot/3.jpg" width="30%"> <img src="screenshot/5.jpg" width="30%"> <img src="screenshot/6.jpg" width="30%"> <img src="screenshot/7.jpg" width="30%"> <img src="screenshot/9.jpg" width="30%">
 
 ## Features
 
@@ -25,7 +28,7 @@ Let's make Money with `Investing` APP.
 
 ### Event Calendar
 
-* Econmics
+* Economics
 * Earnings
 * Dividends
 
@@ -35,35 +38,74 @@ Let's make Money with `Investing` APP.
 
 ### Setting
 
-* Screener(Work In Progress)
+* Screener (Work In Progress)
+
+## Getting Started
+
+### Prerequisites
+
+* Flutter `3.47.x` (stable) — includes Dart `3.13`
+* JDK 17 (Android builds use AGP 8.13 / Gradle 8.14.3)
+* Android SDK (for Android targets)
+
+### Run
+
+```bash
+git clone https://github.com/dev-hann/investing.git
+cd investing
+flutter pub get
+flutter run
+```
+
+### Verify
+
+```bash
+flutter analyze   # must report 0 errors
+flutter test
+flutter build apk --debug
+```
+
+## Project Structure
+
+```
+lib/
+├── main.dart            # GetMaterialApp entry + dependency bindings
+├── const/               # App constants (colors)
+├── controller/          # GetX controllers (one per feature screen)
+├── use_case/            # Use cases bridging controllers and repos
+├── repo/                # Repository interfaces + implementations (part-of)
+├── data/
+│   ├── service/         # HTTP services (dio) → api.nasdaq.com
+│   └── db/              # Local storage (Hive CE)
+├── model/               # Domain models (Equatable, fromMap factories)
+├── view/                # Feature screens
+├── widget/              # Shared widgets
+└── util/                # Formatting helpers
+```
+
+Layering and data flow are documented in [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
+Architectural decisions are recorded as ADRs in [docs/adr/](docs/adr/).
+
+## Release & Deployment
+
+Releases are fully automated via GitHub Actions:
+
+1. Every push to `main` / PR runs **CI** (analyze + test + debug build).
+2. Pushing a version tag builds a signed release APK and publishes it to GitHub Releases:
+
+```bash
+git tag v1.0.1
+git push origin v1.0.1
+```
+
+Release signing uses a dedicated keystore stored in GitHub Secrets (`KEYSTORE_BASE64`, `KEYSTORE_PASSWORD`, `KEY_ALIAS`, `KEY_PASSWORD`). Local builds fall back to debug signing when `android/key.properties` is absent.
 
 ## Future Work
 
 * RealTime Update
 * Improve Chart View
+* Screener
 
 ## License
 
-```text
-MIT License
-
-Copyright (c) 2023 Han (한)
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-```
+[MIT](License) — Copyright (c) 2023 Han (한)
