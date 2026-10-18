@@ -1,3 +1,4 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:investing/model/market.dart';
 import 'package:investing/model/market_status.dart';
 import 'package:investing/repo/market/market_repo.dart';
@@ -51,3 +52,7 @@ class MarketUseCase extends UseCase<MarketRepo> {
     return MarketStatus.fromMap(res as Map<String, dynamic>);
   }
 }
+
+final marketUseCaseProvider = Provider(
+  (ref) => MarketUseCase(ref.watch(marketRepoProvider)),
+);

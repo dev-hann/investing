@@ -1,3 +1,3 @@
-import 'package:investing/repo/setting/setting_repo.dart';
+part of 'setting_repo.dart';
 
 class SettingImpl extends SettingRepo {}

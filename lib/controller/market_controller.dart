@@ -1,43 +1,61 @@
 import 'dart:async';
 import 'dart:math';
 
-import 'package:get/get.dart';
-import 'package:investing/controller/controller.dart';
+import 'package:equatable/equatable.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:investing/model/market.dart';
 import 'package:investing/model/market_status.dart';
 import 'package:investing/use_case/market_use_case.dart';
+import 'package:investing/widget/snackbar.dart';
 
-class MarketController extends Controller<MarketUseCase> {
-  MarketController(super.useCase);
+class MarketState extends Equatable {
+  const MarketState({
+    this.marketDataList = const [],
+    this.marketPercentData = const {},
+    this.marketStatus,
+  });
 
-  static MarketController find() => Get.find<MarketController>();
+  final List<MarketData> marketDataList;
+  final Map<String, double> marketPercentData;
+  final MarketStatus? marketStatus;
+
+  MarketState copyWith({
+    List<MarketData>? marketDataList,
+    Map<String, double>? marketPercentData,
+    MarketStatus? marketStatus,
+  }) {
+    return MarketState(
+      marketDataList: marketDataList ?? this.marketDataList,
+      marketPercentData: marketPercentData ?? this.marketPercentData,
+      marketStatus: marketStatus ?? this.marketStatus,
+    );
+  }
 
   @override
-  void onReady() {
-    // refreshMarketStatus().then((value) {
-    //   final marketStatusValue = marketStatus.value!;
-    //   if (marketStatusValue.isOpened) {
-    //     return refreshMarketPercentRealTimeData();
-    //   }
-    //   return refreshMarketPercentData();
-    // });
+  List<Object?> get props => [marketDataList, marketPercentData, marketStatus];
+}
+
+class MarketController extends Notifier<MarketState> {
+  late final MarketUseCase useCase;
+  final Map<String, List<double>> marketChartData = {};
+
+  @override
+  MarketState build() {
+    useCase = ref.watch(marketUseCaseProvider);
     unawaited(refreshMarketData());
-    super.onReady();
+    return const MarketState();
   }
 
-  final RxList<MarketData> marketDataList = RxList();
   Future<void> refreshMarketData() async {
     final data = await useCase.requestMarketData();
-    marketDataList(data);
+    state = state.copyWith(marketDataList: data);
   }
 
-  final RxMap<String, double> marketPercentData = RxMap();
   Future<void> refreshMarketPercentData() async {
     final data = await useCase.requestMarketPercentData();
-    marketPercentData(data);
+    state = state.copyWith(marketPercentData: data);
   }
 
-  final RxMap<String, List<double>> marketChartData = RxMap();
   Future<Map<String, List<double>>> requestMarketChartData(
     List<String> symbolList,
   ) async {
@@ -66,7 +84,7 @@ class MarketController extends Controller<MarketUseCase> {
   }
 
   Future<void> refreshMarketPercentRealTimeData() async {
-    Map<String, double> percentData = marketPercentData;
+    Map<String, double> percentData = state.marketPercentData;
     if (percentData.isEmpty) {
       percentData = await useCase.requestMarketPercentData();
     }
@@ -80,27 +98,30 @@ class MarketController extends Controller<MarketUseCase> {
       final data = await useCase.refreshMarketPercentRealTimeData(tmpList);
       map.addEntries(data.entries);
     }
-    marketPercentData(map);
+    state = state.copyWith(marketPercentData: map);
     await Future<void>.delayed(const Duration(seconds: 5));
     unawaited(refreshMarketPercentRealTimeData());
   }
 
   // MarketStatus
-  final Rxn<MarketStatus?> marketStatus = Rxn();
-  late Timer _marketTimer;
+  Timer? _marketTimer;
+
   Future<void> refreshMarketStatus() async {
     final status = await useCase.requestMarketStatus();
-    marketStatus(status);
+    state = state.copyWith(marketStatus: status);
     if (!status.isOpened) {
       final now = DateTime.now();
       final leftDuration = now.difference(status.preMarketOpen);
       _marketTimer = Timer.periodic(leftDuration, (_) {
         // Open Market!
         unawaited(refreshMarketStatus());
-        _marketTimer.cancel();
+        _marketTimer?.cancel();
       });
       return;
     }
-    Get.snackbar('Market Status', 'Market is Opened!');
+    showIVSnackbar('Market Status', 'Market is Opened!');
   }
 }
+
+final marketControllerProvider =
+    NotifierProvider<MarketController, MarketState>(MarketController.new);

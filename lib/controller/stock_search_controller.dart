@@ -1,19 +1,24 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:investing/controller/controller.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:investing/model/stock/stock.dart';
 import 'package:investing/use_case/stock_use_case.dart';
 
-class StockSearchController extends Controller<StockUseCase> {
-  StockSearchController(super.useCase);
-  static StockSearchController find() => Get.find();
+class StockSearchController extends Notifier<List<Stock>?> {
   final TextEditingController queryController = TextEditingController();
-  List<Stock>? searchList;
+
+  @override
+  List<Stock>? build() {
+    ref.onDispose(queryController.dispose);
+    return null;
+  }
 
   Future<void> searchStock(String query) async {
-    searchList = null;
-
-    searchList = await useCase.searchStock(query);
-    update();
+    final useCase = ref.read(stockUseCaseProvider);
+    state = await useCase.searchStock(query);
   }
 }
+
+final stockSearchControllerProvider =
+    NotifierProvider<StockSearchController, List<Stock>?>(
+      StockSearchController.new,
+    );

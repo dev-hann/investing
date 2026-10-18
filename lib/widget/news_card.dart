@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get/route_manager.dart';
 import 'package:investing/model/news.dart';
 
 class NewsCard extends StatefulWidget {
@@ -12,21 +11,27 @@ class NewsCard extends StatefulWidget {
 }
 
 class _NewsCardState extends State<NewsCard> {
-  Widget titleWidget() {
+  Widget titleWidget(BuildContext context) {
     return Text(
       widget.news.title,
       maxLines: 2,
       overflow: TextOverflow.ellipsis,
-      style: Get.textTheme.titleMedium,
+      style: Theme.of(context).textTheme.titleMedium,
     );
   }
 
-  Widget subtitleWidget() {
+  Widget subtitleWidget(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(widget.news.publisher, style: Get.textTheme.bodySmall),
-        Text(widget.news.created ?? '', style: Get.textTheme.bodySmall),
+        Text(
+          widget.news.publisher,
+          style: Theme.of(context).textTheme.bodySmall,
+        ),
+        Text(
+          widget.news.created ?? '',
+          style: Theme.of(context).textTheme.bodySmall,
+        ),
       ],
     );
   }
@@ -57,9 +62,9 @@ class _NewsCardState extends State<NewsCard> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          titleWidget(),
+          titleWidget(context),
           const SizedBox(height: 8.0),
-          subtitleWidget(),
+          subtitleWidget(context),
           headPhotWidget(),
         ],
       ),

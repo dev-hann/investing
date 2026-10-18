@@ -1,12 +1,12 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:investing/controller/market_controller.dart';
 import 'package:investing/widget/loading_widget.dart';
 import 'package:investing/widget/title_widget.dart';
 
-class SectorDetailView extends StatefulWidget {
+class SectorDetailView extends ConsumerStatefulWidget {
   const SectorDetailView({
     super.key,
     required this.sectorName,
@@ -16,20 +16,27 @@ class SectorDetailView extends StatefulWidget {
   final List<String> symbolList;
 
   @override
-  State<SectorDetailView> createState() => _SectorDetailViewState();
+  ConsumerState<SectorDetailView> createState() => _SectorDetailViewState();
 }
 
-class _SectorDetailViewState extends State<SectorDetailView> {
-  final MarketController controller = MarketController.find();
-
-  final RxMap<String, List<double>> chartData = RxMap();
+class _SectorDetailViewState extends ConsumerState<SectorDetailView> {
+  Map<String, List<double>> chartData = {};
 
   @override
   void initState() {
     super.initState();
-    unawaited(
-      controller.requestMarketChartData(widget.symbolList).then(chartData.call),
-    );
+    unawaited(_requestChartData());
+  }
+
+  Future<void> _requestChartData() async {
+    final data = await ref
+        .read(marketControllerProvider.notifier)
+        .requestMarketChartData(widget.symbolList);
+    if (mounted) {
+      setState(() {
+        chartData = data;
+      });
+    }
   }
 
   AppBar appBar() {
@@ -48,19 +55,22 @@ class _SectorDetailViewState extends State<SectorDetailView> {
         padding: const EdgeInsets.all(16.0),
         child: TitleWidget(
           title: Text(widget.sectorName),
-          child: Obx(() {
-            final data = chartData;
-            if (data.isEmpty) {
-              return const Center(child: IVLoadingWidget());
-            }
-            return Column(
-              children: chartData.entries
-                  .map(
-                    (entry) => item(symbol: entry.key, chartData: entry.value),
-                  )
-                  .toList(),
-            );
-          }),
+          child: Builder(
+            builder: (context) {
+              final data = chartData;
+              if (data.isEmpty) {
+                return const Center(child: IVLoadingWidget());
+              }
+              return Column(
+                children: chartData.entries
+                    .map(
+                      (entry) =>
+                          item(symbol: entry.key, chartData: entry.value),
+                    )
+                    .toList(),
+              );
+            },
+          ),
         ),
       ),
     );

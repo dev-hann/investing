@@ -10,6 +10,7 @@ ADRs capture *why* the codebase looks the way it does. Each record is immutable 
 | [0002](0002-dart3-migration.md) | Migrate to Dart 3 with community package forks | Accepted | 2026-10-18 |
 | [0003](0003-treemap-any-treemap.md) | Replace `treemap` with `any_treemap` for the market heatmap | Accepted | 2026-10-18 |
 | [0004](0004-github-actions-release-signing.md) | Tag-driven GitHub Actions releases with dedicated signing keystore | Accepted | 2026-10-18 |
+| [0005](0005-getx-to-riverpod.md) | Replace GetX with Riverpod for state management and DI | Accepted | 2026-10-18 |
 
 ## Creating a new ADR
 

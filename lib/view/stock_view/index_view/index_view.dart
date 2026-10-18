@@ -2,9 +2,9 @@ import 'dart:async';
 
 import 'package:auto_size_text_plus/auto_size_text_plus.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:investing/const/color.dart';
 import 'package:investing/model/stock/stock.dart';
+import 'package:investing/util/navigator.dart';
 import 'package:investing/util/number_format.dart';
 import 'package:investing/view/stock_view/detail_view/stock_detail_view.dart';
 import 'package:investing/widget/shimmer.dart';
@@ -15,18 +15,25 @@ class IndexView extends StatelessWidget {
   const IndexView({super.key, required this.indexList});
   final List<Stock>? indexList;
 
-  Widget loadingItem() {
-    final width = Get.width / 2.5;
+  double itemWidth(BuildContext context) {
+    return MediaQuery.sizeOf(context).width / 2.5;
+  }
+
+  Widget loadingItem({required double width}) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 4.0),
       child: IVShimmer(width: width, height: width),
     );
   }
 
-  Widget item({required Stock index}) {
+  Widget item({
+    required BuildContext context,
+    required Stock index,
+    required double width,
+  }) {
     return GestureDetector(
       onTap: () {
-        unawaited(Get.to<void>(StockDetailView(stock: index)));
+        unawaited(pushView(context, StockDetailView(stock: index)));
       },
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 4.0),
@@ -36,7 +43,7 @@ class IndexView extends StatelessWidget {
             borderRadius: BorderRadius.circular(16.0),
           ),
           child: SizedBox(
-            width: Get.width / 2.5,
+            width: width,
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Builder(
@@ -98,15 +105,21 @@ class IndexView extends StatelessWidget {
         scrollDirection: Axis.horizontal,
         child: Builder(
           builder: (context) {
+            final width = itemWidth(context);
             final list = indexList;
             if (list == null) {
               return Row(
                 children: [
-                  for (int index = 0; index < 10; ++index) loadingItem(),
+                  for (int index = 0; index < 10; ++index)
+                    loadingItem(width: width),
                 ],
               );
             }
-            return Row(children: list.map((e) => item(index: e)).toList());
+            return Row(
+              children: list
+                  .map((e) => item(context: context, index: e, width: width))
+                  .toList(),
+            );
           },
         ),
       ),

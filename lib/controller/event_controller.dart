@@ -1,42 +1,55 @@
 import 'dart:async';
 
+import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:investing/controller/controller.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:investing/model/calendar/calendar_event.dart';
 import 'package:investing/use_case/event_use_case.dart';
 
 typedef CalendarEventData = Map<String, List<CalendarEvent>>;
 
-class EventController extends Controller<EventUseCase> {
-  EventController(super.useCase);
-  static EventController find() => Get.find<EventController>();
-  final Map<CalendarEventType, CalendarEventData> eventData = {};
-  DateTime dateTime = DateTime.now();
-  CalendarEventType eventType = CalendarEventType.economics;
-  List<CalendarEvent>? eventList;
-  final ScrollController scrollController = ScrollController();
+class EventState extends Equatable {
+  const EventState({
+    required this.dateTime,
+    required this.eventType,
+    this.eventList,
+  });
+
+  final DateTime dateTime;
+  final CalendarEventType eventType;
+  final List<CalendarEvent>? eventList;
 
   @override
-  void onReady() {
-    unawaited(refreshEventList());
-    super.onReady();
+  List<Object?> get props => [dateTime, eventType, eventList];
+}
+
+class EventController extends Notifier<EventState> {
+  late final EventUseCase useCase;
+  final ScrollController scrollController = ScrollController();
+  final Map<CalendarEventType, CalendarEventData> eventData = {};
+
+  @override
+  EventState build() {
+    useCase = ref.watch(eventUseCaseProvider);
+    ref.onDispose(scrollController.dispose);
+    unawaited(Future<void>.microtask(refreshEventList));
+    return EventState(
+      dateTime: DateTime.now(),
+      eventType: CalendarEventType.economics,
+    );
   }
 
   Future<void> refreshEventList({
     CalendarEventType? newEventType,
     DateTime? newDateTime,
   }) async {
-    final e = newEventType ?? eventType;
-    final d = newDateTime ?? dateTime;
-    dateTime = d;
-    eventType = e;
+    final e = newEventType ?? state.eventType;
+    final d = newDateTime ?? state.dateTime;
+    state = EventState(dateTime: d, eventType: e);
 
     if (!eventData.containsKey(e)) {
       eventData[e] = {};
     }
-    eventList = null;
-    update();
     final List<CalendarEvent> tmpList = [];
     final data = eventData[e]!;
     final key = CalendarEvent.key(d);
@@ -60,8 +73,7 @@ class EventController extends Controller<EventUseCase> {
       eventData.update(e, (value) => data);
       tmpList.addAll(eventList);
     }
-    eventList = tmpList;
-    update();
+    state = EventState(dateTime: d, eventType: e, eventList: tmpList);
   }
 
   void jumpToTop() {
@@ -72,3 +84,7 @@ class EventController extends Controller<EventUseCase> {
     );
   }
 }
+
+final eventControllerProvider = NotifierProvider<EventController, EventState>(
+  EventController.new,
+);

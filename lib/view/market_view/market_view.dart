@@ -1,20 +1,13 @@
 import 'package:any_treemap/any_treemap.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:investing/const/color.dart';
 import 'package:investing/controller/market_controller.dart';
 import 'package:investing/model/market.dart';
 
 // TODO: (Future Work) make view more compatable (like Finviz HeatMap)
-class MarketView extends StatefulWidget {
+class MarketView extends ConsumerWidget {
   const MarketView({super.key});
-
-  @override
-  State<MarketView> createState() => _MarketViewState();
-}
-
-class _MarketViewState extends State<MarketView> {
-  final MarketController controller = MarketController.find();
 
   AppBar appBar() {
     return AppBar(title: const Text('Market Map'));
@@ -58,48 +51,51 @@ class _MarketViewState extends State<MarketView> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final state = ref.watch(marketControllerProvider);
+    final list = state.marketDataList;
+    final percentData = state.marketPercentData;
     return Scaffold(
       appBar: appBar(),
-      body: Obx(() {
-        final list = controller.marketDataList;
-        final percentData = controller.marketPercentData;
-        if (list.isEmpty) {
-          return const SizedBox.shrink();
-        }
-        final tree = TreemapNormalizer.normalize(
-          TreemapNode<String>(
-            key: 'market',
-            children: [
-              for (final sector in list)
-                sectorNode(
-                  name: sector.name,
-                  children: sector.childeren,
-                  percentData: percentData,
-                ),
-            ],
-          ),
-        );
-        return RotatedBox(
-          quarterTurns: 1,
-          child: TreemapChart<String>(
-            tree: tree,
-            tiles: TreemapTiles<String>(
-              appearance: TreemapAppearanceResolver<String>(
-                colorScale: TreemapColorScale.exact(
-                  const {},
-                  fallback: IVColor.blueGrey,
+      body: Builder(
+        builder: (context) {
+          if (list.isEmpty) {
+            return const SizedBox.shrink();
+          }
+          final tree = TreemapNormalizer.normalize(
+            TreemapNode<String>(
+              key: 'market',
+              children: [
+                for (final sector in list)
+                  sectorNode(
+                    name: sector.name,
+                    children: sector.childeren,
+                    percentData: percentData,
+                  ),
+              ],
+            ),
+          );
+          return RotatedBox(
+            quarterTurns: 1,
+            child: TreemapChart<String>(
+              tree: tree,
+              tiles: TreemapTiles<String>(
+                appearance: TreemapAppearanceResolver<String>(
+                  colorScale: TreemapColorScale.exact(
+                    const {},
+                    fallback: IVColor.blueGrey,
+                  ),
                 ),
               ),
+              labels: TreemapCanvasLabels<String>(),
+              layout: const TreemapLayoutConfig(
+                innerSpacing: 1,
+                outerPadding: TreemapInsets.all(1),
+              ),
             ),
-            labels: TreemapCanvasLabels<String>(),
-            layout: const TreemapLayoutConfig(
-              innerSpacing: 1,
-              outerPadding: TreemapInsets.all(1),
-            ),
-          ),
-        );
-      }),
+          );
+        },
+      ),
     );
   }
 }

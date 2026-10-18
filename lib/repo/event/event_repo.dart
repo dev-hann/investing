@@ -1,5 +1,6 @@
 library;
 
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:investing/data/service/event_service.dart';
 import 'package:investing/repo/repo.dart';
 import 'package:investing/util/date_time_format.dart';
@@ -10,3 +11,5 @@ abstract class EventRepo extends Repo {
   Future<List<dynamic>> requestEarningEventList(DateTime dateTime);
   Future<List<dynamic>> requestDvidendEventList(DateTime dateTime);
 }
+
+final eventRepoProvider = Provider<EventRepo>((ref) => EventImpl());

@@ -1,18 +1,14 @@
-import 'package:get/get.dart';
-import 'package:investing/controller/controller.dart';
-import 'package:investing/use_case/home_use_case.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 enum PageType { watchList, news, event, map, setting }
 
-class HomeController extends Controller<HomeUseCase> {
-  HomeController(super.useCase);
-  static HomeController find() => Get.find();
+class HomeController extends Notifier<PageType> {
+  @override
+  PageType build() => PageType.watchList;
 
-  int _currentIndex = 0;
-  PageType get currentPage => PageType.values[_currentIndex];
-
-  void moveToPage(PageType pageType) {
-    _currentIndex = pageType.index;
-    update();
-  }
+  set currentPage(PageType pageType) => state = pageType;
 }
+
+final homeControllerProvider = NotifierProvider<HomeController, PageType>(
+  HomeController.new,
+);

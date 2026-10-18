@@ -4,7 +4,7 @@ Guidelines for AI coding assistants working in this repository. Follow these rul
 
 ## Project
 
-`investing` — a Flutter stock market information app (Android) backed by the Nasdaq public API (`api.nasdaq.com`). State management: GetX. Local storage: Hive CE. Networking: dio.
+`investing` — a Flutter stock market information app (Android) backed by the Nasdaq public API (`api.nasdaq.com`). State management: Riverpod (`flutter_riverpod`). Local storage: Hive CE. Networking: dio.
 
 ## Commands
 
@@ -22,7 +22,7 @@ flutter build apk --release  # signed release build (needs android/key.propertie
 `analysis_options.yaml` enables strict analyzer modes — `strict-casts`, `strict-inference`, `strict-raw-types` — plus an extended lint set on top of `flutter_lints`. Rules are never disabled to silence findings; fix the code instead.
 
 * **JSON boundary**: values from `dynamic` JSON must be cast explicitly (`as String`, `as Map<String, dynamic>`, `as num` + `.toDouble()`). Preserve nullability exactly (`as String?` when the receiver is nullable). Bind through a typed local before indexing.
-* **Fire-and-forget futures**: wrap intentional ones in `unawaited(...)` (`dart:async`). Navigation: `unawaited(Get.to<void>(...))`.
+* **Fire-and-forget futures**: wrap intentional ones in `unawaited(...)` (`dart:async`). Navigation: `unawaited(pushView(context, ...))` from `util/navigator.dart`.
 * **No raw generics**: `List()`/`Map`/`Future<List>` must carry type arguments (`List<Stock>()`, `Future<List<dynamic>>`).
 * **Callbacks**: type as `void Function(Param)` (or `Future<void> Function(...)` when awaited), never bare `Function`.
 * **Formatting**: `dart format` defaults (80 cols, trailing commas). CI rejects unformatted code.
@@ -36,10 +36,10 @@ Deployment is tag-driven: push a `v*` tag to trigger the Release workflow (GitHu
 Data flows one way. Never skip a layer or let a lower layer reference an upper one.
 
 ```
-view/ (Widgets)
-  → controller/ (GetX controllers, Rx state)
+view/ (Widgets — ConsumerWidget/ConsumerStatefulWidget, ref.watch)
+  → controller/ (Riverpod Notifiers, immutable state + NotifierProvider)
     → use_case/ (feature orchestration)
-      → repo/ (interfaces + impls, part-of structure)
+      → repo/ (interfaces + impls, part-of structure; xxxRepoProvider declared here)
         → data/service/ (dio HTTP)  +  data/db/ (Hive CE)
           → api.nasdaq.com / local box
 ```
@@ -56,7 +56,8 @@ Rules:
 * **equatable is pinned to 2.x**: `fl_chart 1.x` requires `equatable ^2.0.7`. Do not bump to 3.x until fl_chart allows it.
 * **Android toolchain is pinned**: AGP 8.13.0 / Gradle 8.14.3 / Kotlin 2.4.0. AGP 9.x breaks `flutter_inappwebview_android 1.1.3` (removed `proguard-android.txt` support). Only bump after verifying that plugin released a fix.
 * **Dart3-incompatible packages were replaced** — do not reintroduce: `hive` (→ `hive_ce`), `pull_to_refresh` (→ `pull_to_refresh_flutter3`), `auto_size_text` (→ `auto_size_text_plus`), `treemap` (→ `any_treemap`).
-* **Full-app widget tests hang**: controllers start network/Hive IO in `onInit`, which deadlocks flutter_test's fake async. Test models/leaf widgets instead, or wrap real IO in `tester.runAsync`.
+* **Full-app widget tests hang**: notifiers (news/event/market/stock) start network/Hive IO in `build()`, which deadlocks flutter_test's fake async. Test pure notifiers with a bare `ProviderContainer` (see `test/controller_test.dart`), test models/leaf widgets, or wrap real IO in `tester.runAsync`.
+* **Notifier/use-case convention**: notifiers bind `late final useCase = ref.watch(xxxUseCaseProvider)` in `build()` — this only works because use-case providers are static (`Provider`, never rebuilt). Never make them depend on mutable state, or `late final` reassignment throws.
 
 ## Decision records (ADR)
 

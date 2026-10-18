@@ -1,3 +1,4 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:investing/model/news.dart';
 import 'package:investing/model/stock/stock.dart';
 import 'package:investing/repo/news/news_repo.dart';
@@ -31,3 +32,7 @@ class NewsUseCase extends UseCase<NewsRepo> {
         .toList();
   }
 }
+
+final newsUseCaseProvider = Provider(
+  (ref) => NewsUseCase(ref.watch(newsRepoProvider)),
+);

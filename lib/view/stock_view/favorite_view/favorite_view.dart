@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:get/get.dart';
 import 'package:investing/const/color.dart';
 import 'package:investing/model/stock/stock.dart';
 import 'package:investing/util/number_format.dart';
@@ -37,9 +36,9 @@ class FavoriteView extends StatelessWidget {
     );
   }
 
-  Widget emptyWidget() {
+  Widget emptyWidget(BuildContext context) {
     return SizedBox(
-      height: Get.height / 3,
+      height: MediaQuery.sizeOf(context).height / 3,
       child: const Center(child: Text('Favorite List is Empty!')),
     );
   }
@@ -75,7 +74,7 @@ class FavoriteView extends StatelessWidget {
               return loadingWidget();
             }
             if (list.isEmpty) {
-              return emptyWidget();
+              return emptyWidget(context);
             }
             return ListView.separated(
               physics: const NeverScrollableScrollPhysics(),

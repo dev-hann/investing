@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import 'package:get/get.dart';
-import 'package:investing/controller/controller.dart';
+import 'package:equatable/equatable.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:investing/model/date_time_range.dart';
 import 'package:investing/model/stock/stock.dart';
 import 'package:investing/model/stock/stock_chart.dart';
@@ -10,35 +10,67 @@ import 'package:investing/model/stock/stock_dividend.dart';
 import 'package:investing/model/stock/stock_financial.dart';
 import 'package:investing/use_case/stock_use_case.dart';
 
-class StockController extends Controller<StockUseCase> {
-  StockController(super.useCase);
-  static StockController find() => Get.find();
+class StockState extends Equatable {
+  const StockState({this.favoriteList, this.indexList = const []});
+
+  /// `null` means the list has not been loaded yet (loading UI).
+  final List<Stock>? favoriteList;
+  final List<Stock> indexList;
+
+  StockState copyWith({List<Stock>? favoriteList, List<Stock>? indexList}) {
+    return StockState(
+      favoriteList: favoriteList ?? this.favoriteList,
+      indexList: indexList ?? this.indexList,
+    );
+  }
 
   @override
-  void onReady() async {
+  List<Object?> get props => [favoriteList, indexList];
+}
+
+class StockController extends Notifier<StockState> {
+  late final StockUseCase useCase;
+  StreamSubscription<List<Stock>>? _favoriteSubscription;
+
+  static List<Stock> defaultIndexList() => [
+    Stock.nasdaq100(),
+    Stock.nasdaq(),
+    Stock.snp(),
+    Stock.dow(),
+    Stock.treasury2Y(),
+    Stock.treasury20Y(),
+    Stock.gold(),
+    Stock.copper(),
+    Stock.naturalGas(),
+    Stock.crudeOil(),
+  ];
+
+  @override
+  StockState build() {
+    useCase = ref.watch(stockUseCaseProvider);
+    ref.onDispose(() => unawaited(_favoriteSubscription?.cancel()));
+    unawaited(_init());
+    return StockState(indexList: defaultIndexList());
+  }
+
+  Future<void> _init() async {
     await useCase.init();
-    super.onReady();
-    unawaited(_initIndexList());
     unawaited(_initFavoriteList());
+    unawaited(_initIndexList());
   }
 
   // Favorite
-  List<Stock>? _favoriteList;
-  List<Stock>? get favoriteList => _favoriteList;
   bool isContains(Stock stock) {
-    if (_favoriteList == null) {
+    final list = state.favoriteList;
+    if (list == null) {
       return false;
     }
-    final index = _favoriteList!.indexWhere(
-      (element) => element.isEquals(stock),
-    );
-    return index != -1;
+    return list.any((element) => element.isEquals(stock));
   }
 
   Future<void> _initFavoriteList() async {
-    useCase.favoriteListStream().listen((event) async {
-      _favoriteList = event;
-      update();
+    _favoriteSubscription = useCase.favoriteListStream().listen((event) {
+      state = state.copyWith(favoriteList: event);
     });
     unawaited(refreshFavoriteList());
   }
@@ -47,8 +79,7 @@ class StockController extends Controller<StockUseCase> {
     List<Stock> list = useCase.loadStockList();
     list = await useCase.requestStockList(list);
     list.sort();
-    _favoriteList = list;
-    update();
+    state = state.copyWith(favoriteList: list);
   }
 
   void refreshRealTimeFavoriteList() async {
@@ -56,13 +87,6 @@ class StockController extends Controller<StockUseCase> {
     await Future<void>.delayed(const Duration(seconds: 2));
     refreshRealTimeFavoriteList();
   }
-
-  // Future updateFavoriteList(List<Stock> list) async {
-  //   favoriteList(list);
-  //   for (final stock in list) {
-  //     updateFavoriteStock(stock);
-  //   }
-  // }
 
   Future<void> toggleFavoriteStock(Stock stock) async {
     if (isContains(stock)) {
@@ -75,27 +99,13 @@ class StockController extends Controller<StockUseCase> {
   // Index
   //TODO: make it edit by option button
 
-  List<Stock> _indexList = RxList([
-    Stock.nasdaq100(),
-    Stock.nasdaq(),
-    Stock.snp(),
-    Stock.dow(),
-    Stock.treasury2Y(),
-    Stock.treasury20Y(),
-    Stock.gold(),
-    Stock.copper(),
-    Stock.naturalGas(),
-    Stock.crudeOil(),
-  ]);
-  List<Stock> get indexList => _indexList;
   Future<void> _initIndexList() async {
     await refreshIndexList();
   }
 
   Future<void> refreshIndexList() async {
-    final res = await useCase.requestStockList(indexList);
-    _indexList = res;
-    update();
+    final res = await useCase.requestStockList(state.indexList);
+    state = state.copyWith(indexList: res);
   }
 
   Future<void> refreshRealTimeIndexList() async {
@@ -138,3 +148,7 @@ class StockController extends Controller<StockUseCase> {
     return useCase.reqeustStockCompany(stock.symbol);
   }
 }
+
+final stockControllerProvider = NotifierProvider<StockController, StockState>(
+  StockController.new,
+);

@@ -1,3 +1,4 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:investing/model/date_time_range.dart';
 import 'package:investing/model/stock/stock.dart';
 import 'package:investing/model/stock/stock_chart.dart';
@@ -164,3 +165,7 @@ class StockUseCase extends UseCase<StockRepo> {
     }
   }
 }
+
+final stockUseCaseProvider = Provider(
+  (ref) => StockUseCase(ref.watch(stockRepoProvider)),
+);

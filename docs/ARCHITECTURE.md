@@ -8,9 +8,9 @@ The app is a single-module Flutter application structured as a strict one-way la
 
 ```
 ┌────────────────────────────────────────────────────────────┐
-│ view/            Feature screens (StatefulWidget, Obx)     │
+│ view/            Feature screens (ConsumerWidget, setState)│
 ├────────────────────────────────────────────────────────────┤
-│ controller/      GetX controllers — Rx state + actions     │
+│ controller/      Riverpod Notifiers — immutable state      │
 ├────────────────────────────────────────────────────────────┤
 │ use_case/        Feature orchestration, one class per feed │
 ├────────────────────────────────────────────────────────────┤
@@ -27,24 +27,25 @@ Dependencies point downward only. A repo must not import a controller; a service
 
 ### View (`lib/view/`)
 
-Screens grouped by feature (`stock_view/`, `news_view/`, `event_view/`, `market_view/`, `home_view/`, `setting_view/`). Views read controller state through `Obx`/`Get.find` and dispatch user actions to controller methods. Reusable components live in `lib/widget/`.
+Screens grouped by feature (`stock_view/`, `news_view/`, `event_view/`, `market_view/`, `home_view/`, `setting_view/`). Views watch provider state via `ref.watch` (`ConsumerWidget`/`ConsumerStatefulWidget`) and dispatch user actions with `ref.read(...Provider.notifier)`. Screen-local state uses plain `setState`. Navigation goes through the `pushView` helper (`util/navigator.dart`). Reusable components live in `lib/widget/`.
 
 ### Controller (`lib/controller/`)
 
-One `GetX` controller per feature. All controllers extend the project base class:
+One Riverpod `Notifier` per feature, colocated with its `NotifierProvider` in the same file. Notifiers obtain their use case by watching the layer's provider:
 
 ```dart
-abstract class Controller<T extends UseCase> extends GetxController {
-  Controller(this.useCase);
-  final T useCase;
-  Future get loading;           // completes when onReady fired
-  Future<O?> bottomSheet<O>(...);
-  Future<O> showOverlay<O>(...);
-  static T put<T extends Controller>(T controller); // Get.put wrapper
+class NewsController extends Notifier<List<News>> {
+  late final NewsUseCase useCase;
+
+  @override
+  List<News> build() {
+    useCase = ref.watch(newsUseCaseProvider); // static provider — build runs once
+    return [];
+  }
 }
 ```
 
-Controllers expose `Rx` state (`RxList`, `RxMap`, …), perform no HTTP calls themselves, and are registered in `main.dart` via `initialBinding: BindingsBuilder(...)`.
+State is an immutable class (`Equatable` + `copyWith`) for multi-field controllers (`StockState`, `MarketState`, `EventState`); single-value controllers use the value directly (`ThemeMode`, `PageType`, `List<News>`).
 
 ### Use case (`lib/use_case/`)
 
@@ -54,7 +55,7 @@ Thin orchestration layer. `abstract class UseCase<T extends Repo>` holds one rep
 
 Each domain has a library pair:
 
-* `xxx_repo.dart` — `abstract class XxxRepo extends Repo` (public contract) + imports shared by the implementation,
+* `xxx_repo.dart` — `abstract class XxxRepo extends Repo` (public contract) + imports shared by the implementation + the `xxxRepoProvider` declaration,
 * `xxx_impl.dart` — `class XxxImpl extends XxxRepo`, declared as `part of 'xxx_repo.dart';`.
 
 Repos map raw service responses into domain models (`model/`) and own caching policy (Hive box reads/writes, stream updates).
@@ -71,23 +72,23 @@ Equatable classes with `factory Xxx.fromMap(dynamic)` constructors. Parsing stop
 ## Data flow example — stock search
 
 ```
-StockSearchView (input)
-  → StockSearchController.search(query)
+StockSearchView (input, ConsumerWidget)
+  → StockSearchController.search(query)        [ref.read(...notifier)]
     → StockUseCase.searchStockList(query)
       → StockImpl.searchStockList(query)
         → StockService.searchStock(query)         [dio GET /api/search/site]
       ← List<Stock> (fromMap parsed)
-    ← Stream<List<Stock>>
-  ← Obx rebuild
+    ← state = result
+  ← ref.watch(stockSearchControllerProvider) rebuild
 ```
 
 ## App shell
 
-`main.dart` builds a `GetMaterialApp` with light/dark Material 3 themes (orange primary), registers all controllers in `initialBinding`, and shows `HomeView` as the tab shell over the feature views.
+`main.dart` wraps a `MaterialApp` in a `ProviderScope`, watches `settingControllerProvider` for `themeMode`, wires the global `scaffoldMessengerKey` (so controllers can show snackbars), and shows `HomeView` as the tab shell over the feature views.
 
 ## Testing
 
-Controllers start real network and Hive IO in `onInit`, so full-app widget tests deadlock under `flutter_test` fake async. Current suite covers model parsing (`test/widget_test.dart`). Prefer model/leaf-widget tests, or wrap real IO in `tester.runAsync` when adding tests.
+Pure notifiers (`SettingController`, `HomeController`) are unit-tested with a bare `ProviderContainer` (`test/controller_test.dart`). Notifiers that start network or Hive IO in `build()` (news, event, market, stock) deadlock `flutter_test` fake async the same way the old GetX controllers did — don't watch them in plain tests; test models/leaf widgets, or wrap real IO in `tester.runAsync`.
 
 ## Build & release
 

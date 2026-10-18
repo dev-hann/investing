@@ -1,41 +1,37 @@
 import 'dart:async';
 
-import 'package:get/get.dart';
-import 'package:investing/controller/controller.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:investing/model/news.dart';
 import 'package:investing/model/stock/stock.dart';
 import 'package:investing/use_case/news_use_case.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 
-class NewsController extends Controller<NewsUseCase> {
-  NewsController(super.repo);
-
-  static NewsController find() => Get.find<NewsController>();
-
-  @override
-  void onReady() {
-    super.onReady();
-    unawaited(refreshNewsList());
-  }
-
+class NewsController extends Notifier<List<News>> {
+  late final NewsUseCase useCase;
   final RefreshController refreshController = RefreshController();
-  final List<News> _newsList = [];
-  List<News> get newsList => _newsList;
 
   int _currentPage = 1;
 
+  @override
+  List<News> build() {
+    useCase = ref.watch(newsUseCaseProvider);
+    ref.onDispose(refreshController.dispose);
+    unawaited(Future<void>.microtask(refreshNewsList));
+    return [];
+  }
+
   Future<void> refreshNewsList() async {
     _currentPage = 1;
-    _newsList.clear();
+    state = [];
     final list = await useCase.requestlatestNewsList(_currentPage);
-    newsList.addAll(list);
+    state = list;
     refreshController.refreshCompleted();
   }
 
   Future<void> requestNextPageNewsList() async {
     _currentPage++;
     final list = await useCase.requestlatestNewsList(_currentPage);
-    _newsList.addAll(list);
+    state = [...state, ...list];
     refreshController.loadComplete();
   }
 
@@ -51,3 +47,7 @@ class NewsController extends Controller<NewsUseCase> {
     return useCase.searchStockNewsList(stock: stock, page: page);
   }
 }
+
+final newsControllerProvider = NotifierProvider<NewsController, List<News>>(
+  NewsController.new,
+);

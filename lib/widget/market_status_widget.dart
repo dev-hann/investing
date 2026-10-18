@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:investing/const/color.dart';
 import 'package:investing/controller/market_controller.dart';
 import 'package:investing/model/market_status.dart';
 
-class MarketStatusWidget extends StatelessWidget {
+class MarketStatusWidget extends ConsumerWidget {
   const MarketStatusWidget({super.key});
 
   Widget statusIcon({required bool isOpned}) {
@@ -37,22 +37,21 @@ class MarketStatusWidget extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
-    final controller = MarketController.find();
-    return Obx(() {
-      final status = controller.marketStatus.value;
-      if (status == null) {
-        return const SizedBox();
-      }
-      final isOpened = status.isOpened;
-      final type = status.type;
-      return Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          statusIcon(isOpned: isOpened),
-          statusText(isOpned: isOpened, type: type),
-        ],
-      );
-    });
+  Widget build(BuildContext context, WidgetRef ref) {
+    final status = ref.watch(
+      marketControllerProvider.select((state) => state.marketStatus),
+    );
+    if (status == null) {
+      return const SizedBox();
+    }
+    final isOpened = status.isOpened;
+    final type = status.type;
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        statusIcon(isOpned: isOpened),
+        statusText(isOpned: isOpened, type: type),
+      ],
+    );
   }
 }

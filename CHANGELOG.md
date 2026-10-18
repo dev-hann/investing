@@ -2,6 +2,22 @@
 
 All notable changes to this project are documented here. Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versioning follows SemVer with `v`-prefixed git tags that trigger automatic releases.
 
+## [Unreleased]
+
+### Changed
+
+- **State management migrated from GetX to Riverpod** ([ADR-0005](docs/adr/0005-getx-to-riverpod.md)): controllers are now `Notifier`s with immutable state classes; DI is a compile-checked provider graph declared per layer (`repo` → `use_case` → `controller`); `GetMaterialApp` → `MaterialApp` + `ProviderScope`; theme mode is provider state watched by `MaterialApp`.
+- Navigation moved from `Get.to`/`Get.back` to the `Navigator` (`pushView` helper in `util/navigator.dart`); dialogs via `showDialog`; bottom sheets via `showModalBottomSheet`; snackbars via global `scaffoldMessengerKey`.
+- Screen-local reactive state (`Rx`/`Obx` in views) converted to `setState`; reactive widgets are now `ConsumerWidget`/`ConsumerStatefulWidget`.
+
+### Added
+
+- Controller unit tests via `ProviderContainer` (`test/controller_test.dart`) — the first tests that exercise controllers without a widget tree.
+
+### Removed
+
+- `get` dependency.
+
 ## [1.0.0] — 2026-10-18
 
 ### Added

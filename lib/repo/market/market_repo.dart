@@ -1,5 +1,6 @@
 library;
 
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:investing/data/service/market_service.dart';
 import 'package:investing/repo/repo.dart';
 part './market_impl.dart';
@@ -15,3 +16,5 @@ abstract class MarketRepo extends Repo {
 
   Future<dynamic> requestMarketStatus();
 }
+
+final marketRepoProvider = Provider<MarketRepo>((ref) => MarketImpl());

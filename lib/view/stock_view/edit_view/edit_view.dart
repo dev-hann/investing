@@ -1,5 +1,6 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:investing/model/stock/stock.dart';
 import 'package:investing/widget/alert.dart';
 import 'package:investing/widget/stock_card.dart';
@@ -9,25 +10,33 @@ class EditView extends StatelessWidget {
     : itemListNotifier = ValueNotifier(itemList);
   final ValueNotifier<List<Stock>> itemListNotifier;
 
-  void deleteItem({required int index, required List<Stock> itemList}) async {
-    final res = await Get.dialog<bool>(
-      IVAlert(
-        content: const Text('Delete?'),
-        actions: [
-          ElevatedButton(
-            onPressed: () {
-              Get.back(result: true);
-            },
-            child: const Text('Delete'),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              Get.back(result: false);
-            },
-            child: const Text('Cancel'),
-          ),
-        ],
-      ),
+  Future<void> deleteItem({
+    required BuildContext context,
+    required int index,
+    required List<Stock> itemList,
+  }) async {
+    final navigator = Navigator.of(context);
+    final res = await showDialog<bool>(
+      context: context,
+      builder: (context) {
+        return IVAlert(
+          content: const Text('Delete?'),
+          actions: [
+            ElevatedButton(
+              onPressed: () {
+                navigator.pop(true);
+              },
+              child: const Text('Delete'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                navigator.pop(false);
+              },
+              child: const Text('Cancel'),
+            ),
+          ],
+        );
+      },
     );
     if (res == true) {
       final list = [...itemList]..removeAt(index);
@@ -46,7 +55,7 @@ class EditView extends StatelessWidget {
     itemListNotifier.value = list;
   }
 
-  AppBar appBar() {
+  AppBar appBar(BuildContext context) {
     return AppBar(
       title: const Text('Stock Edit View'),
       leading: IconButton(
@@ -57,7 +66,7 @@ class EditView extends StatelessWidget {
             final item = itemList[index];
             res.add(item.copyWith(order: index));
           }
-          Get.back(result: res);
+          Navigator.of(context).pop(res);
         },
         icon: const Icon(Icons.arrow_back),
       ),
@@ -67,7 +76,7 @@ class EditView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBar(),
+      appBar: appBar(context),
       body: ValueListenableBuilder<List<Stock>>(
         valueListenable: itemListNotifier,
         builder: (context, itemList, _) {
@@ -90,8 +99,14 @@ class EditView extends StatelessWidget {
                       child: const Icon(Icons.reorder),
                     ),
                     trailing: IconButton(
-                      onPressed: () async {
-                        deleteItem(index: index, itemList: itemList);
+                      onPressed: () {
+                        unawaited(
+                          deleteItem(
+                            context: context,
+                            index: index,
+                            itemList: itemList,
+                          ),
+                        );
                       },
                       icon: const Icon(Icons.delete),
                     ),

@@ -1,60 +1,25 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_ce_flutter/hive_flutter.dart';
 import 'package:investing/const/color.dart';
-import 'package:investing/controller/controller.dart';
-import 'package:investing/controller/event_controller.dart';
-import 'package:investing/controller/home_controller.dart';
-import 'package:investing/controller/market_controller.dart';
-import 'package:investing/controller/news_controller.dart';
 import 'package:investing/controller/setting_controller.dart';
-import 'package:investing/controller/stock_controller.dart';
-import 'package:investing/controller/stock_search_controller.dart';
-import 'package:investing/repo/event/event_repo.dart';
-import 'package:investing/repo/home/home_repo.dart';
-import 'package:investing/repo/market/market_repo.dart';
-import 'package:investing/repo/news/news_repo.dart';
-import 'package:investing/repo/setting/setting_impl.dart';
-import 'package:investing/repo/stock/stock_repo.dart';
-import 'package:investing/use_case/event_use_case.dart';
-import 'package:investing/use_case/home_use_case.dart';
-import 'package:investing/use_case/market_use_case.dart';
-import 'package:investing/use_case/news_use_case.dart';
-import 'package:investing/use_case/setting_use_case.dart';
-import 'package:investing/use_case/stock_use_case.dart';
 import 'package:investing/view/home_view/home_view.dart';
+import 'package:investing/widget/snackbar.dart';
 
 void main() async {
   await Hive.initFlutter();
-  runApp(const MyApp());
+  runApp(const ProviderScope(child: MyApp()));
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends ConsumerWidget {
   const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return GetMaterialApp(
-      initialBinding: BindingsBuilder<void>(() {
-        Controller.put<HomeController>(HomeController(HomeUseCase(HomeImpl())));
-        Controller.put<SettingController>(
-          SettingController(SettingUseCase(SettingImpl())),
-        );
-        final stockUseCase = StockUseCase(StockImpl());
-        Controller.put<StockController>(StockController(stockUseCase));
-        Controller.put<StockSearchController>(
-          StockSearchController(stockUseCase),
-        );
-        Controller.put<NewsController>(NewsController(NewsUseCase(NewsImpl())));
-        Controller.put<EventController>(
-          EventController(EventUseCase(EventImpl())),
-        );
-        Controller.put<MarketController>(
-          MarketController(MarketUseCase(MarketImpl())),
-        );
-      }),
+  Widget build(BuildContext context, WidgetRef ref) {
+    return MaterialApp(
+      scaffoldMessengerKey: scaffoldMessengerKey,
       debugShowCheckedModeBanner: false,
-      themeMode: ThemeMode.system,
+      themeMode: ref.watch(settingControllerProvider),
       darkTheme: ThemeData.dark().copyWith(
         primaryColor: IVColor.orange,
         tabBarTheme: const TabBarThemeData(

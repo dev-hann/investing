@@ -1,5 +1,6 @@
 library;
 
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:investing/data/db/data_base.dart';
 import 'package:investing/data/service/service.dart';
 import 'package:investing/model/date_time_range.dart';
@@ -39,3 +40,5 @@ abstract class StockRepo extends Repo {
 
   Future<dynamic> reqeustStockCompany(String symbol);
 }
+
+final stockRepoProvider = Provider<StockRepo>((ref) => StockImpl());
