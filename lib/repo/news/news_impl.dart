@@ -2,15 +2,48 @@ part of 'news_repo.dart';
 
 class NewsImpl extends NewsRepo {
   final NewsService service = NewsService();
+  final IVDataBase cacheDB = IVDataBase('NewsCache');
+
+  @override
+  Future<void> init() async {
+    await cacheDB.init();
+    return super.init();
+  }
+
+  /// Last-known-good first page, shown when the network fails.
+  List<News>? _loadCachedFirstPage() {
+    final data = cacheDB.read('first_page');
+    if (data is List && data.isNotEmpty) {
+      try {
+        return List<Map<String, dynamic>>.from(data).map(News.latest).toList();
+      } catch (_) {
+        return null;
+      }
+    }
+    return null;
+  }
 
   @override
   Future<List<News>> requestNewsList(int page) async {
-    final res =
-        await service.requestLatestNewsList(page) as Map<String, dynamic>;
-    final rows =
-        ((res['data'] as Map<String, dynamic>)['rows'] as List<dynamic>)
-            .cast<Map<String, dynamic>>();
-    return rows.map(News.latest).toList();
+    try {
+      final res =
+          await service.requestLatestNewsList(page) as Map<String, dynamic>;
+      final rows =
+          ((res['data'] as Map<String, dynamic>)['rows'] as List<dynamic>)
+              .cast<Map<String, dynamic>>();
+      if (page == 1) {
+        await cacheDB.put(key: 'first_page', value: rows);
+      }
+      return rows.map(News.latest).toList();
+    } catch (e) {
+      if (page == 1) {
+        final cached = _loadCachedFirstPage();
+        if (cached != null) {
+          return cached;
+        }
+      }
+      rethrow;
+    }
   }
 
   @override

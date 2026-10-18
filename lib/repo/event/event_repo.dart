@@ -1,6 +1,7 @@
 library;
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:investing/data/db/data_base.dart';
 import 'package:investing/data/service/event_service.dart';
 import 'package:investing/model/calendar/calendar_event.dart';
 import 'package:investing/repo/repo.dart';

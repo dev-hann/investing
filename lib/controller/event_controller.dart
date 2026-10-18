@@ -32,7 +32,12 @@ class EventController extends Notifier<EventState> {
   EventState build() {
     useCase = ref.watch(eventUseCaseProvider);
     ref.onDispose(scrollController.dispose);
-    unawaited(Future<void>.microtask(refreshEventList));
+    unawaited(
+      Future<void>.microtask(() async {
+        await useCase.init();
+        await refreshEventList();
+      }),
+    );
     return EventState(
       dateTime: DateTime.now(),
       eventType: CalendarEventType.economics,

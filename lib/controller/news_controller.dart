@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:investing/model/news.dart';
 import 'package:investing/model/stock/stock.dart';
@@ -16,23 +17,39 @@ class NewsController extends Notifier<List<News>> {
   List<News> build() {
     useCase = ref.watch(newsUseCaseProvider);
     ref.onDispose(refreshController.dispose);
-    unawaited(Future<void>.microtask(refreshNewsList));
+    unawaited(
+      Future<void>.microtask(() async {
+        await useCase.init();
+        await refreshNewsList();
+      }),
+    );
     return [];
   }
 
   Future<void> refreshNewsList() async {
     _currentPage = 1;
-    state = [];
-    final list = await useCase.requestlatestNewsList(_currentPage);
-    state = list;
-    refreshController.refreshCompleted();
+    try {
+      final list = await useCase.requestlatestNewsList(_currentPage);
+      state = list;
+    } catch (e) {
+      // Network failure — keep the last-known list.
+      debugPrint('NewsController: refresh failed — $e');
+    } finally {
+      refreshController.refreshCompleted();
+    }
   }
 
   Future<void> requestNextPageNewsList() async {
-    _currentPage++;
-    final list = await useCase.requestlatestNewsList(_currentPage);
-    state = [...state, ...list];
-    refreshController.loadComplete();
+    try {
+      _currentPage++;
+      final list = await useCase.requestlatestNewsList(_currentPage);
+      state = [...state, ...list];
+    } catch (e) {
+      _currentPage--;
+      debugPrint('NewsController: next page failed — $e');
+    } finally {
+      refreshController.loadComplete();
+    }
   }
 
   // Search
