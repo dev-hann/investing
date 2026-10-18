@@ -4,6 +4,7 @@ import 'package:investing/util/number_format.dart';
 import 'package:investing/view/stock_view/detail_view/chart_view/chart_view.dart';
 import 'package:investing/view/stock_view/detail_view/company_view/company_view.dart';
 import 'package:investing/view/stock_view/detail_view/dividend_view/dividend_view.dart';
+import 'package:investing/view/stock_view/detail_view/financial_view/financial_view.dart';
 import 'package:investing/view/stock_view/detail_view/stock_news_view/stock_news_view.dart';
 import 'package:investing/widget/book_mark.dart';
 import 'package:investing/widget/stock_price_builder.dart';
@@ -78,7 +79,7 @@ class StockDetailView extends StatelessWidget {
           ChartView(stock: stock),
           DividendView(stock: stock),
           StockNewsView(stock: stock),
-          // FinancialView(stock: stock),
+          FinancialView(stock: stock),
           CompanyView(stock: stock),
         ],
       ),

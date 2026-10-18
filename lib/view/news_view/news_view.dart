@@ -5,7 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:investing/controller/news_controller.dart';
 import 'package:investing/util/navigator.dart';
 import 'package:investing/view/news_view/detail_view/news_detail_view.dart';
-import 'package:investing/view/news_view/search_view.dart/news_search_view.dart';
+import 'package:investing/view/news_view/search_view/news_search_view.dart';
 import 'package:investing/widget/news_card.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 

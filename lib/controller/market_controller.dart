@@ -1,11 +1,12 @@
 import 'dart:async';
 
 import 'package:equatable/equatable.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:investing/model/market.dart';
 import 'package:investing/model/market_status.dart';
+import 'package:investing/model/stock/stock.dart';
 import 'package:investing/use_case/market_use_case.dart';
-import 'package:investing/widget/snackbar.dart';
 
 class MarketState extends Equatable {
   const MarketState({
@@ -90,8 +91,13 @@ class MarketController extends Notifier<MarketState> {
   }
 
   Future<void> refreshMarketData() async {
-    final data = await useCase.requestMarketData();
-    state = state.copyWith(marketDataList: data);
+    try {
+      final data = await useCase.requestMarketData();
+      state = state.copyWith(marketDataList: data);
+    } catch (e) {
+      // Network failure — keep the last-known sector tree.
+      debugPrint('MarketController: market data refresh failed — $e');
+    }
   }
 
   Future<void> refreshMarketPercentData() async {
@@ -136,21 +142,34 @@ class MarketController extends Notifier<MarketState> {
     return res;
   }
 
+  // Movers
+  Future<List<Stock>> requestMovers(MarketMoverCategory category) {
+    return useCase.requestMovers(category);
+  }
+
   // MarketStatus
   Future<void> refreshMarketStatus() async {
-    final status = await useCase.requestMarketStatus();
-    state = state.copyWith(marketStatus: status);
-    if (!status.isOpened) {
-      final now = DateTime.now();
-      final leftDuration = now.difference(status.preMarketOpen);
-      _marketTimer = Timer.periodic(leftDuration, (_) {
-        // Open Market!
-        unawaited(refreshMarketStatus());
-        _marketTimer?.cancel();
-      });
+    final MarketStatus status;
+    try {
+      status = await useCase.requestMarketStatus();
+    } catch (e) {
+      debugPrint('MarketController: market status refresh failed — $e');
       return;
     }
-    showIVSnackbar('Market Status', 'Market is Opened!');
+    state = state.copyWith(marketStatus: status);
+    if (status.isOpened) {
+      return;
+    }
+    // Wait until the pre-market opens, then refresh again.
+    final leftDuration = status.preMarketOpen.difference(DateTime.now());
+    if (leftDuration.isNegative || leftDuration == Duration.zero) {
+      unawaited(refreshMarketStatus());
+      return;
+    }
+    _marketTimer?.cancel();
+    _marketTimer = Timer(leftDuration, () {
+      unawaited(refreshMarketStatus());
+    });
   }
 }
 

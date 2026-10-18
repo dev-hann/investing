@@ -27,6 +27,19 @@ class StockUseCase extends UseCase<StockRepo> {
     return repo.removeStock(stock.symbol);
   }
 
+  /// Rewrites the favorite box to match [list] (order + membership).
+  Future<void> updateFavoriteList(List<Stock> list) async {
+    final current = loadStockList();
+    for (final stock in current) {
+      if (!list.any((e) => e.isEquals(stock))) {
+        await repo.removeStock(stock.symbol);
+      }
+    }
+    for (final stock in list) {
+      await repo.updateStock(symbol: stock.symbol, data: stock.toMap());
+    }
+  }
+
   Future<List<Stock>> searchStock(String query) {
     return repo.searchStock(query);
   }

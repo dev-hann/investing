@@ -62,7 +62,7 @@ class EventView extends ConsumerWidget {
         rowHeight: 40.0,
         firstDay: DateTime(1970),
         focusedDay: selectedDateTime,
-        lastDay: DateTime(2024),
+        lastDay: DateTime.now().add(const Duration(days: 730)),
         calendarStyle: const CalendarStyle(isTodayHighlighted: false),
         selectedDayPredicate: (dateTime) {
           return isSameDay(dateTime, selectedDateTime);

@@ -53,16 +53,6 @@ class FavoriteView extends StatelessWidget {
             const Expanded(child: Text('Favorites')),
             GestureDetector(
               onTap: onTapEdit,
-              //  () async {
-              //   // final list = await Get.to(
-              //   //   EditView(
-              //   //     itemList: stockController.favoriteList,
-              //   //   ),
-              //   // );
-              //   // if (list != null) {
-              //   //   stockController.updateFavoriteList(list);
-              //   // }
-              // },
               child: const Icon(Icons.settings),
             ),
           ],

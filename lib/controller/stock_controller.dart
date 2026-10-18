@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:equatable/equatable.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:investing/model/date_time_range.dart';
 import 'package:investing/model/stock/stock.dart';
@@ -77,7 +78,12 @@ class StockController extends Notifier<StockState> {
 
   Future<void> refreshFavoriteList() async {
     List<Stock> list = useCase.loadStockList();
-    list = await useCase.requestStockList(list);
+    try {
+      list = await useCase.requestStockList(list);
+    } catch (e) {
+      // Network failure — keep the last-known list.
+      debugPrint('StockController: favorite refresh failed — $e');
+    }
     list.sort();
     state = state.copyWith(favoriteList: list);
   }
@@ -96,6 +102,10 @@ class StockController extends Notifier<StockState> {
     }
   }
 
+  Future<void> updateFavoriteList(List<Stock> list) {
+    return useCase.updateFavoriteList(list);
+  }
+
   // Index
   //TODO: make it edit by option button
 
@@ -104,8 +114,13 @@ class StockController extends Notifier<StockState> {
   }
 
   Future<void> refreshIndexList() async {
-    final res = await useCase.requestStockList(state.indexList);
-    state = state.copyWith(indexList: res);
+    try {
+      final res = await useCase.requestStockList(state.indexList);
+      state = state.copyWith(indexList: res);
+    } catch (e) {
+      // Network failure — keep the last-known prices.
+      debugPrint('StockController: index refresh failed — $e');
+    }
   }
 
   Future<void> refreshRealTimeIndexList() async {
