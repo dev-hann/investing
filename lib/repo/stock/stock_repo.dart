@@ -9,19 +9,16 @@ part './stock_impl.dart';
 
 abstract class StockRepo extends Repo {
   Stream<List<dynamic>> favoriteListStream();
-  List loadStockList();
-  Future updateStock({
+  List<dynamic> loadStockList();
+  Future<void> updateStock({
     required String symbol,
     required Map<String, dynamic> data,
   });
-  Future removeStock(String symbol);
+  Future<void> removeStock(String symbol);
 
-  Future<List> searchStock(String query);
+  Future<List<dynamic>> searchStock(String query);
 
-  Future<dynamic> requestStock({
-    required String symbol,
-    required String asset,
-  });
+  Future<dynamic> requestStock({required String symbol, required String asset});
 
   Future<dynamic> requestStockList(List<String> symbolList);
 

@@ -10,11 +10,24 @@ Guidelines for AI coding assistants working in this repository. Follow these rul
 
 ```bash
 flutter pub get          # install dependencies (run after checkout / pubspec changes)
-flutter analyze          # MUST pass with 0 errors before committing
+dart format .            # formatter is enforced in CI (--set-exit-if-changed)
+flutter analyze          # MUST report zero issues (info counts as failure in CI)
 flutter test             # unit/smoke tests
 flutter build apk --debug    # quick native build verification
 flutter build apk --release  # signed release build (needs android/key.properties, falls back to debug signing)
 ```
+
+## Strictness & conventions
+
+`analysis_options.yaml` enables strict analyzer modes — `strict-casts`, `strict-inference`, `strict-raw-types` — plus an extended lint set on top of `flutter_lints`. Rules are never disabled to silence findings; fix the code instead.
+
+* **JSON boundary**: values from `dynamic` JSON must be cast explicitly (`as String`, `as Map<String, dynamic>`, `as num` + `.toDouble()`). Preserve nullability exactly (`as String?` when the receiver is nullable). Bind through a typed local before indexing.
+* **Fire-and-forget futures**: wrap intentional ones in `unawaited(...)` (`dart:async`). Navigation: `unawaited(Get.to<void>(...))`.
+* **No raw generics**: `List()`/`Map`/`Future<List>` must carry type arguments (`List<Stock>()`, `Future<List<dynamic>>`).
+* **Callbacks**: type as `void Function(Param)` (or `Future<void> Function(...)` when awaited), never bare `Function`.
+* **Formatting**: `dart format` defaults (80 cols, trailing commas). CI rejects unformatted code.
+* **Naming**: files are `snake_case.dart` matching the class they contain (`stock_summary.dart` holds `StockSummary`). Keep names typo-free — renames use `git mv` plus import updates.
+* **pubspec**: dependencies sorted alphabetically including SDK deps (`sort_pub_dependencies`).
 
 Deployment is tag-driven: push a `v*` tag to trigger the Release workflow (GitHub Actions). Never commit `android/key.properties` or `*.keystore` — both are gitignored.
 

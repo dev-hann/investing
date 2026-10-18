@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:investing/model/stock/stock.dart';
 import 'package:investing/util/number_format.dart';
 import 'package:investing/view/stock_view/detail_view/chart_view/chart_view.dart';
@@ -5,14 +6,10 @@ import 'package:investing/view/stock_view/detail_view/company_view/company_view.
 import 'package:investing/view/stock_view/detail_view/dividend_view/dividend_view.dart';
 import 'package:investing/view/stock_view/detail_view/stock_news_view/stock_news_view.dart';
 import 'package:investing/widget/book_mark.dart';
-import 'package:flutter/material.dart';
 import 'package:investing/widget/stock_price_builder.dart';
 
 class StockDetailView extends StatelessWidget {
-  const StockDetailView({
-    super.key,
-    required this.stock,
-  });
+  const StockDetailView({super.key, required this.stock});
   final Stock stock;
 
   AppBar appBar() {
@@ -25,17 +22,13 @@ class StockDetailView extends StatelessWidget {
       }
       return IconButton(
         onPressed: () {},
-        icon: BookMarkWidget(
-          stock: stock,
-        ),
+        icon: BookMarkWidget(stock: stock),
       );
     }
 
     return AppBar(
-      title: const Text("Stock Detail"),
-      actions: [
-        bookmarkWidget(),
-      ],
+      title: const Text('Stock Detail'),
+      actions: [bookmarkWidget()],
     );
   }
 
@@ -60,16 +53,16 @@ class StockDetailView extends StatelessWidget {
                     Row(
                       children: [
                         Text(indicator),
-                        Text("$percentageChange%"),
-                        Text("($netChage)"),
+                        Text('$percentageChange%'),
+                        Text('($netChage)'),
                       ],
-                    )
+                    ),
                   ],
                 );
               },
             );
           },
-        )
+        ),
       ],
     );
   }
@@ -86,7 +79,7 @@ class StockDetailView extends StatelessWidget {
           DividendView(stock: stock),
           StockNewsView(stock: stock),
           // FinancialView(stock: stock),
-          CompanyView(stock: stock)
+          CompanyView(stock: stock),
         ],
       ),
     );

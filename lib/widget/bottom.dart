@@ -1,12 +1,7 @@
 import 'package:flutter/cupertino.dart';
 
 class IVBottom extends StatelessWidget {
-  const IVBottom({
-    super.key,
-    this.title,
-    this.message,
-    this.actions,
-  });
+  const IVBottom({super.key, this.title, this.message, this.actions});
   final Widget? title;
   final Widget? message;
   final List<IVBottomButton>? actions;

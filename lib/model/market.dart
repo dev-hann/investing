@@ -1,10 +1,7 @@
 import 'package:equatable/equatable.dart';
 
 abstract class Market<T> extends Equatable {
-  const Market(
-    this.name,
-    this.childeren,
-  );
+  const Market(this.name, this.childeren);
   final String name;
   final List<T> childeren;
   int get sumValue;
@@ -13,16 +10,13 @@ abstract class Market<T> extends Equatable {
 }
 
 class MarketData extends Market<MarketSector> {
-  const MarketData(
-    super.name,
-    super.childeren,
-  );
+  const MarketData(super.name, super.childeren);
 
   factory MarketData.fromMap(dynamic map) {
-    final data = Map<String, dynamic>.from(map);
+    final data = Map<String, dynamic>.from(map as Map<dynamic, dynamic>);
     return MarketData(
-      data["name"],
-      List.from(data["children"]).map((e) => MarketSector.fromMap(e)).toList(),
+      data['name'] as String,
+      (data['children'] as List<dynamic>).map(MarketSector.fromMap).toList(),
     );
   }
 
@@ -33,16 +27,15 @@ class MarketData extends Market<MarketSector> {
 }
 
 class MarketSector extends Market<MarketItem> {
-  const MarketSector(
-    super.name,
-    super.childeren,
-  );
+  const MarketSector(super.name, super.childeren);
 
   factory MarketSector.fromMap(dynamic map) {
-    final data = Map<String, dynamic>.from(map);
+    final data = Map<String, dynamic>.from(map as Map<dynamic, dynamic>);
     return MarketSector(
-      data["name"],
-      List.from(data["children"]).map((e) => MarketItem.fromMap(e)).toList(),
+      data['name'] as String,
+      (data['children'] as List<dynamic>)
+          .map((e) => MarketItem.fromMap(e as Map<String, dynamic>))
+          .toList(),
     );
   }
 
@@ -52,7 +45,7 @@ class MarketSector extends Market<MarketItem> {
       .fold(0, (previousValue, element) => previousValue + element);
 }
 
-class MarketItem extends Market {
+class MarketItem extends Market<Never> {
   MarketItem(String name, this.description, this.value) : super(name, []);
   final String description;
   final int value;

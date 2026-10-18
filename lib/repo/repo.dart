@@ -1,3 +1,3 @@
 abstract class Repo {
-  Future init() async {}
+  Future<void> init() async {}
 }

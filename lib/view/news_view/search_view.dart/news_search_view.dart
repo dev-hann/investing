@@ -1,10 +1,12 @@
+import 'dart:async';
+
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:investing/controller/news_controller.dart';
 import 'package:investing/model/news.dart';
 import 'package:investing/view/news_view/detail_view/news_detail_view.dart';
 import 'package:investing/widget/news_card.dart';
 import 'package:investing/widget/text_field.dart';
-import 'package:flutter/material.dart';
 
 class NewsSearchView extends StatefulWidget {
   const NewsSearchView({super.key});
@@ -18,27 +20,21 @@ class _NewsSearchViewState extends State<NewsSearchView> {
   final RxList<News> searchedList = RxList();
 
   AppBar appBar() {
-    return AppBar(
-      title: const Text("Search News"),
-    );
+    return AppBar(title: const Text('Search News'));
   }
 
-  Widget queryTextField({
-    required Function(String query) onSubmitted,
-  }) {
+  Widget queryTextField({required void Function(String query) onSubmitted}) {
     return Card(
       child: CustomTextfield(
         textInputAction: TextInputAction.search,
         onSubmitted: onSubmitted,
         autoFocus: true,
-        hintText: "Aa",
+        hintText: 'Aa',
       ),
     );
   }
 
-  Widget searchedListWidget({
-    required List<News> searchedList,
-  }) {
+  Widget searchedListWidget({required List<News> searchedList}) {
     return ListView.separated(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
@@ -48,9 +44,7 @@ class _NewsSearchViewState extends State<NewsSearchView> {
         return NewsCard(
           news: news,
           onTap: () async {
-            Get.to(
-              NewsDetailView(news: news),
-            );
+            unawaited(Get.to<void>(NewsDetailView(news: news)));
           },
         );
       },
@@ -76,9 +70,7 @@ class _NewsSearchViewState extends State<NewsSearchView> {
               },
             ),
             const SizedBox(height: 16.0),
-            searchedListWidget(
-              searchedList: searchedList,
-            ),
+            searchedListWidget(searchedList: searchedList),
           ],
         );
       }),

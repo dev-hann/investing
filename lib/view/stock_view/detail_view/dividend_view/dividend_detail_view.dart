@@ -4,29 +4,22 @@ import 'package:investing/util/date_time_format.dart';
 import 'package:investing/util/number_format.dart';
 
 class DividendDetailView extends StatelessWidget {
-  const DividendDetailView({
-    super.key,
-    required this.dividend,
-  });
+  const DividendDetailView({super.key, required this.dividend});
   final StockDividend dividend;
 
   AppBar appBar() {
-    return AppBar(
-      title: const Text("Dividend Detail View"),
-    );
+    return AppBar(title: const Text('Dividend Detail View'));
   }
 
-  Widget dateRow({
-    required List<Widget> valueList,
-    TextStyle? style,
-  }) {
+  Widget dateRow({required List<Widget> valueList, TextStyle? style}) {
     return DefaultTextStyle(
       style: style ?? const TextStyle(),
       textAlign: TextAlign.center,
       maxLines: 1,
       child: Row(
-        children:
-            valueList.map((e) => Expanded(child: Center(child: e))).toList(),
+        children: valueList
+            .map((e) => Expanded(child: Center(child: e)))
+            .toList(),
       ),
     );
   }
@@ -43,9 +36,9 @@ class DividendDetailView extends StatelessWidget {
             dateRow(
               style: Theme.of(context).textTheme.titleMedium,
               valueList: const [
-                Text("Ex Dividend Day"),
-                Text("Pay Day"),
-                Text("Yield"),
+                Text('Ex Dividend Day'),
+                Text('Pay Day'),
+                Text('Yield'),
               ],
             ),
             const SizedBox(height: 8.0),
@@ -58,9 +51,9 @@ class DividendDetailView extends StatelessWidget {
                 itemBuilder: (context, index) {
                   final item = list[index];
                   final declarationText =
-                      IVDateTimeFormat(item.exOrEffDate).dateTimeFormat() ?? "";
+                      IVDateTimeFormat(item.exOrEffDate).dateTimeFormat() ?? '';
                   final paymentText =
-                      IVDateTimeFormat(item.paymentDate).dateTimeFormat() ?? "";
+                      IVDateTimeFormat(item.paymentDate).dateTimeFormat() ?? '';
                   return dateRow(
                     valueList: [
                       Text(declarationText),

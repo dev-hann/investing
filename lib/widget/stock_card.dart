@@ -8,7 +8,7 @@ class StockCard extends StatelessWidget {
     super.key,
     required this.stock,
     this.onTap,
-    this.highlight = "",
+    this.highlight = '',
     this.leading,
     this.trailing,
   });
@@ -19,12 +19,10 @@ class StockCard extends StatelessWidget {
   final Widget? leading;
 
   Map<String, HighlightedWord> get words => {
-        highlight: HighlightedWord(
-          textStyle: const TextStyle(
-            color: IVColor.orange,
-          ),
-        ),
-      };
+    highlight: HighlightedWord(
+      textStyle: const TextStyle(color: IVColor.orange),
+    ),
+  };
   Widget titleText() {
     return TextHighlight(
       text: stock.name,
@@ -35,10 +33,7 @@ class StockCard extends StatelessWidget {
   }
 
   Widget subtitleText() {
-    return TextHighlight(
-      text: stock.symbol,
-      words: words,
-    );
+    return TextHighlight(text: stock.symbol, words: words);
   }
 
   Widget? leadingWidget() {
@@ -47,9 +42,7 @@ class StockCard extends StatelessWidget {
     }
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        leading!,
-      ],
+      children: [leading!],
     );
   }
 

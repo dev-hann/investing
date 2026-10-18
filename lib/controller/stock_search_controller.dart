@@ -10,7 +10,7 @@ class StockSearchController extends Controller<StockUseCase> {
   final TextEditingController queryController = TextEditingController();
   List<Stock>? searchList;
 
-  Future searchStock(String query) async {
+  Future<void> searchStock(String query) async {
     searchList = null;
 
     searchList = await useCase.searchStock(query);

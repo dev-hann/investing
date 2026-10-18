@@ -32,36 +32,40 @@ class StockSummary extends Equatable {
 
   @override
   List<Object?> get props => [
-        todayHighLowPrice,
-        shareVolume,
-        day20AvgVolume,
-        day50AvgVolume,
-        day65AvgVolume,
-        previousClosePrice,
-        fiftyTwoWeekHighLowPrice,
-        marketCap,
-        annualizedDividend,
-        exDividendDate,
-        dividendPayDate,
-        currentYield,
-        beta,
-      ];
+    todayHighLowPrice,
+    shareVolume,
+    day20AvgVolume,
+    day50AvgVolume,
+    day65AvgVolume,
+    previousClosePrice,
+    fiftyTwoWeekHighLowPrice,
+    marketCap,
+    annualizedDividend,
+    exDividendDate,
+    dividendPayDate,
+    currentYield,
+    beta,
+  ];
 
   factory StockSummary.fromMap(Map<String, dynamic> map) {
+    String valueOf(String key) {
+      return (map[key] as Map<String, dynamic>)['value'] as String;
+    }
+
     return StockSummary(
-      map['TodayHighLow']["value"] as String,
-      map['ShareVolume']["value"] as String,
-      map['AvgDailyVol20Days']["value"] as String,
-      map['FiftyDayAvgDailyVol']["value"] as String,
-      map['AvgDailyVol65Days']["value"] as String,
-      map['PreviousClose']["value"] as String,
-      map['FiftTwoWeekHighLow']["value"] as String,
-      map['MarketCap']["value"] as String,
-      map['annualizedDividend']["value"] as String,
-      map['exDividendDate']["value"] as String,
-      map['dividendPayDate']["value"] as String,
-      map['currentYield']["value"] as String,
-      map['beta']["value"] as String,
+      valueOf('TodayHighLow'),
+      valueOf('ShareVolume'),
+      valueOf('AvgDailyVol20Days'),
+      valueOf('FiftyDayAvgDailyVol'),
+      valueOf('AvgDailyVol65Days'),
+      valueOf('PreviousClose'),
+      valueOf('FiftTwoWeekHighLow'),
+      valueOf('MarketCap'),
+      valueOf('annualizedDividend'),
+      valueOf('exDividendDate'),
+      valueOf('dividendPayDate'),
+      valueOf('currentYield'),
+      valueOf('beta'),
     );
   }
 }

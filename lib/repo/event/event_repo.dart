@@ -6,7 +6,7 @@ import 'package:investing/util/date_time_format.dart';
 part './event_impl.dart';
 
 abstract class EventRepo extends Repo {
-  Future<List> requestEconomicEventList(DateTime dateTime);
-  Future<List> requestEarningEventList(DateTime dateTime);
-  Future<List> requestDvidendEventList(DateTime dateTime);
+  Future<List<dynamic>> requestEconomicEventList(DateTime dateTime);
+  Future<List<dynamic>> requestEarningEventList(DateTime dateTime);
+  Future<List<dynamic>> requestDvidendEventList(DateTime dateTime);
 }

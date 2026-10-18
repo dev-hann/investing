@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:investing/controller/stock_controller.dart';
@@ -9,10 +11,7 @@ import 'package:investing/view/stock_view/detail_view/chart_view/chart_button.da
 import 'package:investing/widget/chart_widget.dart';
 
 class ChartView extends StatefulWidget {
-  const ChartView({
-    super.key,
-    required this.stock,
-  });
+  const ChartView({super.key, required this.stock});
   final Stock stock;
 
   @override
@@ -22,16 +21,17 @@ class ChartView extends StatefulWidget {
 class _ChartViewState extends State<ChartView> {
   final StockController controller = StockController.find();
   final RxMap<ChartRangeType, StockChart> chartMap = RxMap();
-  late final Rx<ChartRangeType> chartRangeType =
-      Rx(widget.stock.chartRangeTypeList.first);
+  late final Rx<ChartRangeType> chartRangeType = Rx(
+    widget.stock.chartRangeTypeList.first,
+  );
 
   @override
   void initState() {
     super.initState();
-    requestStockChart(chartRangeType.value);
+    unawaited(requestStockChart(chartRangeType.value));
   }
 
-  Future requestStockChart(ChartRangeType type) async {
+  Future<void> requestStockChart(ChartRangeType type) async {
     if (!chartMap.containsKey(type)) {
       final data = await controller.requestStockChart(
         stock: widget.stock,
@@ -42,9 +42,7 @@ class _ChartViewState extends State<ChartView> {
     chartRangeType(type);
   }
 
-  Widget chartButtonListView({
-    required ChartRangeType selected,
-  }) {
+  Widget chartButtonListView({required ChartRangeType selected}) {
     return IVChartButton(
       selected: selected,
       onTap: (type) {
@@ -52,7 +50,7 @@ class _ChartViewState extends State<ChartView> {
           // TODO:(Future Work) make Live Chart view
           return;
         }
-        requestStockChart(type);
+        unawaited(requestStockChart(type));
       },
       rangeTypeList: ChartRangeType.values,
     );
@@ -74,15 +72,10 @@ class _ChartViewState extends State<ChartView> {
       return Column(
         children: [
           Padding(
-            padding: const EdgeInsets.only(
-              top: 56.0,
-              bottom: 16.0,
-            ),
+            padding: const EdgeInsets.only(top: 56.0, bottom: 16.0),
             child: chartWidget(chartValue),
           ),
-          chartButtonListView(
-            selected: chartRangeTypeValue,
-          ),
+          chartButtonListView(selected: chartRangeTypeValue),
         ],
       );
     });

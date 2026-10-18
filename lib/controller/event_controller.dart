@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:investing/controller/controller.dart';
@@ -17,11 +19,11 @@ class EventController extends Controller<EventUseCase> {
 
   @override
   void onReady() {
-    refreshEventList();
+    unawaited(refreshEventList());
     super.onReady();
   }
 
-  Future refreshEventList({
+  Future<void> refreshEventList({
     CalendarEventType? newEventType,
     DateTime? newDateTime,
   }) async {
@@ -45,7 +47,7 @@ class EventController extends Controller<EventUseCase> {
       switch (e) {
         case CalendarEventType.economics:
           final list = await useCase.requestEconomicEventList(d);
-          eventList.addAll(list.where((e) => e.country.code == "US").toList());
+          eventList.addAll(list.where((e) => e.country.code == 'US').toList());
           break;
         case CalendarEventType.earnings:
           eventList.addAll(await useCase.requestEarningEventList(d));

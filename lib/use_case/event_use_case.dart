@@ -6,18 +6,25 @@ class EventUseCase extends UseCase<EventRepo> {
   EventUseCase(super.repo);
 
   Future<List<EconomicEvent>> requestEconomicEventList(
-      DateTime dateTime) async {
+    DateTime dateTime,
+  ) async {
     final res = await repo.requestEconomicEventList(dateTime);
-    return List.from(res).map((e) => EconomicEvent.fromMap(e)).toList();
+    return List<dynamic>.from(res)
+        .map((e) => EconomicEvent.fromMap(e as Map<String, dynamic>))
+        .toList();
   }
 
   Future<List<EarningEvent>> requestEarningEventList(DateTime dateTime) async {
     final res = await repo.requestEarningEventList(dateTime);
-    return List.from(res).map((e) => EarningEvent.fromMap(e)).toList();
+    return List<dynamic>.from(res)
+        .map((e) => EarningEvent.fromMap(e as Map<String, dynamic>))
+        .toList();
   }
 
   Future<List<DividendEvent>> requestDvidendEventList(DateTime dateTime) async {
     final res = await repo.requestDvidendEventList(dateTime);
-    return List.from(res).map((e) => DividendEvent.fromMap(e)).toList();
+    return List<dynamic>.from(res)
+        .map((e) => DividendEvent.fromMap(e as Map<String, dynamic>))
+        .toList();
   }
 }

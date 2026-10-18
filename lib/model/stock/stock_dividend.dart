@@ -18,14 +18,14 @@ class StockDividend extends Equatable {
   final List<DividenedHistory> histoyList;
 
   static DateTime? _dateTime(String value) {
-    if (value == "N/A") {
+    if (value == 'N/A') {
       return null;
     }
-    return IVDateTimeFormat.fromPattern("MM/dd/yyyy", value);
+    return IVDateTimeFormat.fromPattern('MM/dd/yyyy', value);
   }
 
   static double _double(String value) {
-    if (value == "N/A") {
+    if (value == 'N/A') {
       return 0.0;
     }
     return IVNumberFormat(value).toDouble();
@@ -36,13 +36,14 @@ class StockDividend extends Equatable {
 
   factory StockDividend.fromMap(Map<String, dynamic> map) {
     return StockDividend(
-      annualizedDividend: _double(map['annualizedDividend']),
-      dividendPaymentDate: _dateTime(map['dividendPaymentDate']),
-      exDividendDate: _dateTime(map['exDividendDate']),
-      yield: _double(map['yield']),
-      histoyList: List.from((map['dividends']["rows"]))
-          .map((e) => DividenedHistory.fromMap(e))
-          .toList(),
+      annualizedDividend: _double(map['annualizedDividend'] as String),
+      dividendPaymentDate: _dateTime(map['dividendPaymentDate'] as String),
+      exDividendDate: _dateTime(map['exDividendDate'] as String),
+      yield: _double(map['yield'] as String),
+      histoyList:
+          ((map['dividends'] as Map<String, dynamic>)['rows'] as List<dynamic>)
+              .map((e) => DividenedHistory.fromMap(e as Map<String, dynamic>))
+              .toList(),
     );
   }
 }
@@ -68,23 +69,23 @@ class DividenedHistory extends Equatable {
 
   @override
   List<Object?> get props => [
-        amount,
-        currency,
-        declarationDate,
-        exOrEffDate,
-        paymentDate,
-        recordDate,
-        type,
-      ];
+    amount,
+    currency,
+    declarationDate,
+    exOrEffDate,
+    paymentDate,
+    recordDate,
+    type,
+  ];
 
   factory DividenedHistory.fromMap(Map<String, dynamic> map) {
     return DividenedHistory(
-      StockDividend._double(map['amount']),
+      StockDividend._double(map['amount'] as String),
       map['currency'] as String,
-      StockDividend._dateTime(map['declarationDate']),
-      StockDividend._dateTime(map['exOrEffDate']),
-      StockDividend._dateTime(map['paymentDate']),
-      StockDividend._dateTime(map['recordDate']),
+      StockDividend._dateTime(map['declarationDate'] as String),
+      StockDividend._dateTime(map['exOrEffDate'] as String),
+      StockDividend._dateTime(map['paymentDate'] as String),
+      StockDividend._dateTime(map['recordDate'] as String),
       map['type'] as String,
     );
   }

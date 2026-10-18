@@ -9,19 +9,13 @@ import 'package:investing/model/market.dart';
 import 'package:investing/widget/title_widget.dart';
 
 final class _SectorRatio extends LinkedListEntry<_SectorRatio> {
-  _SectorRatio(
-    this.value,
-    this.isOverHalf,
-  );
+  _SectorRatio(this.value, {required this.isOverHalf});
   final int value;
   final bool isOverHalf;
 }
 
 class SectorView extends StatefulWidget {
-  const SectorView({
-    super.key,
-    required this.valueList,
-  });
+  const SectorView({super.key, required this.valueList});
   final List<int> valueList;
 
   @override
@@ -42,7 +36,7 @@ class _SectorViewState extends State<SectorView> {
       final value = valueList[index];
       final ratio = ((value / sumValue) * 100).toInt();
       sumValue -= value;
-      ratioList.add(_SectorRatio(ratio, value > sumValue));
+      ratioList.add(_SectorRatio(ratio, isOverHalf: value > sumValue));
     }
   }
 
@@ -51,11 +45,7 @@ class _SectorViewState extends State<SectorView> {
     if (next == null) {
       return ColoredBox(
         color: Colors.primaries[Random().nextInt(15)],
-        child: Center(
-          child: Text(
-            sectorRatio.toString(),
-          ),
-        ),
+        child: Center(child: Text(sectorRatio.toString())),
       );
     }
     final ratio = sectorRatio.value;
@@ -68,45 +58,32 @@ class _SectorViewState extends State<SectorView> {
         final List<Widget> children = [
           Expanded(
             flex: ratio,
-            child: Builder(builder: (context) {
-              if (sectorRatio.isOverHalf) {
-                return ColoredBox(
-                  color: Colors.primaries[Random().nextInt(15)],
-                  child: Center(
-                    child: Text(
-                      sectorRatio.toString(),
-                    ),
-                  ),
-                );
-              }
-              return isRow
-                  ? Column(
-                      children: [
-                        ColoredBox(
-                          color: Colors.primaries[Random().nextInt(15)],
-                          child: Center(
-                            child: Text(
-                              sectorRatio.toString(),
-                            ),
+            child: Builder(
+              builder: (context) {
+                if (sectorRatio.isOverHalf) {
+                  return ColoredBox(
+                    color: Colors.primaries[Random().nextInt(15)],
+                    child: Center(child: Text(sectorRatio.toString())),
+                  );
+                }
+                return isRow
+                    ? Column(
+                        children: [
+                          ColoredBox(
+                            color: Colors.primaries[Random().nextInt(15)],
+                            child: Center(child: Text(sectorRatio.toString())),
                           ),
-                        ),
-                        ColoredBox(
-                          color: Colors.primaries[Random().nextInt(15)],
-                          child: Center(
-                            child: Text(
-                              sectorRatio.toString(),
-                            ),
+                          ColoredBox(
+                            color: Colors.primaries[Random().nextInt(15)],
+                            child: Center(child: Text(sectorRatio.toString())),
                           ),
-                        )
-                      ],
-                    )
-                  : Row();
-            }),
+                        ],
+                      )
+                    : const Row();
+              },
+            ),
           ),
-          Expanded(
-            flex: 100 - ratio,
-            child: layout(next),
-          ),
+          Expanded(flex: 100 - ratio, child: layout(next)),
         ];
         return SizedBox(
           width: width,
@@ -114,13 +91,9 @@ class _SectorViewState extends State<SectorView> {
           child: Builder(
             builder: (context) {
               if (isRow) {
-                return Row(
-                  children: children,
-                );
+                return Row(children: children);
               }
-              return Column(
-                children: children,
-              );
+              return Column(children: children);
             },
           ),
         );
@@ -143,7 +116,7 @@ class SectorViewOld extends StatefulWidget {
   });
   final List<MarketSector> sectorList;
   final Map<String, double> percentData;
-  final Function(List<String> symbolList) onTap;
+  final void Function(List<String> symbolList) onTap;
 
   @override
   State<SectorViewOld> createState() => _SectorViewOldState();
@@ -189,42 +162,39 @@ class _SectorViewOldState extends State<SectorViewOld> {
         child: SizedBox(
           height: 25,
           child: Row(
-              children:
-                  children.sublist(0, min(6, children.length)).map((item) {
-            final percent = widget.percentData[item.name] ?? 0.0;
-            return Expanded(
-              flex: pow(item.sumValue, 1 / 3).floor(),
-              child: Row(
-                children: [
-                  const VerticalDivider(
-                    color: IVColor.blueGrey,
-                    width: 0,
-                  ),
-                  Expanded(
-                    child: ColoredBox(
-                      color: stockColor(percent) ?? Colors.transparent,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          AutoSizeText(
-                            item.name,
-                            maxLines: 1,
-                            maxFontSize: 8,
-                            minFontSize: 5,
-                          ),
-                          AutoSizeText(
-                            "${percent.toStringAsFixed(2)}%",
-                            maxLines: 1,
-                            minFontSize: 3,
-                          ),
-                        ],
+            children: children.sublist(0, min(6, children.length)).map((item) {
+              final percent = widget.percentData[item.name] ?? 0.0;
+              return Expanded(
+                flex: pow(item.sumValue, 1 / 3).floor(),
+                child: Row(
+                  children: [
+                    const VerticalDivider(color: IVColor.blueGrey, width: 0),
+                    Expanded(
+                      child: ColoredBox(
+                        color: stockColor(percent) ?? Colors.transparent,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            AutoSizeText(
+                              item.name,
+                              maxLines: 1,
+                              maxFontSize: 8,
+                              minFontSize: 5,
+                            ),
+                            AutoSizeText(
+                              '${percent.toStringAsFixed(2)}%',
+                              maxLines: 1,
+                              minFontSize: 3,
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                ],
-              ),
-            );
-          }).toList()),
+                  ],
+                ),
+              );
+            }).toList(),
+          ),
         ),
       ),
     );
@@ -234,7 +204,7 @@ class _SectorViewOldState extends State<SectorViewOld> {
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: widget.sectorList.map((e) => sectorWidget(e)).toList(),
+      children: widget.sectorList.map(sectorWidget).toList(),
     );
   }
 }

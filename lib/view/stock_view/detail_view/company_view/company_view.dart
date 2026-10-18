@@ -1,15 +1,14 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:investing/controller/stock_controller.dart';
-import 'package:investing/model/stock/stock_company.dart';
 import 'package:investing/model/stock/stock.dart';
+import 'package:investing/model/stock/stock_company.dart';
 import 'package:investing/widget/title_widget.dart';
 
 class CompanyView extends StatefulWidget {
-  const CompanyView({
-    super.key,
-    required this.stock,
-  });
+  const CompanyView({super.key, required this.stock});
   final Stock stock;
 
   @override
@@ -23,7 +22,7 @@ class _CompanyViewState extends State<CompanyView> {
   @override
   void initState() {
     super.initState();
-    controller.reqeustStockCompany(widget.stock).then(company.call);
+    unawaited(controller.reqeustStockCompany(widget.stock).then(company.call));
   }
 
   @override
@@ -36,12 +35,10 @@ class _CompanyViewState extends State<CompanyView> {
       return Padding(
         padding: const EdgeInsets.symmetric(vertical: 8.0),
         child: TitleWidget(
-          title: const Text("Company Profile"),
+          title: const Text('Company Profile'),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(companyValue.description),
-            ],
+            children: [Text(companyValue.description)],
           ),
         ),
       );

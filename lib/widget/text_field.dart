@@ -11,8 +11,8 @@ class CustomTextfield extends StatelessWidget {
     this.autoFocus = false,
   });
   final TextEditingController? controller;
-  final Function(String text)? onSubmitted;
-  final Function(String text)? onChanged;
+  final void Function(String text)? onSubmitted;
+  final void Function(String text)? onChanged;
   final TextInputAction? textInputAction;
   final String? hintText;
   final bool autoFocus;

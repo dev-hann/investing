@@ -19,12 +19,14 @@ class TitleWidget extends StatelessWidget {
       title: Row(
         children: [
           Expanded(child: title),
-          Builder(builder: (context) {
-            return DefaultTextStyle(
-              style: Theme.of(context).textTheme.labelLarge!,
-              child: trailing,
-            );
-          }),
+          Builder(
+            builder: (context) {
+              return DefaultTextStyle(
+                style: Theme.of(context).textTheme.labelLarge!,
+                child: trailing,
+              );
+            },
+          ),
         ],
       ),
       child: child,

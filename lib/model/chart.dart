@@ -1,19 +1,9 @@
 import 'package:equatable/equatable.dart';
 
-enum ChartRangeType {
-  realTime,
-  oneDay,
-  oneMonth,
-  threeMonth,
-  oneYear,
-  all,
-}
+enum ChartRangeType { realTime, oneDay, oneMonth, threeMonth, oneYear, all }
 
 class IVChart extends Equatable implements Comparable<IVChart> {
-  const IVChart(
-    this.dateTime,
-    this.value,
-  );
+  const IVChart(this.dateTime, this.value);
   final int dateTime;
   final double value;
 
@@ -21,10 +11,7 @@ class IVChart extends Equatable implements Comparable<IVChart> {
   List<Object?> get props => [dateTime, value];
 
   factory IVChart.fromMap(Map<String, dynamic> map) {
-    return IVChart(
-      map['x'],
-      map['y'],
-    );
+    return IVChart(map['x'] as int, (map['y'] as num).toDouble());
   }
 
   @override

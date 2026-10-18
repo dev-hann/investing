@@ -40,11 +40,9 @@ class IVChartWidget extends StatelessWidget {
             show: true,
             alignment: Alignment.topRight,
             padding: EdgeInsets.zero,
-            style: const TextStyle(
-              color: Colors.white,
-            ),
+            style: const TextStyle(color: Colors.white),
             labelResolver: (value) {
-              return "Max: ${value.y.toStringAsFixed(2)}";
+              return 'Max: ${value.y.toStringAsFixed(2)}';
             },
           ),
         ),
@@ -57,11 +55,9 @@ class IVChartWidget extends StatelessWidget {
             show: true,
             alignment: Alignment.bottomRight,
             padding: EdgeInsets.zero,
-            style: const TextStyle(
-              color: Colors.white,
-            ),
+            style: const TextStyle(color: Colors.white),
             labelResolver: (value) {
-              return "Min: ${value.y.toStringAsFixed(2)}";
+              return 'Min: ${value.y.toStringAsFixed(2)}';
             },
           ),
         ),
@@ -73,11 +69,9 @@ class IVChartWidget extends StatelessWidget {
             show: true,
             alignment: Alignment.topRight,
             padding: EdgeInsets.zero,
-            style: const TextStyle(
-              color: Colors.white,
-            ),
+            style: const TextStyle(color: Colors.white),
             labelResolver: (value) {
-              return "Closed: ${value.y.toStringAsFixed(2)}";
+              return 'Closed: ${value.y.toStringAsFixed(2)}';
             },
           ),
         ),
@@ -89,11 +83,8 @@ class IVChartWidget extends StatelessWidget {
     return LineTouchData(
       getTouchedSpotIndicator: (barData, spotIndexes) {
         return spotIndexes.map((e) {
-          return TouchedSpotIndicatorData(
-            FlLine(
-              color: Colors.white,
-              strokeWidth: 1,
-            ),
+          return const TouchedSpotIndicatorData(
+            FlLine(color: Colors.white, strokeWidth: 1),
             FlDotData(),
           );
         }).toList();
@@ -109,17 +100,10 @@ class IVChartWidget extends StatelessWidget {
       getTooltipItems: (touchedSpots) {
         return touchedSpots.map((e) {
           return LineTooltipItem(
-            IVDateTimeFormat(
-              DateTime.fromMillisecondsSinceEpoch(e.x.toInt()),
-            ).dateTimeFormat("yyyy-MM-dd HH:mm")!,
-            const TextStyle(
-              color: Colors.white,
-            ),
-            children: [
-              TextSpan(
-                text: "\n${IVNumberFormat.priceFormat(e.y)}",
-              ),
-            ],
+            IVDateTimeFormat(DateTime.fromMillisecondsSinceEpoch(e.x.toInt()))
+                .dateTimeFormat('yyyy-MM-dd HH:mm')!,
+            const TextStyle(color: Colors.white),
+            children: [TextSpan(text: '\n${IVNumberFormat.priceFormat(e.y)}')],
           );
         }).toList();
       },
@@ -138,17 +122,12 @@ class IVChartWidget extends StatelessWidget {
         //   spotsLine: BarAreaSpotsLine(),
         // ),
         // // color: stock.isUp ? IVColor.red : IVColor.blue,
-        dotData: FlDotData(
-          show: false,
-        ),
-        spots: List.generate(
-          priceChartList.length,
-          (index) {
-            final item = priceChartList[index];
-            return FlSpot(item.dateTime.toDouble(), item.value);
-          },
-        ).toList(),
-      )
+        dotData: const FlDotData(show: false),
+        spots: List.generate(priceChartList.length, (index) {
+          final item = priceChartList[index];
+          return FlSpot(item.dateTime.toDouble(), item.value);
+        }).toList(),
+      ),
     ];
   }
 
@@ -162,10 +141,7 @@ class IVChartWidget extends StatelessWidget {
           final chart = stockChart;
           final width = constraints.maxWidth;
           if (chart == null) {
-            return SizedBox(
-              width: width,
-              height: width / 1.5,
-            );
+            return SizedBox(width: width, height: width / 1.5);
           }
           final priceChartList = chart.priceChartList;
           final volumeChartList = chart.volumeChartList;
@@ -198,17 +174,19 @@ class IVChartWidget extends StatelessWidget {
                         LineChartData(
                           maxY: maxY,
                           minY: minY,
-                          titlesData: FlTitlesData(show: false),
+                          titlesData: const FlTitlesData(show: false),
                           borderData: FlBorderData(show: false),
-                          gridData: FlGridData(show: false),
+                          gridData: const FlGridData(show: false),
                           lineTouchData: lineTouchData(),
                           extraLinesData: previousPriceLineData(
                             show: showPreviousPrice,
                             previousClosePrice: previousClosePrice,
-                            maxLineValue:
-                                priceChartList.map((e) => e.value).reduce(max),
-                            minLineValue:
-                                priceChartList.map((e) => e.value).reduce(min),
+                            maxLineValue: priceChartList
+                                .map((e) => e.value)
+                                .reduce(max),
+                            minLineValue: priceChartList
+                                .map((e) => e.value)
+                                .reduce(min),
                           ),
                           lineBarsData: lineBarListData(
                             netChange: chart.netChange,

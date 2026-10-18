@@ -6,39 +6,32 @@ version: 1.0.0+1
 environment:
   sdk: ^3.13.0
 dependencies:
+  # keep this list alphabetically sorted (sort_pub_dependencies)
+  any_treemap: ^4.0.0
+  auto_size_text_plus: ^3.0.2
+  cupertino_icons: ^2.0.0
+  dio: ^5.11.1
+  equatable: ^2.1.0
+  fl_chart: ^1.2.0
   flutter:
     sdk: flutter
-  cupertino_icons: ^2.0.0
-
-  # UI
-  reorderables: ^0.6.0
-  flutter_slidable: ^4.0.3
-  table_calendar: ^3.3.0
-  pull_to_refresh_flutter3: ^2.0.2
-  auto_size_text_plus: ^3.0.2
-  highlight_text: ^1.8.0
   flutter_inappwebview: ^6.1.5
-  shimmer_animation: ^2.2.2+1
-  fl_chart: ^1.2.0
-  any_treemap: ^4.0.0
-
-  # DataBase
+  flutter_slidable: ^4.0.3
+  get: ^4.7.3
+  highlight_text: ^1.8.0
   hive_ce: ^2.22.0
   hive_ce_flutter: ^2.5.0
-
-  # Utils
-  equatable: ^2.1.0
-  dio: ^5.11.1
-  intl: ^0.20.3
   http: ^1.6.0
-
-  # StateManager
-  get: ^4.7.3
+  intl: ^0.20.3
+  pull_to_refresh_flutter3: ^2.0.2
+  reorderables: ^0.6.0
+  shimmer_animation: ^2.2.2+1
+  table_calendar: ^3.3.0
 
 dev_dependencies:
+  change_app_package_name: ^1.5.0
+  flutter_lints: ^6.0.0
   flutter_test:
     sdk: flutter
-  flutter_lints: ^6.0.0
-  change_app_package_name: ^1.5.0
 flutter:
   uses-material-design: true

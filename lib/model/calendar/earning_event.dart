@@ -44,23 +44,23 @@ class EarningEvent extends CalendarEvent {
       noOfEsts: map['noOfEsts'] as String,
       lastYearRptDt: map['lastYearRptDt'] as String?,
       lastYearEPS: map['lastYearEPS'] as String?,
-      eps: map["eps"] as String?,
-      surprise: map["surprice"] as String?,
+      eps: map['eps'] as String?,
+      surprise: map['surprice'] as String?,
     );
   }
 
   @override
   List<Object?> get props => [
-        lastYearEPS,
-        lastYearRptDt,
-        time,
-        symbol,
-        name,
-        marketCap,
-        firscalQuarterEnding,
-        epsForecast,
-        noOfEsts,
-        eps,
-        surprise,
-      ];
+    lastYearEPS,
+    lastYearRptDt,
+    time,
+    symbol,
+    name,
+    marketCap,
+    firscalQuarterEnding,
+    epsForecast,
+    noOfEsts,
+    eps,
+    surprise,
+  ];
 }

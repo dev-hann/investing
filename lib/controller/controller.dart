@@ -9,9 +9,9 @@ abstract class Controller<T extends UseCase> extends GetxController {
   Controller(this.useCase);
   final T useCase;
 
-  final Completer _initComputer = Completer();
+  final Completer<void> _initComputer = Completer<void>();
 
-  Future get loading => _initComputer.future;
+  Future<void> get loading => _initComputer.future;
 
   Future<O?> bottomSheet<O>(
     Widget widget, {
@@ -25,9 +25,7 @@ abstract class Controller<T extends UseCase> extends GetxController {
     );
   }
 
-  Future<O> showOverlay<O>(
-    Future<O> Function() asyncFunction,
-  ) {
+  Future<O> showOverlay<O>(Future<O> Function() asyncFunction) {
     return Get.showOverlay<O>(
       asyncFunction: asyncFunction,
       loadingWidget: const IVLoadingWidget(),

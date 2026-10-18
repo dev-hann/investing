@@ -20,24 +20,28 @@ class StockCompany extends Equatable {
 
   @override
   List<Object?> get props => [
-        name,
-        symbol,
-        address,
-        industry,
-        sector,
-        region,
-        description,
-      ];
+    name,
+    symbol,
+    address,
+    industry,
+    sector,
+    region,
+    description,
+  ];
 
   factory StockCompany.fromMap(Map<String, dynamic> map) {
+    String valueOf(String key) {
+      return (map[key] as Map<String, dynamic>)['value'] as String;
+    }
+
     return StockCompany(
-      map['CompanyName']["value"] as String,
-      map['Symbol']["value"] as String,
-      map['Address']["value"] as String,
-      map['Industry']["value"] as String,
-      map['Sector']["value"] as String,
-      map['Region']["value"] as String,
-      map['CompanyDescription']["value"] as String,
+      valueOf('CompanyName'),
+      valueOf('Symbol'),
+      valueOf('Address'),
+      valueOf('Industry'),
+      valueOf('Sector'),
+      valueOf('Region'),
+      valueOf('CompanyDescription'),
     );
   }
 }

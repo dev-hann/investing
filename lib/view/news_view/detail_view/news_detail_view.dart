@@ -3,16 +3,11 @@ import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:investing/model/news.dart';
 
 class NewsDetailView extends StatelessWidget {
-  const NewsDetailView({
-    super.key,
-    required this.news,
-  });
+  const NewsDetailView({super.key, required this.news});
   final News news;
 
   AppBar appBar() {
-    return AppBar(
-      title: const Text("News Detail View"),
-    );
+    return AppBar(title: const Text('News Detail View'));
   }
 
   @override
@@ -20,9 +15,7 @@ class NewsDetailView extends StatelessWidget {
     return Scaffold(
       appBar: appBar(),
       body: InAppWebView(
-        initialUrlRequest: URLRequest(
-          url: WebUri(news.articleDetailURL),
-        ),
+        initialUrlRequest: URLRequest(url: WebUri(news.articleDetailURL)),
       ),
     );
   }

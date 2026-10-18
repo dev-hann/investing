@@ -1,14 +1,8 @@
 import 'package:get/get.dart';
 import 'package:investing/controller/controller.dart';
-import 'package:investing/use_case/home_use_cas.dart';
+import 'package:investing/use_case/home_use_case.dart';
 
-enum PageType {
-  watchList,
-  news,
-  event,
-  map,
-  setting,
-}
+enum PageType { watchList, news, event, map, setting }
 
 class HomeController extends Controller<HomeUseCase> {
   HomeController(super.useCase);

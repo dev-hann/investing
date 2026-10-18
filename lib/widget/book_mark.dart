@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:investing/controller/stock_controller.dart';
@@ -21,7 +23,7 @@ class BookMarkWidget extends StatelessWidget {
         final isContains = controller.isContains(stock);
         return GestureDetector(
           onTap: () {
-            controller.toggleFavoriteStock(stock);
+            unawaited(controller.toggleFavoriteStock(stock));
           },
           child: Icon(
             isContains ? Icons.bookmark : Icons.bookmark_border,

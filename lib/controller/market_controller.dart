@@ -21,27 +21,28 @@ class MarketController extends Controller<MarketUseCase> {
     //   }
     //   return refreshMarketPercentData();
     // });
-    refreshMarketData();
+    unawaited(refreshMarketData());
     super.onReady();
   }
 
   final RxList<MarketData> marketDataList = RxList();
-  Future refreshMarketData() async {
+  Future<void> refreshMarketData() async {
     final data = await useCase.requestMarketData();
     marketDataList(data);
   }
 
   final RxMap<String, double> marketPercentData = RxMap();
-  Future refreshMarketPercentData() async {
+  Future<void> refreshMarketPercentData() async {
     final data = await useCase.requestMarketPercentData();
     marketPercentData(data);
   }
 
   final RxMap<String, List<double>> marketChartData = RxMap();
   Future<Map<String, List<double>>> requestMarketChartData(
-      List<String> symbolList) async {
+    List<String> symbolList,
+  ) async {
     final Map<String, List<double>> res = {};
-    final tmpSymbolList = [];
+    final tmpSymbolList = <String>[];
 
     for (final symbol in symbolList) {
       if (marketChartData.containsKey(symbol)) {
@@ -54,8 +55,9 @@ class MarketController extends Controller<MarketUseCase> {
       final data = await useCase.requestChartData(symbolList);
       for (final entry in data.entries) {
         final key = entry.key;
-        final value =
-            List<num>.from(entry.value).map((e) => e.toDouble()).toList();
+        final value = List<num>.from(entry.value)
+            .map((e) => e.toDouble())
+            .toList();
         marketChartData[key] = value;
         res[key] = value;
       }
@@ -63,7 +65,7 @@ class MarketController extends Controller<MarketUseCase> {
     return res;
   }
 
-  Future refreshMarketPercentRealTimeData() async {
+  Future<void> refreshMarketPercentRealTimeData() async {
     Map<String, double> percentData = marketPercentData;
     if (percentData.isEmpty) {
       percentData = await useCase.requestMarketPercentData();
@@ -79,14 +81,14 @@ class MarketController extends Controller<MarketUseCase> {
       map.addEntries(data.entries);
     }
     marketPercentData(map);
-    await Future.delayed(const Duration(seconds: 5));
-    refreshMarketPercentRealTimeData();
+    await Future<void>.delayed(const Duration(seconds: 5));
+    unawaited(refreshMarketPercentRealTimeData());
   }
 
   // MarketStatus
   final Rxn<MarketStatus?> marketStatus = Rxn();
   late Timer _marketTimer;
-  Future refreshMarketStatus() async {
+  Future<void> refreshMarketStatus() async {
     final status = await useCase.requestMarketStatus();
     marketStatus(status);
     if (!status.isOpened) {
@@ -94,11 +96,11 @@ class MarketController extends Controller<MarketUseCase> {
       final leftDuration = now.difference(status.preMarketOpen);
       _marketTimer = Timer.periodic(leftDuration, (_) {
         // Open Market!
-        refreshMarketStatus();
+        unawaited(refreshMarketStatus());
         _marketTimer.cancel();
       });
       return;
     }
-    Get.snackbar("Market Status", "Market is Opened!");
+    Get.snackbar('Market Status', 'Market is Opened!');
   }
 }

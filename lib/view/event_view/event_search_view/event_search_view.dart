@@ -9,18 +9,14 @@ class EventSearchView extends StatefulWidget {
 
 class _EventSearchViewState extends State<EventSearchView> {
   AppBar appBar() {
-    return AppBar(
-      title: const Text("Event Search View"),
-    );
+    return AppBar(title: const Text('Event Search View'));
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: appBar(),
-      body: const Center(
-        child: Text("Work In Progress"),
-      ),
+      body: const Center(child: Text('Work In Progress')),
     );
   }
 }

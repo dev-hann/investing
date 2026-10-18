@@ -35,13 +35,13 @@ class DividendEvent extends CalendarEvent {
 
   @override
   List<Object?> get props => [
-        companyName,
-        symbol,
-        dividendExDateTime,
-        paymentDateTime,
-        recordDateTime,
-        dividendRate,
-        indicatedAnnualDividend,
-        announcementDateTime,
-      ];
+    companyName,
+    symbol,
+    dividendExDateTime,
+    paymentDateTime,
+    recordDateTime,
+    dividendRate,
+    indicatedAnnualDividend,
+    announcementDateTime,
+  ];
 }

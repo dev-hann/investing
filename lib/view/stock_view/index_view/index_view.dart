@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:auto_size_text_plus/auto_size_text_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -10,31 +12,21 @@ import 'package:investing/widget/stock_price_builder.dart';
 import 'package:investing/widget/title_widget.dart';
 
 class IndexView extends StatelessWidget {
-  const IndexView({
-    super.key,
-    required this.indexList,
-  });
+  const IndexView({super.key, required this.indexList});
   final List<Stock>? indexList;
 
   Widget loadingItem() {
     final width = Get.width / 2.5;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 4.0),
-      child: IVShimmer(
-        width: width,
-        height: width,
-      ),
+      child: IVShimmer(width: width, height: width),
     );
   }
 
-  Widget item({
-    required Stock index,
-  }) {
+  Widget item({required Stock index}) {
     return GestureDetector(
       onTap: () {
-        Get.to(
-          StockDetailView(stock: index),
-        );
+        unawaited(Get.to<void>(StockDetailView(stock: index)));
       },
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 4.0),
@@ -54,34 +46,33 @@ class IndexView extends StatelessWidget {
                     children: [
                       Row(
                         children: [
-                          AutoSizeText(
-                            index.name,
-                            maxLines: 1,
-                          ),
-                          const Icon(Icons.arrow_forward_ios)
+                          AutoSizeText(index.name, maxLines: 1),
+                          const Icon(Icons.arrow_forward_ios),
                         ],
                       ),
                       IVStockPriceBuilder(
                         stock: index,
                         builder:
                             (indicator, percentageChange, netChage, lastPrice) {
-                          return Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                IVNumberFormat.indexFormat(lastPrice),
-                                style: Theme.of(context).textTheme.titleMedium,
-                              ),
-                              Row(
+                              return Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(indicator),
-                                  Text("$percentageChange%"),
-                                  Text("($netChage)"),
+                                  Text(
+                                    IVNumberFormat.indexFormat(lastPrice),
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .titleMedium,
+                                  ),
+                                  Row(
+                                    children: [
+                                      Text(indicator),
+                                      Text('$percentageChange%'),
+                                      Text('($netChage)'),
+                                    ],
+                                  ),
                                 ],
-                              ),
-                            ],
-                          );
-                        },
+                              );
+                            },
                       ),
                     ],
                   );
@@ -99,7 +90,7 @@ class IndexView extends StatelessWidget {
     return TitleWidget(
       title: const Padding(
         padding: EdgeInsets.symmetric(horizontal: 16.0),
-        child: Text("Index"),
+        child: Text('Index'),
       ),
       child: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
@@ -115,9 +106,7 @@ class IndexView extends StatelessWidget {
                 ],
               );
             }
-            return Row(
-              children: list.map((e) => item(index: e)).toList(),
-            );
+            return Row(children: list.map((e) => item(index: e)).toList());
           },
         ),
       ),

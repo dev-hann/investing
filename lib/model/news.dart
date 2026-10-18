@@ -19,7 +19,7 @@ class News extends Equatable {
   final String image;
 
   String get articleDetailURL {
-    return "https://nasdaq.com$url";
+    return 'https://nasdaq.com$url';
   }
 
   String? get headPhoto {
@@ -31,14 +31,14 @@ class News extends Equatable {
 
   @override
   List<Object?> get props => [
-        index,
-        title,
-        created,
-        publisher,
-        url,
-        imageDomain,
-        image,
-      ];
+    index,
+    title,
+    created,
+    publisher,
+    url,
+    imageDomain,
+    image,
+  ];
 
   factory News.latest(Map<String, dynamic> map) {
     return News(
@@ -48,25 +48,25 @@ class News extends Equatable {
       publisher: map['publisher'] as String,
       url: map['url'] as String,
       image: map['image'] as String,
-      imageDomain: map["imagedomain"] as String,
+      imageDomain: map['imagedomain'] as String,
     );
   }
   factory News.search(Map<String, dynamic> map) {
     return News(
-      index: List.from(map['nid']).first as int,
-      title: List.from(map['title']).first as String,
-      created: map["crdt"],
+      index: (map['nid'] as List<dynamic>).first as int,
+      title: (map['title'] as List<dynamic>).first as String,
+      created: map['crdt'] as String?,
       publisher: map['publisher_name'] == null
-          ? ""
-          : List.from(map['publisher_name']).first as String,
-      url: List.from(map['url']).first as String,
+          ? ''
+          : (map['publisher_name'] as List<dynamic>).first as String,
+      url: (map['url'] as List<dynamic>).first as String,
       // ignore: prefer_interpolation_to_compose_strings
       image: map['field_image_url'] == null
-          ? ""
-          : (List.from(map['field_image_url']).first as String)
-              .split('//')
-              .last,
-      imageDomain: "https://www.nasdaq.com/sites/acquia.prod/files/",
+          ? ''
+          : ((map['field_image_url'] as List<dynamic>).first as String)
+                .split('//')
+                .last,
+      imageDomain: 'https://www.nasdaq.com/sites/acquia.prod/files/',
     );
   }
 }

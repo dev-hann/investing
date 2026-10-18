@@ -9,8 +9,8 @@ class EconomicEvent extends CalendarEvent {
     required this.consensus,
     required this.previous,
     required this.description,
-  })  : country = Country.fromName(country),
-        super(CalendarEventType.economics);
+  }) : country = Country.fromName(country),
+       super(CalendarEventType.economics);
   final String gmt;
   final Country country;
   final String eventName;
@@ -33,13 +33,13 @@ class EconomicEvent extends CalendarEvent {
 
   @override
   List<Object?> get props => [
-        type,
-        gmt,
-        country,
-        eventName,
-        actual,
-        consensus,
-        previous,
-        description,
-      ];
+    type,
+    gmt,
+    country,
+    eventName,
+    actual,
+    consensus,
+    previous,
+    description,
+  ];
 }

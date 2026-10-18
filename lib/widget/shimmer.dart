@@ -16,10 +16,7 @@ class IVShimmer extends StatelessWidget {
   final Color background;
 
   factory IVShimmer.listTile() {
-    return const IVShimmer(
-      width: double.infinity,
-      height: kToolbarHeight,
-    );
+    return const IVShimmer(width: double.infinity, height: kToolbarHeight);
   }
 
   @override
@@ -27,10 +24,7 @@ class IVShimmer extends StatelessWidget {
     return ClipRRect(
       borderRadius: radius,
       child: Shimmer(
-        child: SizedBox(
-          width: width,
-          height: height,
-        ),
+        child: SizedBox(width: width, height: height),
       ),
     );
   }

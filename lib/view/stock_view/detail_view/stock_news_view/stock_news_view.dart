@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:investing/controller/news_controller.dart';
@@ -9,10 +11,7 @@ import 'package:investing/widget/text_button.dart';
 import 'package:investing/widget/title_widget.dart';
 
 class StockNewsView extends StatefulWidget {
-  const StockNewsView({
-    super.key,
-    required this.stock,
-  });
+  const StockNewsView({super.key, required this.stock});
   final Stock stock;
 
   @override
@@ -26,12 +25,11 @@ class _StockNewsViewState extends State<StockNewsView> {
   @override
   void initState() {
     super.initState();
-    controller
-        .searchStockNewsList(
-          stock: widget.stock,
-          page: 1,
-        )
-        .then(newsList.call);
+    unawaited(
+      controller
+          .searchStockNewsList(stock: widget.stock, page: 1)
+          .then(newsList.call),
+    );
   }
 
   Widget item(News news) {
@@ -40,14 +38,10 @@ class _StockNewsViewState extends State<StockNewsView> {
       child: Card(
         child: ListTile(
           onTap: () {
-            Get.to(NewsDetailView(news: news));
+            unawaited(Get.to<void>(NewsDetailView(news: news)));
           },
-          title: Text(
-            news.title,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-          ),
-          subtitle: Text(news.created ?? ""),
+          title: Text(news.title, maxLines: 1, overflow: TextOverflow.ellipsis),
+          subtitle: Text(news.created ?? ''),
         ),
       ),
     );
@@ -65,12 +59,12 @@ class _StockNewsViewState extends State<StockNewsView> {
         child: Column(
           children: [
             TitleWidget.withButton(
-              title: const Text("News"),
+              title: const Text('News'),
               trailing: IVTextButton.more(
                 onTap: () {
-                  controller.bottomSheet(
-                    StockNewsDetailView(
-                      stock: widget.stock,
+                  unawaited(
+                    controller.bottomSheet<void>(
+                      StockNewsDetailView(stock: widget.stock),
                     ),
                   );
                 },

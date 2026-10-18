@@ -15,22 +15,22 @@ class IVChartButton extends StatelessWidget {
   final List<ChartRangeType> rangeTypeList;
   final Color activeColor;
   final Color background;
-  final Function(ChartRangeType type) onTap;
+  final void Function(ChartRangeType type) onTap;
 
   String text(ChartRangeType type) {
     switch (type) {
       case ChartRangeType.realTime:
-        return "Live";
+        return 'Live';
       case ChartRangeType.oneDay:
-        return "1D";
+        return '1D';
       case ChartRangeType.oneMonth:
-        return "1M";
+        return '1M';
       case ChartRangeType.threeMonth:
-        return "3M";
+        return '3M';
       case ChartRangeType.oneYear:
-        return "1Y";
+        return '1Y';
       case ChartRangeType.all:
-        return "All";
+        return 'All';
     }
   }
 
@@ -68,8 +68,9 @@ class IVChartButton extends StatelessWidget {
         borderRadius: BorderRadius.circular(8.0),
       ),
       child: Row(
-        children:
-            rangeTypeList.map((e) => Expanded(child: itemWidget(e))).toList(),
+        children: rangeTypeList
+            .map((e) => Expanded(child: itemWidget(e)))
+            .toList(),
       ),
     );
   }

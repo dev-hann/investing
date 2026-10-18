@@ -5,13 +5,10 @@ import 'package:investing/model/market.dart';
 
 void main() {
   test('IVChart parses and compares by dateTime', () {
-    final chart = IVChart.fromMap(const {
-      'x': 100,
-      'y': 2.5,
-    });
+    final chart = IVChart.fromMap(const {'x': 100, 'y': 2.5});
     expect(chart.dateTime, 100);
     expect(chart.value, 2.5);
-    expect(chart.compareTo(IVChart(200, 1.0)), isNegative);
+    expect(chart.compareTo(const IVChart(200, 1.0)), isNegative);
   });
 
   test('MarketData parses nested sectors and items', () {

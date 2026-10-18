@@ -6,6 +6,8 @@ All notable changes to this project are documented here. Format follows [Keep a 
 
 ### Added
 - GitHub Actions CI (analyze + test + debug APK on push/PR). [`ci.yml`](.github/workflows/ci.yml)
+- Strict analysis profile: `strict-casts` / `strict-inference` / `strict-raw-types` plus an extended lint set (explicit casts at the JSON boundary, `unawaited` discipline, const/quotes/formatting rules); formatting enforced in CI via `dart format --set-exit-if-changed`.
+- Misspelled filenames corrected: `home_use_cas.dart`→`home_use_case.dart`, `stock_search_contrller.dart`→`stock_search_controller.dart`, `earming_event_card.dart`→`earning_event_card.dart`, `stock_summay.dart`→`stock_summary.dart`, `evnet_search_view.dart`→`event_search_view.dart`.
 - Tag-driven release pipeline: `v*` tag builds a keystore-signed release APK and publishes it to GitHub Releases. [`release.yml`](.github/workflows/release.yml)
 - Release signing with dedicated keystore via GitHub Secrets (`debug`-signed fallback for local builds without `key.properties`).
 - Documentation set: rewritten README, `AGENTS.md` for AI assistants, `docs/ARCHITECTURE.md`, ADR index + records 0001–0004, this changelog.

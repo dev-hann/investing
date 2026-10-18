@@ -4,7 +4,7 @@ abstract class UseCase<T extends Repo> {
   UseCase(this.repo);
   final T repo;
 
-  Future init() {
+  Future<void> init() {
     return repo.init();
   }
 }

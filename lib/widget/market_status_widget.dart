@@ -5,43 +5,33 @@ import 'package:investing/controller/market_controller.dart';
 import 'package:investing/model/market_status.dart';
 
 class MarketStatusWidget extends StatelessWidget {
-  const MarketStatusWidget({
-    super.key,
-  });
+  const MarketStatusWidget({super.key});
 
-  Widget statusIcon({
-    required bool isOpned,
-  }) {
+  Widget statusIcon({required bool isOpned}) {
     return Icon(
       Icons.online_prediction,
       color: isOpned ? IVColor.orange : IVColor.grey,
     );
   }
 
-  Widget statusText({
-    required bool isOpned,
-    required MarketStatusType type,
-  }) {
-    String text = "Closed";
+  Widget statusText({required bool isOpned, required MarketStatusType type}) {
+    String text = 'Closed';
     if (isOpned) {
       switch (type) {
         case MarketStatusType.pre:
-          text = "Pre";
+          text = 'Pre';
           break;
         case MarketStatusType.regular:
-          text = "Open";
+          text = 'Open';
           break;
         case MarketStatusType.after:
-          text = "After";
+          text = 'After';
           break;
       }
     }
     return Builder(
       builder: (context) {
-        return Text(
-          text,
-          style: Theme.of(context).textTheme.labelSmall,
-        );
+        return Text(text, style: Theme.of(context).textTheme.labelSmall);
       },
     );
   }
@@ -59,13 +49,8 @@ class MarketStatusWidget extends StatelessWidget {
       return Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          statusIcon(
-            isOpned: isOpened,
-          ),
-          statusText(
-            isOpned: isOpened,
-            type: type,
-          ),
+          statusIcon(isOpned: isOpened),
+          statusText(isOpned: isOpened, type: type),
         ],
       );
     });

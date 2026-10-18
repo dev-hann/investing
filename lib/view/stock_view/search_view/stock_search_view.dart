@@ -1,25 +1,25 @@
-import 'package:investing/controller/stock_search_contrller.dart';
+import 'dart:async';
+
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:investing/controller/stock_search_controller.dart';
 import 'package:investing/model/stock/stock.dart';
 import 'package:investing/view/stock_view/detail_view/stock_detail_view.dart';
 import 'package:investing/widget/book_mark.dart';
 import 'package:investing/widget/stock_card.dart';
 import 'package:investing/widget/text_field.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:investing/widget/title_widget.dart';
 
 class StockSearchView extends StatelessWidget {
   const StockSearchView({super.key});
 
   AppBar appBar() {
-    return AppBar(
-      title: const Text("Search Stock"),
-    );
+    return AppBar(title: const Text('Search Stock'));
   }
 
   Widget queryTextField({
     required TextEditingController queryController,
-    required Function(String text) onSubmitted,
+    required void Function(String text) onSubmitted,
   }) {
     return Card(
       child: CustomTextfield(
@@ -27,7 +27,7 @@ class StockSearchView extends StatelessWidget {
         textInputAction: TextInputAction.search,
         onSubmitted: onSubmitted,
         autoFocus: true,
-        hintText: "Aa",
+        hintText: 'Aa',
       ),
     );
   }
@@ -37,10 +37,10 @@ class StockSearchView extends StatelessWidget {
     required List<Stock>? searchList,
   }) {
     if (searchList == null) {
-      return const Text("init View");
+      return const Text('init View');
     }
     if (searchList.isEmpty) {
-      return const Text("Result Empty View");
+      return const Text('Result Empty View');
     }
     return Column(
       children: searchList.map((stock) {
@@ -50,13 +50,9 @@ class StockSearchView extends StatelessWidget {
             child: StockCard(
               stock: stock,
               highlight: query,
-              trailing: BookMarkWidget(
-                stock: stock,
-              ),
+              trailing: BookMarkWidget(stock: stock),
               onTap: () {
-                Get.to(
-                  StockDetailView(stock: stock),
-                );
+                unawaited(Get.to<void>(StockDetailView(stock: stock)));
               },
             ),
           ),
@@ -87,12 +83,12 @@ class StockSearchView extends StatelessWidget {
                     if (query.isEmpty) {
                       return;
                     }
-                    controller.searchStock(query);
+                    unawaited(controller.searchStock(query));
                   },
                 ),
                 const SizedBox(height: 16.0),
                 TitleWidget(
-                  title: const Text("Result"),
+                  title: const Text('Result'),
                   child: searchedListWidget(
                     query: queryController.text,
                     searchList: searchList,

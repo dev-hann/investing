@@ -22,24 +22,15 @@ class IVDateTimeRange extends Equatable {
 
   factory IVDateTimeRange.beforeDay(int day) {
     final now = DateTime.now();
-    return IVDateTimeRange(
-      now.add(Duration(days: -day)),
-      now,
-    );
+    return IVDateTimeRange(now.add(Duration(days: -day)), now);
   }
   factory IVDateTimeRange.beforeMonth(int month) {
     final now = DateTime.now();
-    return IVDateTimeRange(
-      DateTime(now.year, now.month - month, now.day),
-      now,
-    );
+    return IVDateTimeRange(DateTime(now.year, now.month - month, now.day), now);
   }
   factory IVDateTimeRange.beforeYear(int year) {
     final now = DateTime.now();
-    return IVDateTimeRange(
-      DateTime(now.year - year, now.month, now.day),
-      now,
-    );
+    return IVDateTimeRange(DateTime(now.year - year, now.month, now.day), now);
   }
 
   static IVDateTimeRange? fromRangeType(ChartRangeType type) {

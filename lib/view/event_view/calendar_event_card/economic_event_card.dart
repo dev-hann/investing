@@ -3,14 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:investing/model/calendar/calendar_event.dart';
 
 class EconomicEventCard extends StatelessWidget {
-  const EconomicEventCard({
-    super.key,
-    required this.event,
-  });
+  const EconomicEventCard({super.key, required this.event});
   final EconomicEvent event;
 
   String removeNbsp(String data) {
-    return data.replaceAll("&nbsp;", "-");
+    return data.replaceAll('&nbsp;', '-');
   }
 
   Widget leadingWidget() {
@@ -18,7 +15,7 @@ class EconomicEventCard extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(event.gmt),
-        Text("${event.country.code} ${event.country.icon()}"),
+        Text('${event.country.code} ${event.country.icon()}'),
       ],
     );
   }
@@ -29,7 +26,7 @@ class EconomicEventCard extends StatelessWidget {
 
   Widget subtitleWidget() {
     return AutoSizeText(
-      "Act: ${removeNbsp(event.actual)} | Cons: ${removeNbsp(event.consensus)} | Prev: ${removeNbsp(event.previous)}",
+      'Act: ${removeNbsp(event.actual)} | Cons: ${removeNbsp(event.consensus)} | Prev: ${removeNbsp(event.previous)}',
       maxLines: 1,
     );
   }
@@ -54,10 +51,7 @@ class EconomicEventCard extends StatelessWidget {
               title: titleWidget(),
               subtitle: subtitleWidget(),
               children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(desc),
-                ),
+                Padding(padding: const EdgeInsets.all(8.0), child: Text(desc)),
               ],
             ),
           );

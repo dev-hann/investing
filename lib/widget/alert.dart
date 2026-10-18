@@ -1,12 +1,7 @@
 import 'package:flutter/material.dart';
 
 class IVAlert extends StatelessWidget {
-  const IVAlert({
-    super.key,
-    this.title,
-    this.content,
-    this.actions,
-  });
+  const IVAlert({super.key, this.title, this.content, this.actions});
   final Widget? title;
   final Widget? content;
   final List<Widget>? actions;

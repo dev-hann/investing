@@ -2,14 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:investing/model/calendar/calendar_event.dart';
 
 class DividendEventCard extends StatelessWidget {
-  const DividendEventCard({
-    super.key,
-    required this.event,
-  });
+  const DividendEventCard({super.key, required this.event});
   final DividendEvent event;
 
   String removeNbsp(String data) {
-    return data.replaceAll("&nbsp;", "-");
+    return data.replaceAll('&nbsp;', '-');
   }
 
   Widget titleWidget() {
@@ -34,7 +31,7 @@ class DividendEventCard extends StatelessWidget {
             child: ExpansionTile(
               title: titleWidget(),
               subtitle: subtitleWidget(),
-              children: [],
+              children: const [],
             ),
           );
         },

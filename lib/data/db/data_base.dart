@@ -3,12 +3,12 @@ import 'package:hive_ce_flutter/hive_flutter.dart';
 class IVDataBase {
   IVDataBase(this.name);
   final String name;
-  late Box _box;
-  Future init() async {
+  late Box<dynamic> _box;
+  Future<void> init() async {
     _box = await Hive.openBox(name);
   }
 
-  Future updateStock({
+  Future<void> updateStock({
     required String symbol,
     required Map<String, dynamic> data,
   }) {
@@ -23,13 +23,13 @@ class IVDataBase {
     return _box.get(symbol);
   }
 
-  Future clear() {
+  Future<int> clear() {
     return _box.clear();
   }
 
-  Stream get stream => _box.watch();
+  Stream<BoxEvent> get stream => _box.watch();
 
-  Future removeStock(String symbol) {
+  Future<void> removeStock(String symbol) {
     return _box.delete(symbol);
   }
 }

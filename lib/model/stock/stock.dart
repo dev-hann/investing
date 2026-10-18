@@ -3,19 +3,9 @@ import 'package:flutter/material.dart';
 
 import 'package:investing/model/chart.dart';
 
-enum StockType {
-  stock,
-  etf,
-  majorIndex,
-  fixedIncome,
-  commodity,
-}
+enum StockType { stock, etf, majorIndex, fixedIncome, commodity }
 
-enum IndicatorStatus {
-  up,
-  down,
-  same,
-}
+enum IndicatorStatus { up, down, same }
 
 class Stock extends Equatable implements Comparable<Stock> {
   Stock({
@@ -37,18 +27,18 @@ class Stock extends Equatable implements Comparable<Stock> {
 
   StockType get type {
     final assetText = asset.toLowerCase();
-    if (assetText == "etf") {
+    if (assetText == 'etf') {
       return StockType.etf;
-    } else if (assetText == "stocks") {
+    } else if (assetText == 'stocks') {
       return StockType.stock;
-    } else if (assetText == "index") {
+    } else if (assetText == 'index') {
       return StockType.majorIndex;
-    } else if (assetText == "fixedincome") {
+    } else if (assetText == 'fixedincome') {
       return StockType.fixedIncome;
-    } else if (assetText == "commodities") {
+    } else if (assetText == 'commodities') {
       return StockType.commodity;
     }
-    throw FlutterError("Unknown Stock Type $assetText");
+    throw FlutterError('Unknown Stock Type $assetText');
   }
 
   List<ChartRangeType> get chartRangeTypeList {
@@ -87,88 +77,56 @@ class Stock extends Equatable implements Comparable<Stock> {
 
   @override
   List<Object?> get props => [
-        symbol,
-        name,
-        asset,
-        lastSalePrice,
-        netChange,
-        percentChange,
-        order,
-      ];
+    symbol,
+    name,
+    asset,
+    lastSalePrice,
+    netChange,
+    percentChange,
+    order,
+  ];
 
   factory Stock.snp() {
-    return Stock(
-      symbol: "SPX",
-      name: "S&P 500",
-      asset: "index",
-    );
+    return Stock(symbol: 'SPX', name: 'S&P 500', asset: 'index');
   }
 
   factory Stock.dow() {
-    return Stock(
-      symbol: "INDU",
-      name: "DOW",
-      asset: "index",
-    );
+    return Stock(symbol: 'INDU', name: 'DOW', asset: 'index');
   }
   factory Stock.nasdaq100() {
-    return Stock(
-      symbol: "NDX",
-      name: "Nasdaq-100",
-      asset: "index",
-    );
+    return Stock(symbol: 'NDX', name: 'Nasdaq-100', asset: 'index');
   }
 
   factory Stock.nasdaq() {
-    return Stock(
-      symbol: "COMP",
-      name: "Nasdaq",
-      asset: "index",
-    );
+    return Stock(symbol: 'COMP', name: 'Nasdaq', asset: 'index');
   }
   factory Stock.treasury2Y() {
     return Stock(
-      symbol: "CMTN2Y",
-      name: "2 Years Treasury",
-      asset: "fixedincome",
+      symbol: 'CMTN2Y',
+      name: '2 Years Treasury',
+      asset: 'fixedincome',
     );
   }
   factory Stock.treasury20Y() {
     return Stock(
-      symbol: "CMTN20Y",
-      name: "20 Years Treasury",
-      asset: "fixedincome",
+      symbol: 'CMTN20Y',
+      name: '20 Years Treasury',
+      asset: 'fixedincome',
     );
   }
   factory Stock.crudeOil() {
-    return Stock(
-      symbol: "CL%3ANMX",
-      name: "WTI Oil",
-      asset: "commodities",
-    );
+    return Stock(symbol: 'CL%3ANMX', name: 'WTI Oil', asset: 'commodities');
   }
 
   factory Stock.gold() {
-    return Stock(
-      symbol: "GC%3ACMX",
-      name: "Gold",
-      asset: "commodities",
-    );
+    return Stock(symbol: 'GC%3ACMX', name: 'Gold', asset: 'commodities');
   }
   factory Stock.copper() {
-    return Stock(
-      symbol: "hg%3Acmx",
-      name: "Copper",
-      asset: "commodities",
-    );
+    return Stock(symbol: 'hg%3Acmx', name: 'Copper', asset: 'commodities');
   }
 
   factory Stock.naturalGas() {
-    return Stock(
-      symbol: "ng%3Anmx",
-      name: "Natural Gas",
-      asset: "commodities",
-    );
+    return Stock(symbol: 'ng%3Anmx', name: 'Natural Gas', asset: 'commodities');
   }
 
   @override
@@ -210,7 +168,7 @@ class Stock extends Equatable implements Comparable<Stock> {
   }
 
   factory Stock.fromMap(dynamic data) {
-    final map = Map<String, dynamic>.from(data);
+    final map = Map<String, dynamic>.from(data as Map<dynamic, dynamic>);
     return Stock(
       order: map['order'] as int,
       symbol: map['symbol'] as String,

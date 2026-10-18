@@ -9,7 +9,7 @@ part './stock_service.dart';
 abstract class IVService {
   final _dio = Dio();
 
-  Future<Response> post(
+  Future<Response<dynamic>> post(
     String url, {
     Map<String, dynamic>? data,
     Map<String, dynamic>? headers,
@@ -17,24 +17,19 @@ abstract class IVService {
     return _dio.post(
       url,
       data: data,
-      options: Options(
-        headers: headers,
-      ),
+      options: Options(headers: headers),
     );
   }
 
-  Future<Response> get(
+  Future<Response<dynamic>> get(
     String url, {
     Map<String, dynamic>? query,
   }) async {
     try {
-      return await _dio.get(
-        url,
-        queryParameters: query,
-      );
+      return await _dio.get(url, queryParameters: query);
     } catch (e) {
       if (e is DioException) {
-        debugPrint("URL: ${e.requestOptions.uri}");
+        debugPrint('URL: ${e.requestOptions.uri}');
       }
       rethrow;
     }

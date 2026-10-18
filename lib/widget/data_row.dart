@@ -1,11 +1,7 @@
 import 'package:flutter/widgets.dart';
 
 class IVDateRow extends StatelessWidget {
-  const IVDateRow({
-    super.key,
-    required this.title,
-    required this.data,
-  });
+  const IVDateRow({super.key, required this.title, required this.data});
   final Widget title;
   final Widget data;
 
@@ -16,9 +12,7 @@ class IVDateRow extends StatelessWidget {
         Expanded(
           child: DefaultTextStyle(
             maxLines: 1,
-            style: const TextStyle(
-              overflow: TextOverflow.ellipsis,
-            ),
+            style: const TextStyle(overflow: TextOverflow.ellipsis),
             child: title,
           ),
         ),

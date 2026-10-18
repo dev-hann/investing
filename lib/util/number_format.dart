@@ -8,21 +8,15 @@ class IVNumberFormat {
     if (number == null) {
       return 0.0;
     }
-    return double.tryParse(
-          number!.replaceAll(RegExp("[,\$%]"), ""),
-        ) ??
-        0.0;
+    return double.tryParse(number!.replaceAll(RegExp('[,\$%]'), '')) ?? 0.0;
   }
 
-  static String priceFormat(
-    double price, {
-    int decimalDigits = 2,
-  }) {
+  static String priceFormat(double price, {int decimalDigits = 2}) {
     return NumberFormat.simpleCurrency(decimalDigits: decimalDigits)
         .format(price);
   }
 
   static String indexFormat(double value) {
-    return NumberFormat.currency(symbol: "").format(value);
+    return NumberFormat.currency(symbol: '').format(value);
   }
 }

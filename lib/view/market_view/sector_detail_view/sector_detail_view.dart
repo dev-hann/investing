@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:investing/controller/market_controller.dart';
@@ -25,24 +27,17 @@ class _SectorDetailViewState extends State<SectorDetailView> {
   @override
   void initState() {
     super.initState();
-    controller.requestMarketChartData(widget.symbolList).then(chartData.call);
+    unawaited(
+      controller.requestMarketChartData(widget.symbolList).then(chartData.call),
+    );
   }
 
   AppBar appBar() {
-    return AppBar(
-      title: const Text("Sector Detail View"),
-    );
+    return AppBar(title: const Text('Sector Detail View'));
   }
 
-  Widget item({
-    required String symbol,
-    required List<double> chartData,
-  }) {
-    return Row(
-      children: [
-        Text(symbol),
-      ],
-    );
+  Widget item({required String symbol, required List<double> chartData}) {
+    return Row(children: [Text(symbol)]);
   }
 
   @override
@@ -56,17 +51,12 @@ class _SectorDetailViewState extends State<SectorDetailView> {
           child: Obx(() {
             final data = chartData;
             if (data.isEmpty) {
-              return const Center(
-                child: IVLoadingWidget(),
-              );
+              return const Center(child: IVLoadingWidget());
             }
             return Column(
               children: chartData.entries
                   .map(
-                    (entry) => item(
-                      symbol: entry.key,
-                      chartData: entry.value,
-                    ),
+                    (entry) => item(symbol: entry.key, chartData: entry.value),
                   )
                   .toList(),
             );

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:investing/controller/setting_controller.dart';
@@ -13,9 +15,7 @@ class SettingView extends StatefulWidget {
 class _SettingViewState extends State<SettingView> {
   final controller = SettingController.find();
   AppBar appBar() {
-    return AppBar(
-      title: const Text("Setting"),
-    );
+    return AppBar(title: const Text('Setting'));
   }
 
   @override
@@ -28,7 +28,7 @@ class _SettingViewState extends State<SettingView> {
             children: [
               // TODO: (Future Work) Fix light theme mode
               SwitchListTile(
-                title: const Text("Dark Mode"),
+                title: const Text('Dark Mode'),
                 onChanged: (bool value) {
                   controller.toggleThemeMode();
                 },
@@ -36,9 +36,9 @@ class _SettingViewState extends State<SettingView> {
               ),
               ListTile(
                 onTap: () {
-                  Get.to(const ScreenerView());
+                  unawaited(Get.to<void>(const ScreenerView()));
                 },
-                title: const Text("Screener"),
+                title: const Text('Screener'),
               ),
             ],
           );

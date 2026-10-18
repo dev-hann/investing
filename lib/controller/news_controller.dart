@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:get/get.dart';
 import 'package:investing/controller/controller.dart';
 import 'package:investing/model/news.dart';
@@ -13,7 +15,7 @@ class NewsController extends Controller<NewsUseCase> {
   @override
   void onReady() {
     super.onReady();
-    refreshNewsList();
+    unawaited(refreshNewsList());
   }
 
   final RefreshController refreshController = RefreshController();
@@ -22,7 +24,7 @@ class NewsController extends Controller<NewsUseCase> {
 
   int _currentPage = 1;
 
-  Future refreshNewsList() async {
+  Future<void> refreshNewsList() async {
     _currentPage = 1;
     _newsList.clear();
     final list = await useCase.requestlatestNewsList(_currentPage);
@@ -30,14 +32,14 @@ class NewsController extends Controller<NewsUseCase> {
     refreshController.refreshCompleted();
   }
 
-  Future requestNextPageNewsList() async {
+  Future<void> requestNextPageNewsList() async {
     _currentPage++;
     final list = await useCase.requestlatestNewsList(_currentPage);
     _newsList.addAll(list);
     refreshController.loadComplete();
   }
 
-// Search
+  // Search
   Future<List<News>> searchNews(String query) async {
     return await useCase.searchNewList(query);
   }
@@ -46,9 +48,6 @@ class NewsController extends Controller<NewsUseCase> {
     required Stock stock,
     required int page,
   }) {
-    return useCase.searchStockNewsList(
-      stock: stock,
-      page: page,
-    );
+    return useCase.searchStockNewsList(stock: stock, page: page);
   }
 }

@@ -2,10 +2,10 @@ part of 'stock_repo.dart';
 
 class StockImpl extends StockRepo {
   final StockService service = StockService();
-  final IVDataBase favoriteDB = IVDataBase("Favorite");
+  final IVDataBase favoriteDB = IVDataBase('Favorite');
 
   @override
-  Future init() async {
+  Future<void> init() async {
     await favoriteDB.init();
     return super.init();
   }
@@ -16,52 +16,50 @@ class StockImpl extends StockRepo {
   }
 
   @override
-  List loadStockList() {
+  List<dynamic> loadStockList() {
     return favoriteDB.loadStockList();
   }
 
   @override
-  Future removeStock(String index) async {
+  Future<void> removeStock(String index) async {
     return favoriteDB.removeStock(index);
   }
 
   @override
-  Future updateStock({
+  Future<void> updateStock({
     required String symbol,
     required Map<String, dynamic> data,
   }) async {
-    return favoriteDB.updateStock(
-      symbol: symbol,
-      data: data,
-    );
+    return favoriteDB.updateStock(symbol: symbol, data: data);
   }
 
   @override
-  Future<List> searchStock(String query) async {
+  Future<List<dynamic>> searchStock(String query) async {
     final res = await service.searchStock(query);
-    return List.from(res.data["data"]["symbol"]["value"]);
+    final data = res.data as Map<String, dynamic>;
+    final symbolData =
+        (data['data'] as Map<String, dynamic>)['symbol']
+            as Map<String, dynamic>;
+    return List<dynamic>.from(symbolData['value'] as List<dynamic>);
   }
 
   @override
-  Future requestStock({
+  Future<dynamic> requestStock({
     required String symbol,
     required String asset,
   }) async {
-    final res = await service.requestStock(
-      symbol: symbol,
-      assetClass: asset,
-    );
+    final res = await service.requestStock(symbol: symbol, assetClass: asset);
     return res.data;
   }
 
   @override
-  Future requestStockList(List<String> symbolList) async {
+  Future<dynamic> requestStockList(List<String> symbolList) async {
     final res = await service.requestStockList(symbolList);
     return res.data;
   }
 
   @override
-  Future requestStockDividend({
+  Future<dynamic> requestStockDividend({
     required String symbol,
     required String asset,
   }) async {
@@ -73,7 +71,7 @@ class StockImpl extends StockRepo {
   }
 
   @override
-  Future requestStockFinancial({
+  Future<dynamic> requestStockFinancial({
     required String symbol,
     required int typeIndex,
   }) async {
@@ -85,7 +83,7 @@ class StockImpl extends StockRepo {
   }
 
   @override
-  Future requestStockChart({
+  Future<dynamic> requestStockChart({
     required String symbol,
     required String asset,
     required IVDateTimeRange? dateTimeRange,
@@ -100,8 +98,8 @@ class StockImpl extends StockRepo {
   }
 
   @override
-  Future reqeustStockCompany(String symbol) async {
+  Future<dynamic> reqeustStockCompany(String symbol) async {
     final res = await service.requestStockCompany(symbol);
-    return res.data["data"];
+    return (res.data as Map<String, dynamic>)['data'];
   }
 }

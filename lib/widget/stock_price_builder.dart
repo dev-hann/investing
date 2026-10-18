@@ -21,11 +21,11 @@ class IVStockPriceBuilder extends StatelessWidget {
   String indicatorText() {
     switch (stock.indicatorStatus) {
       case IndicatorStatus.up:
-        return "▲";
+        return '▲';
       case IndicatorStatus.down:
-        return "▼";
+        return '▼';
       case IndicatorStatus.same:
-        return "-";
+        return '-';
     }
   }
 

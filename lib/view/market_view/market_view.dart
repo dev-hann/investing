@@ -17,9 +17,7 @@ class _MarketViewState extends State<MarketView> {
   final MarketController controller = MarketController.find();
 
   AppBar appBar() {
-    return AppBar(
-      title: const Text("Market Map"),
-    );
+    return AppBar(title: const Text('Market Map'));
   }
 
   Color stockColor(double value) {
@@ -63,47 +61,45 @@ class _MarketViewState extends State<MarketView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: appBar(),
-      body: Obx(
-        () {
-          final list = controller.marketDataList;
-          final percentData = controller.marketPercentData;
-          if (list.isEmpty) {
-            return const SizedBox.shrink();
-          }
-          final tree = TreemapNormalizer.normalize(
-            TreemapNode<String>(
-              key: 'market',
-              children: [
-                for (final sector in list)
-                  sectorNode(
-                    name: sector.name,
-                    children: sector.childeren,
-                    percentData: percentData,
-                  ),
-              ],
-            ),
-          );
-          return RotatedBox(
-            quarterTurns: 1,
-            child: TreemapChart<String>(
-              tree: tree,
-              tiles: TreemapTiles<String>(
-                appearance: TreemapAppearanceResolver<String>(
-                  colorScale: TreemapColorScale.exact(
-                    const {},
-                    fallback: IVColor.blueGrey,
-                  ),
+      body: Obx(() {
+        final list = controller.marketDataList;
+        final percentData = controller.marketPercentData;
+        if (list.isEmpty) {
+          return const SizedBox.shrink();
+        }
+        final tree = TreemapNormalizer.normalize(
+          TreemapNode<String>(
+            key: 'market',
+            children: [
+              for (final sector in list)
+                sectorNode(
+                  name: sector.name,
+                  children: sector.childeren,
+                  percentData: percentData,
+                ),
+            ],
+          ),
+        );
+        return RotatedBox(
+          quarterTurns: 1,
+          child: TreemapChart<String>(
+            tree: tree,
+            tiles: TreemapTiles<String>(
+              appearance: TreemapAppearanceResolver<String>(
+                colorScale: TreemapColorScale.exact(
+                  const {},
+                  fallback: IVColor.blueGrey,
                 ),
               ),
-              labels: TreemapCanvasLabels<String>(),
-              layout: const TreemapLayoutConfig(
-                innerSpacing: 1,
-                outerPadding: TreemapInsets.all(1),
-              ),
             ),
-          );
-        },
-      ),
+            labels: TreemapCanvasLabels<String>(),
+            layout: const TreemapLayoutConfig(
+              innerSpacing: 1,
+              outerPadding: TreemapInsets.all(1),
+            ),
+          ),
+        );
+      }),
     );
   }
 }

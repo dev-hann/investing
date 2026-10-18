@@ -12,17 +12,10 @@ class IVTextButton extends StatelessWidget {
   final TextStyle? style;
   final Widget child;
 
-  factory IVTextButton.more({
-    required VoidCallback onTap,
-  }) {
+  factory IVTextButton.more({required VoidCallback onTap}) {
     return IVTextButton(
       onTap: onTap,
-      child: Row(
-        children: const [
-          Text("More"),
-          Icon(Icons.arrow_forward_ios),
-        ],
-      ),
+      child: const Row(children: [Text('More'), Icon(Icons.arrow_forward_ios)]),
     );
   }
 
@@ -31,15 +24,9 @@ class IVTextButton extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: IconTheme(
-        data: const IconThemeData(
-          color: IVColor.orange,
-          size: 12.0,
-        ),
+        data: const IconThemeData(color: IVColor.orange, size: 12.0),
         child: DefaultTextStyle(
-          style: style ??
-              const TextStyle(
-                color: IVColor.orange,
-              ),
+          style: style ?? const TextStyle(color: IVColor.orange),
           child: child,
         ),
       ),

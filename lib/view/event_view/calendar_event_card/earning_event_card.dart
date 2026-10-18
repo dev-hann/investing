@@ -2,14 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:investing/model/calendar/calendar_event.dart';
 
 class EarningEventCard extends StatelessWidget {
-  const EarningEventCard({
-    super.key,
-    required this.event,
-  });
+  const EarningEventCard({super.key, required this.event});
   final EarningEvent event;
 
   String removeNbsp(String data) {
-    return data.replaceAll("&nbsp;", "-");
+    return data.replaceAll('&nbsp;', '-');
   }
 
   Widget titleWidget() {
@@ -33,12 +30,10 @@ class EarningEventCard extends StatelessWidget {
           title: titleWidget(),
           subtitle: subtitleWidget(),
           // trailing: trailingWidget(),
-          children: [
+          children: const [
             Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                children: [],
-              ),
+              padding: EdgeInsets.all(8.0),
+              child: Column(children: []),
             ),
           ],
         ),

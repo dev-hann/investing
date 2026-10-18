@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:investing/controller/stock_controller.dart';
@@ -21,12 +23,14 @@ class _FinancialViewState extends State<FinancialView> {
   @override
   void initState() {
     super.initState();
-    controller
-        .requestStockFinancial(
-          stock: widget.stock,
-          type: FinancialType.annual,
-        )
-        .then(financial.call);
+    unawaited(
+      controller
+          .requestStockFinancial(
+            stock: widget.stock,
+            type: FinancialType.annual,
+          )
+          .then(financial.call),
+    );
   }
 
   @override
@@ -39,10 +43,8 @@ class _FinancialViewState extends State<FinancialView> {
       return Padding(
         padding: const EdgeInsets.symmetric(vertical: 8.0),
         child: TitleWidget(
-          title: const Text("Financial"),
-          child: Text(
-            financialValue.balanceTable.toString(),
-          ),
+          title: const Text('Financial'),
+          child: Text(financialValue.balanceTable.toString()),
         ),
       );
     });

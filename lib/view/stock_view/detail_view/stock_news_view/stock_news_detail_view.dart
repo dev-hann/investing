@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:investing/controller/news_controller.dart';
@@ -8,10 +10,7 @@ import 'package:investing/widget/news_card.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 
 class StockNewsDetailView extends StatefulWidget {
-  const StockNewsDetailView({
-    super.key,
-    required this.stock,
-  });
+  const StockNewsDetailView({super.key, required this.stock});
   final Stock stock;
 
   @override
@@ -44,14 +43,13 @@ class _StockNewsDetailViewState extends State<StockNewsDetailView> {
       page: page,
     );
     newsList.addAll(list);
-    refreshController.loadComplete();
-    refreshController.refreshCompleted();
+    refreshController
+      ..loadComplete()
+      ..refreshCompleted();
   }
 
   AppBar appBar() {
-    return AppBar(
-      title: const Text("News View"),
-    );
+    return AppBar(title: const Text('News View'));
   }
 
   @override
@@ -79,7 +77,7 @@ class _StockNewsDetailViewState extends State<StockNewsDetailView> {
                     padding: const EdgeInsets.all(16.0),
                     child: NewsCard(
                       onTap: () {
-                        Get.to(NewsDetailView(news: news));
+                        unawaited(Get.to<void>(NewsDetailView(news: news)));
                       },
                       news: news,
                     ),

@@ -1,9 +1,6 @@
 import 'package:equatable/equatable.dart';
 
-enum FinancialType {
-  annual,
-  queartly,
-}
+enum FinancialType { annual, queartly }
 
 class StockFinancial extends Equatable {
   const StockFinancial({
@@ -19,11 +16,11 @@ class StockFinancial extends Equatable {
 
   @override
   List<Object?> get props => [
-        incomeTable,
-        balanceTable,
-        cashFlowTable,
-        ratiosTable,
-      ];
+    incomeTable,
+    balanceTable,
+    cashFlowTable,
+    ratiosTable,
+  ];
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
@@ -36,39 +33,40 @@ class StockFinancial extends Equatable {
 
   factory StockFinancial.fromMap(Map<String, dynamic> map) {
     return StockFinancial(
-      incomeTable: FinancialTable.fromMap(map['incomeStatementTable']),
-      balanceTable: FinancialTable.fromMap(map['balanceSheetTable']),
-      cashFlowTable: FinancialTable.fromMap(map['cashFlowTable']),
-      ratiosTable: FinancialTable.fromMap(map['financialRatiosTable']),
+      incomeTable: FinancialTable.fromMap(
+        map['incomeStatementTable'] as Map<String, dynamic>,
+      ),
+      balanceTable: FinancialTable.fromMap(
+        map['balanceSheetTable'] as Map<String, dynamic>,
+      ),
+      cashFlowTable: FinancialTable.fromMap(
+        map['cashFlowTable'] as Map<String, dynamic>,
+      ),
+      ratiosTable: FinancialTable.fromMap(
+        map['financialRatiosTable'] as Map<String, dynamic>,
+      ),
     );
   }
 }
 
 class FinancialTable extends Equatable {
-  const FinancialTable({
-    required this.headerMap,
-    required this.dataList,
-  });
+  const FinancialTable({required this.headerMap, required this.dataList});
   final Map<String, dynamic> headerMap;
   final List<Map<String, dynamic>> dataList;
 
   @override
-  List<Object?> get props => [
-        headerMap.hashCode,
-        dataList.hashCode,
-      ];
+  List<Object?> get props => [headerMap.hashCode, dataList.hashCode];
 
   Map<String, dynamic> toMap() {
-    return <String, dynamic>{
-      'headerMap': headerMap,
-      'dataList': dataList,
-    };
+    return <String, dynamic>{'headerMap': headerMap, 'dataList': dataList};
   }
 
   factory FinancialTable.fromMap(Map<String, dynamic> map) {
     return FinancialTable(
-      headerMap: Map<String, dynamic>.from(map['headers']),
-      dataList: List.from(map["rows"]),
+      headerMap: Map<String, dynamic>.from(
+        map['headers'] as Map<dynamic, dynamic>,
+      ),
+      dataList: List<Map<String, dynamic>>.from(map['rows'] as List<dynamic>),
     );
   }
 }

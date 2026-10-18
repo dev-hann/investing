@@ -1,4 +1,5 @@
 part of 'service.dart';
+
 // 4006 markets
 // 3996 Companies
 // 4226 Crypto
@@ -9,48 +10,34 @@ part of 'service.dart';
 // https://api.nasdaq.com/api/news/topic/latestnews?offset=0&limit=10
 
 class NewsService extends IVService {
-  Future requestLatestNewsList(
-    int page, {
-    int stride = 20,
-  }) async {
+  Future<dynamic> requestLatestNewsList(int page, {int stride = 20}) async {
     final begin = (page - 1) * stride;
     final end = page * stride;
-    const url = "https://api.nasdaq.com/api/news/topic/latestnews";
-    final res = await get(
-      url,
-      query: {
-        "offset": begin,
-        "limit": end,
-      },
-    );
+    const url = 'https://api.nasdaq.com/api/news/topic/latestnews';
+    final res = await get(url, query: {'offset': begin, 'limit': end});
     return res.data;
   }
 
-  Future searchNewsList(String query) async {
-    const url = "https://api.nasdaq.com/api/search/site";
-    final res = await get(
-      url,
-      query: {
-        "query": query,
-      },
-    );
+  Future<dynamic> searchNewsList(String query) async {
+    const url = 'https://api.nasdaq.com/api/search/site';
+    final res = await get(url, query: {'query': query});
     return res.data;
   }
 
-  Future<Response> searchStockNewsList({
+  Future<Response<dynamic>> searchStockNewsList({
     required String symbol,
     required String asset,
     required int page,
     required int stride,
   }) async {
-    const url = "https://api.nasdaq.com/api/news/topic/articlebysymbol";
+    const url = 'https://api.nasdaq.com/api/news/topic/articlebysymbol';
     return get(
       url,
       query: {
-        "q": "$symbol|$asset",
-        "offset": (page - 1) * stride,
-        "limit": stride,
-        "fallback": false,
+        'q': '$symbol|$asset',
+        'offset': (page - 1) * stride,
+        'limit': stride,
+        'fallback': false,
       },
     );
   }
