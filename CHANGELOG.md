@@ -6,6 +6,7 @@ All notable changes to this project are documented here. Format follows [Keep a 
 
 ### Added
 
+- **Forui (shadcn-style) design system** ([ADR-0008](docs/adr/0008-forui-design-system.md)): `forui 0.27.6` wired via `MaterialApp.builder` (`FTheme` + `FToaster` + `FTooltipGroup`) with `FLocalizations`; brand theme in `IVTheme` (`const/theme.dart`) — Forui neutral palette with the app orange as primary. A companion Material layer maps the same `FColors` onto flutter/material's `ColorScheme`, so unmigrated Material screens stay palette-consistent. `CustomTextfield` → `FTextField`, `IVTextButton` → `FButton` (ghost), `IVAlert` → `FDialog` behind unchanged public APIs.
 - Controller unit tests via `ProviderContainer` (`test/controller_test.dart`) — the first tests that exercise controllers without a widget tree.
 - Testing guide (`docs/TESTING.md`): hermetic-test principles, per-layer strategy, repo-override pattern for IO notifiers.
 - **Live heatmap percents via Alpaca IEX WebSocket** ([ADR-0006](docs/adr/0006-alpaca-realtime-quotes.md)): quotes streamed per symbol with exact percent math against previous closes, auto-reconnect, and a last-known-good Hive cache that colors the map instantly on cold start. Credentials live in a gitignored asset, `assets/config/alpaca.json` (template: `alpaca.example.json`), loaded at startup by `IVConfig` — without the file the app falls back to a single Finviz percent fetch. Live REST smoke test auto-skips when the file is absent (`test/alpaca_service_test.dart`).

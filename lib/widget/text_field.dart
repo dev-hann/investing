@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:forui/forui.dart';
 
+/// Search-style text field built on Forui's [FTextField].
+///
+/// Keeps the legacy parameter surface (`onSubmitted`, `onChanged`,
+/// `hintText`, `autoFocus`) so existing call sites work unchanged.
 class CustomTextfield extends StatelessWidget {
   const CustomTextfield({
     super.key,
@@ -19,17 +24,15 @@ class CustomTextfield extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
-      controller: controller,
-      autofocus: autoFocus,
-      onChanged: onChanged,
-      onSubmitted: onSubmitted,
-      textInputAction: textInputAction,
-      decoration: InputDecoration(
-        border: InputBorder.none,
-        contentPadding: const EdgeInsets.symmetric(horizontal: 8.0),
-        hintText: hintText,
+    return FTextField(
+      control: FTextFieldControl.managed(
+        controller: controller,
+        onChange: onChanged == null ? null : (value) => onChanged!(value.text),
       ),
+      autofocus: autoFocus,
+      hint: hintText,
+      textInputAction: textInputAction,
+      onSubmit: onSubmitted,
     );
   }
 }

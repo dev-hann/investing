@@ -80,7 +80,7 @@ flutter build apk --debug
 ```
 lib/
 ├── main.dart            # MaterialApp + ProviderScope entry
-├── const/               # App constants (colors)
+├── const/               # App constants (colors, Forui brand theme)
 ├── controller/          # Riverpod Notifiers (one per feature screen)
 ├── use_case/            # Use cases bridging controllers and repos
 ├── repo/                # Repository interfaces + implementations (part-of)

@@ -1,15 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:investing/const/color.dart';
+import 'package:forui/forui.dart';
 
+/// Compact inline action button (used in app bar trailing slots) built on
+/// Forui's [FButton] ghost variant so it inherits the app theme.
 class IVTextButton extends StatelessWidget {
-  const IVTextButton({
-    super.key,
-    this.style,
-    required this.onTap,
-    required this.child,
-  });
+  const IVTextButton({super.key, required this.onTap, required this.child});
   final VoidCallback onTap;
-  final TextStyle? style;
   final Widget child;
 
   factory IVTextButton.more({required VoidCallback onTap}) {
@@ -21,15 +17,11 @@ class IVTextButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: IconTheme(
-        data: const IconThemeData(color: IVColor.orange, size: 12.0),
-        child: DefaultTextStyle(
-          style: style ?? const TextStyle(color: IVColor.orange),
-          child: child,
-        ),
-      ),
+    return FButton(
+      variant: FButtonVariant.ghost,
+      onPress: onTap,
+      mainAxisSize: MainAxisSize.min,
+      child: child,
     );
   }
 }
