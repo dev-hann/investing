@@ -13,16 +13,12 @@ double percentChange({required double price, required double base}) {
 class MarketUseCase extends UseCase<MarketRepo> {
   MarketUseCase(super.repo);
 
-  Future<List<MarketData>> requestMarketData() async {
-    final list = List<dynamic>.from(
-      await repo.requestMarketData() as List<dynamic>,
-    );
-    return list.map(MarketData.fromMap).toList();
+  Future<List<MarketData>> requestMarketData() {
+    return repo.requestMarketData();
   }
 
-  Future<Map<String, double>> requestMarketPercentData() async {
-    final res = await repo.requestMarketPercentData();
-    return Map<String, double>.from(res as Map<dynamic, dynamic>);
+  Future<Map<String, double>> requestMarketPercentData() {
+    return repo.requestMarketPercentData();
   }
 
   bool get isRealTimeConfigured => repo.isRealTimeConfigured;
@@ -65,17 +61,12 @@ class MarketUseCase extends UseCase<MarketRepo> {
     }
   }
 
-  Future<Map<String, List<dynamic>>> requestChartData(
-    List<String> symbolList,
-  ) async {
-    return Map<String, List<dynamic>>.from(
-      await repo.requestChartData(symbolList) as Map<dynamic, dynamic>,
-    );
+  Future<Map<String, List<double>>> requestChartData(List<String> symbolList) {
+    return repo.requestChartData(symbolList);
   }
 
-  Future<MarketStatus> requestMarketStatus() async {
-    final res = await repo.requestMarketStatus();
-    return MarketStatus.fromMap(res as Map<String, dynamic>);
+  Future<MarketStatus> requestMarketStatus() {
+    return repo.requestMarketStatus();
   }
 }
 

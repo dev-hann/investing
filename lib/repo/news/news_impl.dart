@@ -4,24 +4,28 @@ class NewsImpl extends NewsRepo {
   final NewsService service = NewsService();
 
   @override
-  Future<dynamic> requestNewsList(int page) async {
+  Future<List<News>> requestNewsList(int page) async {
     final res =
         await service.requestLatestNewsList(page) as Map<String, dynamic>;
-    return (res['data'] as Map<String, dynamic>)['rows'];
+    final rows =
+        ((res['data'] as Map<String, dynamic>)['rows'] as List<dynamic>)
+            .cast<Map<String, dynamic>>();
+    return rows.map(News.latest).toList();
   }
 
   @override
-  Future<List<dynamic>> searchNewsList(String query) async {
+  Future<List<News>> searchNewsList(String query) async {
     final res = await service.searchNewsList(query) as Map<String, dynamic>;
-    return List<dynamic>.from(
-      ((res['data'] as Map<String, dynamic>)['news']
-              as Map<String, dynamic>)['value']
-          as List<dynamic>,
-    );
+    final rows =
+        (((res['data'] as Map<String, dynamic>)['news']
+                    as Map<String, dynamic>)['value']
+                as List<dynamic>)
+            .cast<Map<String, dynamic>>();
+    return rows.map(News.search).toList();
   }
 
   @override
-  Future<dynamic> searchStockNewsList({
+  Future<List<News>> searchStockNewsList({
     required String symbol,
     required String asset,
     required int page,
@@ -32,7 +36,11 @@ class NewsImpl extends NewsRepo {
       page: page,
       stride: 20,
     );
-    return ((res.data as Map<String, dynamic>)['data']
-        as Map<String, dynamic>)['rows'];
+    final rows =
+        (((res.data as Map<String, dynamic>)['data']
+                    as Map<String, dynamic>)['rows']
+                as List<dynamic>)
+            .cast<Map<String, dynamic>>();
+    return rows.map(News.latest).toList();
   }
 }

@@ -7,29 +7,23 @@ import 'package:investing/use_case/use_case.dart';
 class NewsUseCase extends UseCase<NewsRepo> {
   NewsUseCase(super.repo);
 
-  Future<List<News>> requestlatestNewsList(int page) async {
-    final res = await repo.requestNewsList(page);
-    final list = List<dynamic>.from(res as List<dynamic>);
-    return list.map((e) => News.latest(e as Map<String, dynamic>)).toList();
+  Future<List<News>> requestlatestNewsList(int page) {
+    return repo.requestNewsList(page);
   }
 
-  Future<List<News>> searchNewList(String query) async {
-    final list = await repo.searchNewsList(query);
-    return list.map((e) => News.search(e as Map<String, dynamic>)).toList();
+  Future<List<News>> searchNewList(String query) {
+    return repo.searchNewsList(query);
   }
 
   Future<List<News>> searchStockNewsList({
     required Stock stock,
     required int page,
-  }) async {
-    final res = await repo.searchStockNewsList(
+  }) {
+    return repo.searchStockNewsList(
       symbol: stock.symbol,
       asset: stock.asset,
       page: page,
     );
-    return List<dynamic>.from(res as List<dynamic>)
-        .map((e) => News.latest(e as Map<String, dynamic>))
-        .toList();
   }
 }
 

@@ -4,18 +4,20 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:investing/data/db/data_base.dart';
 import 'package:investing/data/service/alpaca_service.dart';
 import 'package:investing/data/service/market_service.dart';
+import 'package:investing/model/market.dart';
+import 'package:investing/model/market_status.dart';
 import 'package:investing/model/quote.dart';
 import 'package:investing/repo/repo.dart';
 part 'market_impl.dart';
 
 abstract class MarketRepo extends Repo {
-  Future<dynamic> requestMarketData();
+  Future<List<MarketData>> requestMarketData();
 
-  Future<dynamic> requestMarketPercentData();
+  Future<Map<String, double>> requestMarketPercentData();
 
-  Future<dynamic> requestChartData(List<String> symbolList);
+  Future<Map<String, List<double>>> requestChartData(List<String> symbolList);
 
-  Future<dynamic> requestMarketStatus();
+  Future<MarketStatus> requestMarketStatus();
 
   /// Whether Alpaca credentials were provided via `--dart-define`.
   bool get isRealTimeConfigured;

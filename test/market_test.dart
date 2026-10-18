@@ -1,6 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:investing/controller/market_controller.dart';
+import 'package:investing/model/market.dart';
+import 'package:investing/model/market_status.dart';
 import 'package:investing/model/quote.dart';
 import 'package:investing/repo/market/market_repo.dart';
 import 'package:investing/use_case/market_use_case.dart';
@@ -19,10 +21,11 @@ class _FakeMarketRepo extends MarketRepo {
   Map<String, double> loadPercentData() => cachedPercent;
 
   @override
-  Future<dynamic> requestMarketData() async => [];
+  Future<List<MarketData>> requestMarketData() async => [];
 
   @override
-  Future<dynamic> requestMarketPercentData() async => fallbackPercent;
+  Future<Map<String, double>> requestMarketPercentData() async =>
+      fallbackPercent;
 
   @override
   bool get isRealTimeConfigured => false;
@@ -33,12 +36,12 @@ class _FakeMarketRepo extends MarketRepo {
   }
 
   @override
-  Future<dynamic> requestChartData(List<String> symbolList) {
+  Future<Map<String, List<double>>> requestChartData(List<String> symbolList) {
     throw UnimplementedError();
   }
 
   @override
-  Future<dynamic> requestMarketStatus() {
+  Future<MarketStatus> requestMarketStatus() {
     throw UnimplementedError();
   }
 

@@ -128,9 +128,7 @@ class MarketController extends Notifier<MarketState> {
       final data = await useCase.requestChartData(symbolList);
       for (final entry in data.entries) {
         final key = entry.key;
-        final value = List<num>.from(entry.value)
-            .map((e) => e.toDouble())
-            .toList();
+        final value = entry.value;
         marketChartData[key] = value;
         res[key] = value;
       }

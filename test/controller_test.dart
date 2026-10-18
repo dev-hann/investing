@@ -4,31 +4,32 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:investing/controller/home_controller.dart';
 import 'package:investing/controller/news_controller.dart';
 import 'package:investing/controller/setting_controller.dart';
+import 'package:investing/model/news.dart';
 import 'package:investing/repo/news/news_repo.dart';
 
 class _FakeNewsRepo extends NewsRepo {
   @override
-  Future<dynamic> requestNewsList(int page) async {
+  Future<List<News>> requestNewsList(int page) async {
     return [
-      {
-        'id': page,
-        'title': 'title $page',
-        'ago': '1 hour ago',
-        'publisher': 'p',
-        'url': '/article/$page',
-        'image': '',
-        'imagedomain': '',
-      },
+      News(
+        index: page,
+        title: 'title $page',
+        created: '1 hour ago',
+        publisher: 'p',
+        url: '/article/$page',
+        image: '',
+        imageDomain: '',
+      ),
     ];
   }
 
   @override
-  Future<List<dynamic>> searchNewsList(String query) {
+  Future<List<News>> searchNewsList(String query) {
     throw UnimplementedError();
   }
 
   @override
-  Future<dynamic> searchStockNewsList({
+  Future<List<News>> searchStockNewsList({
     required String symbol,
     required String asset,
     required int page,

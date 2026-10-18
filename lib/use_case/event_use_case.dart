@@ -6,27 +6,16 @@ import 'package:investing/use_case/use_case.dart';
 class EventUseCase extends UseCase<EventRepo> {
   EventUseCase(super.repo);
 
-  Future<List<EconomicEvent>> requestEconomicEventList(
-    DateTime dateTime,
-  ) async {
-    final res = await repo.requestEconomicEventList(dateTime);
-    return List<dynamic>.from(res)
-        .map((e) => EconomicEvent.fromMap(e as Map<String, dynamic>))
-        .toList();
+  Future<List<EconomicEvent>> requestEconomicEventList(DateTime dateTime) {
+    return repo.requestEconomicEventList(dateTime);
   }
 
-  Future<List<EarningEvent>> requestEarningEventList(DateTime dateTime) async {
-    final res = await repo.requestEarningEventList(dateTime);
-    return List<dynamic>.from(res)
-        .map((e) => EarningEvent.fromMap(e as Map<String, dynamic>))
-        .toList();
+  Future<List<EarningEvent>> requestEarningEventList(DateTime dateTime) {
+    return repo.requestEarningEventList(dateTime);
   }
 
-  Future<List<DividendEvent>> requestDvidendEventList(DateTime dateTime) async {
-    final res = await repo.requestDvidendEventList(dateTime);
-    return List<dynamic>.from(res)
-        .map((e) => DividendEvent.fromMap(e as Map<String, dynamic>))
-        .toList();
+  Future<List<DividendEvent>> requestDividendEventList(DateTime dateTime) {
+    return repo.requestDividendEventList(dateTime);
   }
 }
 

@@ -27,7 +27,7 @@ class _CompanyViewState extends ConsumerState<CompanyView> {
   Future<void> _requestCompany() async {
     final res = await ref
         .read(stockControllerProvider.notifier)
-        .reqeustStockCompany(widget.stock);
+        .requestStockCompany(widget.stock);
     if (mounted) {
       setState(() {
         company = res;

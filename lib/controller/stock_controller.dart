@@ -144,8 +144,8 @@ class StockController extends Notifier<StockState> {
     );
   }
 
-  Future<StockCompany?> reqeustStockCompany(Stock stock) {
-    return useCase.reqeustStockCompany(stock.symbol);
+  Future<StockCompany?> requestStockCompany(Stock stock) {
+    return useCase.requestStockCompany(stock.symbol);
   }
 }
 

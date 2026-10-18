@@ -66,7 +66,7 @@ class EventController extends Notifier<EventState> {
           eventList.addAll(await useCase.requestEarningEventList(d));
           break;
         case CalendarEventType.dividends:
-          eventList.addAll(await useCase.requestDvidendEventList(d));
+          eventList.addAll(await useCase.requestDividendEventList(d));
           break;
       }
       data[key] = eventList;

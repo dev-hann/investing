@@ -14,7 +14,7 @@ class EventService extends IVService {
     }
   }
 
-  Future<dynamic> requestDvidendEventList(String dateTime) async {
+  Future<dynamic> requestDividendEventList(String dateTime) async {
     try {
       const url = '${_eventURL}dividends';
       final res = await get(url, query: {'date': dateTime});

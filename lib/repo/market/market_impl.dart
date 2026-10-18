@@ -14,27 +14,41 @@ class MarketImpl extends MarketRepo {
   }
 
   @override
-  Future<dynamic> requestMarketData() async {
+  Future<List<MarketData>> requestMarketData() async {
     final res = await service.requestMarketData();
-    return (res.data as Map<String, dynamic>)['children'];
+    final children =
+        (res.data as Map<String, dynamic>)['children'] as List<dynamic>;
+    return children.map(MarketData.fromMap).toList();
   }
 
   @override
-  Future<dynamic> requestMarketPercentData() async {
+  Future<Map<String, double>> requestMarketPercentData() async {
     final res = await service.requestMarketPercentData();
-    return (res.data as Map<String, dynamic>)['nodes'];
+    final nodes =
+        (res.data as Map<String, dynamic>)['nodes'] as Map<dynamic, dynamic>;
+    return nodes.map(
+      (key, value) => MapEntry(key as String, (value as num).toDouble()),
+    );
   }
 
   @override
-  Future<dynamic> requestChartData(List<String> symbolList) async {
+  Future<Map<String, List<double>>> requestChartData(
+    List<String> symbolList,
+  ) async {
     final res = await service.requestChartData(symbolList);
-    return res.data;
+    final data = res.data as Map<dynamic, dynamic>;
+    return data.map(
+      (key, value) => MapEntry(
+        key as String,
+        (value as List<dynamic>).map((e) => (e as num).toDouble()).toList(),
+      ),
+    );
   }
 
   @override
-  Future<dynamic> requestMarketStatus() async {
+  Future<MarketStatus> requestMarketStatus() async {
     final res = await service.requestMarketStatus();
-    return res.data;
+    return MarketStatus.fromMap(res.data as Map<String, dynamic>);
   }
 
   @override

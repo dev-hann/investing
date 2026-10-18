@@ -6,14 +6,6 @@ class StockService extends IVService {
     return get(url, query: {'query': query});
   }
 
-  Future<Response<dynamic>> requestStock({
-    required String symbol,
-    required String assetClass,
-  }) async {
-    final url = 'https://api.nasdaq.com/api/quote/$symbol/info';
-    return get(url, query: {'assetClass': assetClass});
-  }
-
   Future<Response<dynamic>> requestStockList(List<String> symbolList) {
     final q = symbolList.map((e) => 'symbol=$e').join('&');
     final url = 'https://api.nasdaq.com/api/quote/basic?$q';
@@ -36,7 +28,7 @@ class StockService extends IVService {
     return get(url, query: {'frequency': typeIndex + 1});
   }
 
-  Future<Response<dynamic>> requestStockCahrt({
+  Future<Response<dynamic>> requestStockChart({
     required String symbol,
     required String asset,
     required String? fromDate,
