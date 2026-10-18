@@ -4,7 +4,7 @@ Guidelines for AI coding assistants working in this repository. Follow these rul
 
 ## Project
 
-`investing` — a Flutter stock market information app (Android) backed by the Nasdaq public API (`api.nasdaq.com`). State management: Riverpod (`flutter_riverpod`). Local storage: Hive CE. Networking: dio.
+`investing` — a Flutter stock market information app (Android) backed by the Nasdaq public API (`api.nasdaq.com`), Finviz heatmap data, and Alpaca IEX for live quotes. State management: Riverpod (`flutter_riverpod`). Local storage: Hive CE. Networking: dio.
 
 ## Commands
 
@@ -29,7 +29,7 @@ flutter build apk --release  # signed release build (needs android/key.propertie
 * **Naming**: files are `snake_case.dart` matching the class they contain (`stock_summary.dart` holds `StockSummary`). Keep names typo-free — renames use `git mv` plus import updates.
 * **pubspec**: dependencies sorted alphabetically including SDK deps (`sort_pub_dependencies`).
 
-Deployment is tag-driven: push a `v*` tag to trigger the Release workflow (GitHub Actions). Never commit `android/key.properties` or `*.keystore` — both are gitignored.
+Deployment is tag-driven: push a `v*` tag to trigger the Release workflow (GitHub Actions). Never commit `android/key.properties` or `*.keystore` — both are gitignored. Never commit Alpaca credentials either: they are compile-time only (`--dart-define=ALPACA_KEY=…` / `ALPACA_SECRET=…`, read via `String.fromEnvironment` in `lib/data/service/alpaca_service.dart`; without them the app falls back to non-live percent data).
 
 ## Architecture (enforced layering)
 
@@ -40,8 +40,8 @@ view/ (Widgets — ConsumerWidget/ConsumerStatefulWidget, ref.watch)
   → controller/ (Riverpod Notifiers, immutable state + NotifierProvider)
     → use_case/ (feature orchestration)
       → repo/ (interfaces + impls, part-of structure; xxxRepoProvider declared here)
-        → data/service/ (dio HTTP)  +  data/db/ (Hive CE)
-          → api.nasdaq.com / local box
+        → data/service/ (dio HTTP + Alpaca WS)  +  data/db/ (Hive CE)
+          → api.nasdaq.com / finviz / stream.data.alpaca.markets / local box
 ```
 
 Rules:

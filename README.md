@@ -57,6 +57,15 @@ flutter pub get
 flutter run
 ```
 
+Live heatmap quotes need Alpaca credentials (compile-time only — never
+committed; the app works without them using a non-live fallback):
+
+```bash
+flutter run \
+  --dart-define=ALPACA_KEY=<your-key-id> \
+  --dart-define=ALPACA_SECRET=<your-secret>
+```
+
 ### Verify
 
 ```bash
@@ -75,7 +84,7 @@ lib/
 ├── use_case/            # Use cases bridging controllers and repos
 ├── repo/                # Repository interfaces + implementations (part-of)
 ├── data/
-│   ├── service/         # HTTP services (dio) → api.nasdaq.com
+│   ├── service/         # HTTP services (dio) + Alpaca IEX websocket
 │   └── db/              # Local storage (Hive CE)
 ├── model/               # Domain models (Equatable, fromMap factories)
 ├── view/                # Feature screens

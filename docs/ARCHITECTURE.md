@@ -62,8 +62,8 @@ Repos map raw service responses into domain models (`model/`) and own caching po
 
 ### Data sources (`lib/data/`)
 
-* `service/` — `IVService` wraps a `dio` instance with a shared `get(url, query)` and error logging. Domain services (`StockService`, `NewsService`, `EventService`, `MarketService`) are thin URL builders against `api.nasdaq.com`.
-* `db/` — `IVDataBase` opens a named Hive CE box (`Hive.initFlutter` is called in `main()`).
+* `service/` — `IVService` wraps a `dio` instance with a shared `get(url, query)` and error logging. Domain services (`StockService`, `NewsService`, `EventService`, `MarketService`) are thin URL builders against `api.nasdaq.com` / Finviz. `AlpacaService` is separate: previous-close snapshots (REST) and a reconnecting IEX quote websocket, credentials injected via `--dart-define` (see [ADR-0006](adr/0006-alpaca-realtime-quotes.md)).
+* `db/` — `IVDataBase` opens a named Hive CE box (`Hive.initFlutter` is called in `main()`). Boxes: `Favorite` (watch list), `MarketPercent` (last-known-good heatmap cache).
 
 ### Models (`lib/model/`)
 
@@ -88,7 +88,7 @@ StockSearchView (input, ConsumerWidget)
 
 ## Testing
 
-Pure notifiers (`SettingController`, `HomeController`) are unit-tested with a bare `ProviderContainer` (`test/controller_test.dart`). Notifiers that start network or Hive IO in `build()` (news, event, market, stock) deadlock `flutter_test` fake async the same way the old GetX controllers did — don't watch them in plain tests; test models/leaf widgets, or wrap real IO in `tester.runAsync`. Full conventions and copy-paste patterns live in [TESTING.md](TESTING.md).
+Pure notifiers (`SettingController`, `HomeController`) are unit-tested with a bare `ProviderContainer` (`test/controller_test.dart`). Notifiers that start network or Hive IO in `build()` (news, event, market, stock) deadlock `flutter_test` fake async the same way the old GetX controllers did — don't watch them in plain tests; test models/leaf widgets, or wrap real IO in `tester.runAsync`. Full conventions and copy-paste patterns live in [TESTING.md](TESTING.md). One exception runs for real: `test/alpaca_live_test.dart` hits the live Alpaca REST API when credentials are passed via `--dart-define`, and auto-skips otherwise (CI-safe).
 
 ## Build & release
 

@@ -4,16 +4,18 @@ All notable changes to this project are documented here. Format follows [Keep a 
 
 ## [Unreleased]
 
+### Added
+
+- Controller unit tests via `ProviderContainer` (`test/controller_test.dart`) — the first tests that exercise controllers without a widget tree.
+- Testing guide (`docs/TESTING.md`): hermetic-test principles, per-layer strategy, repo-override pattern for IO notifiers.
+- **Live heatmap percents via Alpaca IEX WebSocket** ([ADR-0006](docs/adr/0006-alpaca-realtime-quotes.md)): quotes streamed per symbol with exact percent math against previous closes, auto-reconnect, and a last-known-good Hive cache that colors the map instantly on cold start. Credentials are compile-time only (`--dart-define=ALPACA_KEY/ALPACA_SECRET`) — never stored in the repo; without them the app falls back to a single Finviz percent fetch. Live REST smoke test auto-skips without credentials (`test/alpaca_live_test.dart`).
+
 ### Changed
 
 - **State management migrated from GetX to Riverpod** ([ADR-0005](docs/adr/0005-getx-to-riverpod.md)): controllers are now `Notifier`s with immutable state classes; DI is a compile-checked provider graph declared per layer (`repo` → `use_case` → `controller`); `GetMaterialApp` → `MaterialApp` + `ProviderScope`; theme mode is provider state watched by `MaterialApp`.
 - Navigation moved from `Get.to`/`Get.back` to the `Navigator` (`pushView` helper in `util/navigator.dart`); dialogs via `showDialog`; bottom sheets via `showModalBottomSheet`; snackbars via global `scaffoldMessengerKey`.
 - Screen-local reactive state (`Rx`/`Obx` in views) converted to `setState`; reactive widgets are now `ConsumerWidget`/`ConsumerStatefulWidget`.
-
-### Added
-
-- Controller unit tests via `ProviderContainer` (`test/controller_test.dart`) — the first tests that exercise controllers without a widget tree.
-- Testing guide (`docs/TESTING.md`): hermetic-test principles, per-layer strategy, repo-override pattern for IO notifiers.
+- Market data sources: heatmap structure still Finviz/Nasdaq; percents now Alpaca live or Finviz fallback. Removed the dead 5-second polling chain (controller → use case → repo → service).
 
 ### Removed
 

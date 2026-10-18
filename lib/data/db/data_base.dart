@@ -32,4 +32,13 @@ class IVDataBase {
   Future<void> removeStock(String symbol) {
     return _box.delete(symbol);
   }
+
+  /// Generic key-value access for non-stock boxes (e.g. cached maps).
+  Future<void> put({required String key, required Object? value}) {
+    return _box.put(key, value);
+  }
+
+  dynamic read(String key) {
+    return _box.get(key);
+  }
 }

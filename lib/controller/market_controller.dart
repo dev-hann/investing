@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:math';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -38,12 +37,56 @@ class MarketState extends Equatable {
 class MarketController extends Notifier<MarketState> {
   late final MarketUseCase useCase;
   final Map<String, List<double>> marketChartData = {};
+  StreamSubscription<Map<String, double>>? _percentSubscription;
+  Timer? _percentSaveTimer;
+  Timer? _marketTimer;
 
   @override
   MarketState build() {
     useCase = ref.watch(marketUseCaseProvider);
-    unawaited(refreshMarketData());
+    ref.onDispose(_dispose);
+    unawaited(_init());
     return const MarketState();
+  }
+
+  void _dispose() {
+    unawaited(_percentSubscription?.cancel());
+    _percentSubscription = null;
+    _percentSaveTimer?.cancel();
+    _percentSaveTimer = null;
+    _marketTimer?.cancel();
+    _marketTimer = null;
+  }
+
+  Future<void> _init() async {
+    await useCase.init();
+    // Show the last-known-good heatmap immediately, then refresh.
+    final cached = useCase.loadPercentData();
+    if (cached.isNotEmpty) {
+      state = state.copyWith(marketPercentData: cached);
+    }
+    await refreshMarketData();
+    await _subscribePercentData();
+  }
+
+  Future<void> _subscribePercentData() async {
+    final symbols = state.marketDataList
+        .expand((sector) => sector.childeren.map((stock) => stock.name))
+        .toSet()
+        .toList();
+    if (useCase.isRealTimeConfigured && symbols.isNotEmpty) {
+      _percentSubscription = useCase.subscribePercentData(symbols).listen((
+        delta,
+      ) {
+        state = state.copyWith(
+          marketPercentData: {...state.marketPercentData, ...delta},
+        );
+        _schedulePercentSave();
+      });
+      return;
+    }
+    // No credentials (or nothing to subscribe to) — one-shot fallback.
+    await refreshMarketPercentData();
   }
 
   Future<void> refreshMarketData() async {
@@ -53,7 +96,19 @@ class MarketController extends Notifier<MarketState> {
 
   Future<void> refreshMarketPercentData() async {
     final data = await useCase.requestMarketPercentData();
+    if (data.isEmpty) {
+      // Keep the last-known-good map on empty responses.
+      return;
+    }
     state = state.copyWith(marketPercentData: data);
+    unawaited(useCase.savePercentData(data));
+  }
+
+  void _schedulePercentSave() {
+    _percentSaveTimer?.cancel();
+    _percentSaveTimer = Timer(const Duration(seconds: 5), () {
+      unawaited(useCase.savePercentData(state.marketPercentData));
+    });
   }
 
   Future<Map<String, List<double>>> requestMarketChartData(
@@ -83,29 +138,7 @@ class MarketController extends Notifier<MarketState> {
     return res;
   }
 
-  Future<void> refreshMarketPercentRealTimeData() async {
-    Map<String, double> percentData = state.marketPercentData;
-    if (percentData.isEmpty) {
-      percentData = await useCase.requestMarketPercentData();
-    }
-    final symbolList = percentData.keys.toList();
-    final Map<String, double> map = {};
-    for (int index = 0; index < symbolList.length; index += 100) {
-      final tmpList = symbolList.sublist(
-        index,
-        min(index + 100, symbolList.length),
-      );
-      final data = await useCase.refreshMarketPercentRealTimeData(tmpList);
-      map.addEntries(data.entries);
-    }
-    state = state.copyWith(marketPercentData: map);
-    await Future<void>.delayed(const Duration(seconds: 5));
-    unawaited(refreshMarketPercentRealTimeData());
-  }
-
   // MarketStatus
-  Timer? _marketTimer;
-
   Future<void> refreshMarketStatus() async {
     final status = await useCase.requestMarketStatus();
     state = state.copyWith(marketStatus: status);

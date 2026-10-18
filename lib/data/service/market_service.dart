@@ -7,14 +7,8 @@ class MarketService extends IVService {
     return get(url);
   }
 
-  Future<Response<dynamic>> requestMarkePercenttData() {
+  Future<Response<dynamic>> requestMarketPercentData() {
     const url = 'https://finviz.com/api/map_perf.ashx?t=sec';
-    return get(url);
-  }
-
-  Future<Response<dynamic>> requestStockList(List<String> symbolList) {
-    final q = symbolList.map((e) => 'symbol=$e').join('&');
-    final url = 'https://api.nasdaq.com/api/quote/basic?$q';
     return get(url);
   }
 
