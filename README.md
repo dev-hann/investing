@@ -69,9 +69,9 @@ flutter build apk --debug
 
 ```
 lib/
-├── main.dart            # GetMaterialApp entry + dependency bindings
+├── main.dart            # MaterialApp + ProviderScope entry
 ├── const/               # App constants (colors)
-├── controller/          # GetX controllers (one per feature screen)
+├── controller/          # Riverpod Notifiers (one per feature screen)
 ├── use_case/            # Use cases bridging controllers and repos
 ├── repo/                # Repository interfaces + implementations (part-of)
 ├── data/
@@ -83,7 +83,8 @@ lib/
 └── util/                # Formatting helpers
 ```
 
-Layering and data flow are documented in [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
+Layering and data flow are documented in [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md),
+testing conventions in [docs/TESTING.md](docs/TESTING.md).
 Architectural decisions are recorded as ADRs in [docs/adr/](docs/adr/).
 
 ## Release & Deployment

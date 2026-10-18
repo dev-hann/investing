@@ -13,6 +13,7 @@ All notable changes to this project are documented here. Format follows [Keep a 
 ### Added
 
 - Controller unit tests via `ProviderContainer` (`test/controller_test.dart`) — the first tests that exercise controllers without a widget tree.
+- Testing guide (`docs/TESTING.md`): hermetic-test principles, per-layer strategy, repo-override pattern for IO notifiers.
 
 ### Removed
 

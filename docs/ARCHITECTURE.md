@@ -88,7 +88,7 @@ StockSearchView (input, ConsumerWidget)
 
 ## Testing
 
-Pure notifiers (`SettingController`, `HomeController`) are unit-tested with a bare `ProviderContainer` (`test/controller_test.dart`). Notifiers that start network or Hive IO in `build()` (news, event, market, stock) deadlock `flutter_test` fake async the same way the old GetX controllers did — don't watch them in plain tests; test models/leaf widgets, or wrap real IO in `tester.runAsync`.
+Pure notifiers (`SettingController`, `HomeController`) are unit-tested with a bare `ProviderContainer` (`test/controller_test.dart`). Notifiers that start network or Hive IO in `build()` (news, event, market, stock) deadlock `flutter_test` fake async the same way the old GetX controllers did — don't watch them in plain tests; test models/leaf widgets, or wrap real IO in `tester.runAsync`. Full conventions and copy-paste patterns live in [TESTING.md](TESTING.md).
 
 ## Build & release
 
