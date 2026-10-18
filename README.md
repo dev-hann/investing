@@ -57,13 +57,14 @@ flutter pub get
 flutter run
 ```
 
-Live heatmap quotes need Alpaca credentials (compile-time only — never
-committed; the app works without them using a non-live fallback):
+Live heatmap quotes need Alpaca credentials. Create the gitignored config
+file once (see `assets/config/README.md`) — the app works without it using
+a non-live fallback:
 
-```bash
-flutter run \
-  --dart-define=ALPACA_KEY=<your-key-id> \
-  --dart-define=ALPACA_SECRET=<your-secret>
+```sh
+cp assets/config/alpaca.example.json assets/config/alpaca.json
+# edit alpaca.json with your key id + secret (https://alpaca.markets)
+flutter run
 ```
 
 ### Verify

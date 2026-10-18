@@ -5,22 +5,19 @@ import 'dart:math';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
+import 'package:investing/data/config.dart';
 
 /// Alpaca market-data client (IEX feed, free tier).
 ///
-/// Credentials are injected at compile time — never stored in the repo:
-///
-/// ```sh
-/// flutter run \
-///   --dart-define=ALPACA_KEY=<key-id> \
-///   --dart-define=ALPACA_SECRET=<secret>
-/// ```
-///
-/// Without both defines the service reports [isConfigured] == false and
-/// every call degrades to an empty result.
+/// Credentials come from `assets/config/alpaca.json` (gitignored) via
+/// [IVConfig]; tests may inject them through the constructor. Without
+/// credentials the service reports [isConfigured] == false and every call
+/// degrades to an empty result.
 class AlpacaService {
-  AlpacaService()
-    : _dio = Dio(
+  AlpacaService({String? key, String? secret})
+    : key = key ?? IVConfig.alpacaKey,
+      secret = secret ?? IVConfig.alpacaSecret,
+      _dio = Dio(
         BaseOptions(
           baseUrl: 'https://data.alpaca.markets',
           connectTimeout: const Duration(seconds: 15),
@@ -29,16 +26,16 @@ class AlpacaService {
       );
 
   final Dio _dio;
+  final String key;
+  final String secret;
 
   static const String _wsUrl = 'wss://stream.data.alpaca.markets/v2/iex';
-  static const String _key = String.fromEnvironment('ALPACA_KEY');
-  static const String _secret = String.fromEnvironment('ALPACA_SECRET');
 
-  bool get isConfigured => _key.isNotEmpty && _secret.isNotEmpty;
+  bool get isConfigured => key.isNotEmpty && secret.isNotEmpty;
 
   Map<String, String> get _headers => {
-    'APCA-API-KEY-ID': _key,
-    'APCA-API-SECRET-KEY': _secret,
+    'APCA-API-KEY-ID': key,
+    'APCA-API-SECRET-KEY': secret,
   };
 
   /// Previous daily close per symbol, from IEX snapshots (batched by 200).
@@ -91,9 +88,7 @@ class AlpacaService {
   Stream<Map<String, dynamic>> _connect(List<String> symbols) async* {
     final socket = await WebSocket.connect(_wsUrl);
     try {
-      socket.add(
-        jsonEncode({'action': 'auth', 'key': _key, 'secret': _secret}),
-      );
+      socket.add(jsonEncode({'action': 'auth', 'key': key, 'secret': secret}));
       for (int i = 0; i < symbols.length; i += 200) {
         final chunk = symbols.sublist(i, min(i + 200, symbols.length));
         socket.add(jsonEncode({'action': 'subscribe', 'quotes': chunk}));

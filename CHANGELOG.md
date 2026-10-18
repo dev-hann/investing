@@ -8,7 +8,7 @@ All notable changes to this project are documented here. Format follows [Keep a 
 
 - Controller unit tests via `ProviderContainer` (`test/controller_test.dart`) — the first tests that exercise controllers without a widget tree.
 - Testing guide (`docs/TESTING.md`): hermetic-test principles, per-layer strategy, repo-override pattern for IO notifiers.
-- **Live heatmap percents via Alpaca IEX WebSocket** ([ADR-0006](docs/adr/0006-alpaca-realtime-quotes.md)): quotes streamed per symbol with exact percent math against previous closes, auto-reconnect, and a last-known-good Hive cache that colors the map instantly on cold start. Credentials are compile-time only (`--dart-define=ALPACA_KEY/ALPACA_SECRET`) — never stored in the repo; without them the app falls back to a single Finviz percent fetch. Live REST smoke test auto-skips without credentials (`test/alpaca_live_test.dart`).
+- **Live heatmap percents via Alpaca IEX WebSocket** ([ADR-0006](docs/adr/0006-alpaca-realtime-quotes.md)): quotes streamed per symbol with exact percent math against previous closes, auto-reconnect, and a last-known-good Hive cache that colors the map instantly on cold start. Credentials live in a gitignored asset, `assets/config/alpaca.json` (template: `alpaca.example.json`), loaded at startup by `IVConfig` — without the file the app falls back to a single Finviz percent fetch. Live REST smoke test auto-skips when the file is absent (`test/alpaca_service_test.dart`).
 
 ### Changed
 

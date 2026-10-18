@@ -29,7 +29,7 @@ flutter build apk --release  # signed release build (needs android/key.propertie
 * **Naming**: files are `snake_case.dart` matching the class they contain (`stock_summary.dart` holds `StockSummary`). Keep names typo-free — renames use `git mv` plus import updates.
 * **pubspec**: dependencies sorted alphabetically including SDK deps (`sort_pub_dependencies`).
 
-Deployment is tag-driven: push a `v*` tag to trigger the Release workflow (GitHub Actions). Never commit `android/key.properties` or `*.keystore` — both are gitignored. Never commit Alpaca credentials either: they are compile-time only (`--dart-define=ALPACA_KEY=…` / `ALPACA_SECRET=…`, read via `String.fromEnvironment` in `lib/data/service/alpaca_service.dart`; without them the app falls back to non-live percent data).
+Deployment is tag-driven: push a `v*` tag to trigger the Release workflow (GitHub Actions). Never commit `android/key.properties` or `*.keystore` — both are gitignored. Never commit `assets/config/alpaca.json` either: it holds the Alpaca credentials, is gitignored, and is loaded at startup by `IVConfig` (`lib/data/config.dart`); without it the app falls back to non-live percent data.
 
 ## Architecture (enforced layering)
 

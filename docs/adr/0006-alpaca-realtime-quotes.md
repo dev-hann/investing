@@ -29,8 +29,7 @@ and wire it through the existing layers into `MarketController`:
 - **Credentials are compile-time only.** `--dart-define=ALPACA_KEY=…` /
   `--dart-define=ALPACA_SECRET=…`, read via `String.fromEnvironment`. Keys are
   never written to any file in the repository (same discipline as
-  `android/key.properties`).
-- **Percent math is exact, not drift-prone.** Live percent is computed as
+  `android/key.properties`).- **Percent math is exact, not drift-prone.** Live percent is computed as
   `(midPrice / previousClose − 1) × 100` where previous closes come from a
   batched snapshot request at subscribe time — no accumulating error relative
   to an initial fetch.
@@ -65,3 +64,16 @@ The obsolete polling chain was deleted end-to-end:
   live quote handling was verified at the protocol level (connect/auth/
   subscribe) plus the live REST test; first open-market run should be
   observed on a device.
+
+## Update (2026-10-18) — credential delivery
+
+Replaced the `--dart-define` mechanism with a **gitignored config asset**:
+credentials live in `assets/config/alpaca.json` (gitignored, with a
+committed `alpaca.example.json` template and `README.md` keeping the asset
+directory alive in git), loaded once in `main()` by `IVConfig`
+(`lib/data/config.dart`). Everything else stands. Rationale: plain
+`flutter run`/`flutter test` now picks keys up automatically; CI and fresh
+clones still build without the file and keep the non-live fallback. The
+live smoke test moved to `test/alpaca_service_test.dart` and reads the same
+file, auto-skipping when it is absent.
+

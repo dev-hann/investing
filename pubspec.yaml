@@ -35,3 +35,7 @@ dev_dependencies:
     sdk: flutter
 flutter:
   uses-material-design: true
+  assets:
+    # The alpaca.json inside is gitignored; README.md keeps the
+    # directory alive in git so builds without the private file succeed.
+    - assets/config/

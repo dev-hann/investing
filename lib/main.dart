@@ -3,11 +3,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_ce_flutter/hive_flutter.dart';
 import 'package:investing/const/color.dart';
 import 'package:investing/controller/setting_controller.dart';
+import 'package:investing/data/config.dart';
 import 'package:investing/view/home_view/home_view.dart';
 import 'package:investing/widget/snackbar.dart';
 
 void main() async {
   await Hive.initFlutter();
+  await IVConfig.load();
   runApp(const ProviderScope(child: MyApp()));
 }
 
