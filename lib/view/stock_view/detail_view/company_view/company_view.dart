@@ -23,7 +23,7 @@ class _CompanyViewState extends State<CompanyView> {
   @override
   void initState() {
     super.initState();
-    controller.reqeustStockCompany(widget.stock).then(company);
+    controller.reqeustStockCompany(widget.stock).then(company.call);
   }
 
   @override

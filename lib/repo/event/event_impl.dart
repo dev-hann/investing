@@ -1,4 +1,4 @@
-part of event_repo;
+part of 'event_repo.dart';
 
 class EventImpl extends EventRepo {
   final EventService eventService = EventService();

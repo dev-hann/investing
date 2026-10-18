@@ -47,12 +47,8 @@ class EditView extends StatelessWidget {
     required List<Stock> itemList,
   }) {
     final list = [...itemList];
-    int newIndex = index;
-    if (oldIndex < index) {
-      newIndex = index - 1;
-    }
     final row = list.removeAt(oldIndex);
-    list.insert(newIndex, row);
+    list.insert(index, row);
     itemListNotifier.value = list;
   }
 
@@ -84,7 +80,7 @@ class EditView extends StatelessWidget {
           valueListenable: itemListNotifier,
           builder: (context, itemList, _) {
             return ReorderableListView.builder(
-              onReorder: (oldIndex, index) {
+              onReorderItem: (oldIndex, index) {
                 reorderList(
                   oldIndex: oldIndex,
                   index: index,

@@ -106,7 +106,7 @@ class StockController extends Controller<StockUseCase> {
   // Stock Detail
   Future<StockDividend?> requestStockDividend(Stock stock) async {
     try {
-      return useCase.requestStockDividend(
+      return await useCase.requestStockDividend(
         symbol: stock.symbol,
         asset: stock.asset,
       );

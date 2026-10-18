@@ -67,7 +67,7 @@ class IVChartWidget extends StatelessWidget {
         ),
         HorizontalLine(
           y: previousClosePrice,
-          color: IVColor.blue.withOpacity(0.4),
+          color: IVColor.blue.withValues(alpha: 0.4),
           dashArray: [3, 3],
           label: HorizontalLineLabel(
             show: true,

@@ -1,4 +1,4 @@
-library service;
+library;
 
 import 'package:dio/dio.dart';
 
@@ -27,12 +27,12 @@ abstract class IVService {
     Map<String, dynamic>? query,
   }) async {
     try {
-      return _dio.get(
+      return await _dio.get(
         url,
         queryParameters: query,
       );
     } catch (e) {
-      if (e is DioError) {
+      if (e is DioException) {
         print("URL: ${e.requestOptions.uri}");
       }
       rethrow;

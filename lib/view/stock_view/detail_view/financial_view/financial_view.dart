@@ -26,7 +26,7 @@ class _FinancialViewState extends State<FinancialView> {
           stock: widget.stock,
           type: FinancialType.annual,
         )
-        .then(financial);
+        .then(financial.call);
   }
 
   @override

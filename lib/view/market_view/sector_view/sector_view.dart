@@ -1,14 +1,14 @@
 import 'dart:collection';
 import 'dart:math';
 
-import 'package:auto_size_text/auto_size_text.dart';
+import 'package:auto_size_text_plus/auto_size_text_plus.dart';
 import 'package:flutter/material.dart';
 
 import 'package:investing/const/color.dart';
 import 'package:investing/model/market.dart';
 import 'package:investing/widget/title_widget.dart';
 
-class _SectorRatio extends LinkedListEntry<_SectorRatio> {
+final class _SectorRatio extends LinkedListEntry<_SectorRatio> {
   _SectorRatio(
     this.value,
     this.isOverHalf,
@@ -19,9 +19,9 @@ class _SectorRatio extends LinkedListEntry<_SectorRatio> {
 
 class SectorView extends StatefulWidget {
   const SectorView({
-    Key? key,
+    super.key,
     required this.valueList,
-  }) : super(key: key);
+  });
   final List<int> valueList;
 
   @override

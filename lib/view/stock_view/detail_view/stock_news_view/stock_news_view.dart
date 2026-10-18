@@ -31,7 +31,7 @@ class _StockNewsViewState extends State<StockNewsView> {
           stock: widget.stock,
           page: 1,
         )
-        .then(newsList);
+        .then(newsList.call);
   }
 
   Widget item(News news) {

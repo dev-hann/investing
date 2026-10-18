@@ -1,4 +1,4 @@
-library stock_repo;
+library;
 
 import 'package:investing/data/db/data_base.dart';
 import 'package:investing/data/service/service.dart';

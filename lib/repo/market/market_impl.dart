@@ -1,4 +1,4 @@
-part of market_repo;
+part of 'market_repo.dart';
 
 class MarketImpl extends MarketRepo {
   final MarketService service = MarketService();

@@ -1,4 +1,4 @@
-library event_repo;
+library;
 
 import 'package:investing/data/service/event_service.dart';
 import 'package:investing/repo/repo.dart';

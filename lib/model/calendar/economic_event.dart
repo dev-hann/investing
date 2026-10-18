@@ -1,4 +1,4 @@
-part of calendar_event;
+part of 'calendar_event.dart';
 
 class EconomicEvent extends CalendarEvent {
   EconomicEvent({

@@ -1,4 +1,4 @@
-part of stock_repo;
+part of 'stock_repo.dart';
 
 class StockImpl extends StockRepo {
   final StockService service = StockService();

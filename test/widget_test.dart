@@ -1,30 +1,34 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:investing/main.dart';
+import 'package:investing/model/chart.dart';
+import 'package:investing/model/market.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+  test('IVChart parses and compares by dateTime', () {
+    final chart = IVChart.fromMap(const {
+      'x': 100,
+      'y': 2.5,
+    });
+    expect(chart.dateTime, 100);
+    expect(chart.value, 2.5);
+    expect(chart.compareTo(IVChart(200, 1.0)), isNegative);
+  });
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
-
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
-
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+  test('MarketData parses nested sectors and items', () {
+    final market = MarketData.fromMap(const {
+      'name': 'Technology',
+      'children': [
+        {
+          'name': 'AAPL',
+          'children': [
+            {'name': 'AAPL', 'description': 'Apple Inc.', 'value': 3000},
+          ],
+        },
+      ],
+    });
+    expect(market.name, 'Technology');
+    expect(market.childeren.single.name, 'AAPL');
+    expect(market.childeren.single.sumValue, 3000);
+    expect(market.sumValue, 3000);
   });
 }

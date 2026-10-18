@@ -5,7 +5,7 @@ import 'package:investing/model/news.dart';
 import 'package:investing/model/stock/stock.dart';
 import 'package:investing/view/news_view/detail_view/news_detail_view.dart';
 import 'package:investing/widget/news_card.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 
 class StockNewsDetailView extends StatefulWidget {
   const StockNewsDetailView({

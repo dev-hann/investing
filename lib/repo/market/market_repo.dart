@@ -1,4 +1,4 @@
-library market_repo;
+library;
 
 import 'package:investing/data/service/market_service.dart';
 import 'package:investing/repo/repo.dart';

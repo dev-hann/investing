@@ -1,4 +1,5 @@
 /// Refrence [https://github.com/Daniel-Ioannou/flutter_country_picker]
+library;
 
 class Country {
   Country({

@@ -1,4 +1,4 @@
-library news_repo;
+library;
 
 import 'package:investing/data/service/service.dart';
 import 'package:investing/repo/repo.dart';

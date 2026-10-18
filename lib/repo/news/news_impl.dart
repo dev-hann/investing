@@ -1,4 +1,4 @@
-part of news_repo;
+part of 'news_repo.dart';
 
 class NewsImpl extends NewsRepo {
   final NewsService service = NewsService();

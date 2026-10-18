@@ -1,4 +1,4 @@
-part of service;
+part of 'service.dart';
 // 4006 markets
 // 3996 Companies
 // 4226 Crypto

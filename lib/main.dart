@@ -22,7 +22,7 @@ import 'package:investing/use_case/setting_use_case.dart';
 import 'package:investing/use_case/stock_use_case.dart';
 import 'package:investing/view/home_view/home_view.dart';
 import 'package:flutter/material.dart';
-import 'package:hive_flutter/hive_flutter.dart';
+import 'package:hive_ce_flutter/hive_flutter.dart';
 
 void main() async {
   await Hive.initFlutter();
@@ -74,16 +74,15 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       themeMode: ThemeMode.system,
       darkTheme: ThemeData.dark().copyWith(
-        useMaterial3: true,
         primaryColor: IVColor.orange,
-        tabBarTheme: const TabBarTheme(
+        tabBarTheme: const TabBarThemeData(
           labelColor: IVColor.white,
           unselectedLabelColor: IVColor.darkWhite,
         ),
         appBarTheme: const AppBarTheme(
           centerTitle: true,
         ),
-        cardTheme: CardTheme(
+        cardTheme: CardThemeData(
           margin: EdgeInsets.zero,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16.0),
@@ -91,16 +90,15 @@ class MyApp extends StatelessWidget {
         ),
       ),
       theme: ThemeData.light().copyWith(
-        useMaterial3: true,
         primaryColor: IVColor.orange,
-        tabBarTheme: const TabBarTheme(
+        tabBarTheme: const TabBarThemeData(
           labelColor: IVColor.white,
           unselectedLabelColor: IVColor.darkWhite,
         ),
         appBarTheme: const AppBarTheme(
           centerTitle: true,
         ),
-        cardTheme: CardTheme(
+        cardTheme: CardThemeData(
           margin: EdgeInsets.zero,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16.0),

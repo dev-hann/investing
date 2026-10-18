@@ -17,7 +17,7 @@ enum IndicatorStatus {
   same,
 }
 
-class Stock extends Equatable with Comparable<Stock> {
+class Stock extends Equatable implements Comparable<Stock> {
   Stock({
     required this.symbol,
     required this.name,

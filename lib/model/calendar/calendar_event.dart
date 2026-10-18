@@ -1,4 +1,4 @@
-library calendar_event;
+library;
 
 import 'package:equatable/equatable.dart';
 import 'package:investing/model/country.dart';

@@ -3,7 +3,7 @@ import 'package:investing/controller/controller.dart';
 import 'package:investing/model/news.dart';
 import 'package:investing/model/stock/stock.dart';
 import 'package:investing/use_case/news_use_case.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 
 class NewsController extends Controller<NewsUseCase> {
   NewsController(super.repo);

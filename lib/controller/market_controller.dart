@@ -44,7 +44,7 @@ class MarketController extends Controller<MarketUseCase> {
     final tmpSymbolList = [];
 
     for (final symbol in symbolList) {
-      if (marketChartData.containsKey(symbolList)) {
+      if (marketChartData.containsKey(symbol)) {
         res[symbol] = marketChartData[symbol]!;
       } else {
         tmpSymbolList.add(symbol);

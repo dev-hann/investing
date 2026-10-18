@@ -1,4 +1,4 @@
-part of service;
+part of 'service.dart';
 
 class StockService extends IVService {
   Future<Response> searchStock(String query) async {

@@ -21,7 +21,7 @@ class NewsDetailView extends StatelessWidget {
       appBar: appBar(),
       body: InAppWebView(
         initialUrlRequest: URLRequest(
-          url: Uri.parse(news.articleDetailURL),
+          url: WebUri(news.articleDetailURL),
         ),
       ),
     );

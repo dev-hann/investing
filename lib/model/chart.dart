@@ -9,8 +9,8 @@ enum ChartRangeType {
   all,
 }
 
-class IVChart extends Comparable<IVChart> with EquatableMixin {
-  IVChart(
+class IVChart extends Equatable implements Comparable<IVChart> {
+  const IVChart(
     this.dateTime,
     this.value,
   );

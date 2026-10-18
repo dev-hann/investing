@@ -28,7 +28,7 @@ class _DividendViewState extends State<DividendView> {
   @override
   void initState() {
     super.initState();
-    controller.requestStockDividend(widget.stock).then(dividend);
+    controller.requestStockDividend(widget.stock).then(dividend.call);
   }
 
   @override

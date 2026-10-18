@@ -1,13 +1,9 @@
-import 'dart:math';
-
-import 'package:auto_size_text/auto_size_text.dart';
+import 'package:any_treemap/any_treemap.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:investing/const/color.dart';
 import 'package:investing/controller/market_controller.dart';
 import 'package:investing/model/market.dart';
-import 'package:investing/widget/title_widget.dart';
-import 'package:treemap/treemap.dart';
 
 // TODO: (Future Work) make view more compatable (like Finviz HeatMap)
 class MarketView extends StatefulWidget {
@@ -26,10 +22,7 @@ class _MarketViewState extends State<MarketView> {
     );
   }
 
-  Color? stockColor(double value) {
-    if (value == 0) {
-      return null;
-    }
+  Color stockColor(double value) {
     if (value <= -3) {
       return IVColor.lightRed;
     } else if (value < -2) {
@@ -43,68 +36,26 @@ class _MarketViewState extends State<MarketView> {
     } else if (value > 0) {
       return IVColor.darkGreen;
     }
-    return null;
+    return IVColor.blueGrey;
   }
 
-  Widget sectorWidget({
-    required MarketSector sector,
+  TreemapNode<String> sectorNode({
+    required String name,
+    required List<MarketSector> children,
     required Map<String, double> percentData,
-    required VoidCallback onTap,
   }) {
-    final children = sector.childeren;
-    return TitleWidget(
-      gap: 4.0,
-      title: Builder(
-        builder: (context) {
-          return Text(
-            sector.name,
-            style: Theme.of(context).textTheme.labelSmall,
-          );
-        },
-      ),
-      child: GestureDetector(
-        onTap: onTap,
-        child: SizedBox(
-          height: 25,
-          child: Row(
-              children:
-                  children.sublist(0, min(6, children.length)).map((item) {
-            final percent = percentData[item.name] ?? 0.0;
-            return Expanded(
-              flex: pow(item.sumValue, 1 / 3).floor(),
-              child: Row(
-                children: [
-                  const VerticalDivider(
-                    color: IVColor.blueGrey,
-                    width: 0,
-                  ),
-                  Expanded(
-                    child: ColoredBox(
-                      color: stockColor(percent) ?? Colors.transparent,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          AutoSizeText(
-                            item.name,
-                            maxLines: 1,
-                            maxFontSize: 8,
-                            minFontSize: 5,
-                          ),
-                          AutoSizeText(
-                            "${percent.toStringAsFixed(2)}%",
-                            maxLines: 1,
-                            minFontSize: 3,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            );
-          }).toList()),
-        ),
-      ),
+    return TreemapNode<String>(
+      key: 'sector:$name',
+      label: name,
+      children: [
+        for (final stock in children)
+          TreemapNode<String>(
+            key: 'sector:$name:${stock.name}',
+            label: stock.name,
+            weight: stock.sumValue.toDouble(),
+            color: stockColor(percentData[stock.name] ?? 0.0),
+          ),
+      ],
     );
   }
 
@@ -116,84 +67,39 @@ class _MarketViewState extends State<MarketView> {
         () {
           final list = controller.marketDataList;
           final percentData = controller.marketPercentData;
-          return RotatedBox(
-            quarterTurns: 1,
-            child: DefaultTextStyle(
-              style: const TextStyle(fontSize: 10),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              child: TreeMapLayout(
-                round: true,
-                children: list
-                    .map(
-                      (element) => TreeNode.leaf(
-                        options: TreeNodeOptions(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(element.name),
-                              Expanded(
-                                child: TreeMapLayout(
-                                  children: element.childeren
-                                      .map(
-                                        (e) => TreeNode.leaf(
-                                          value: e.sumValue,
-                                          options: TreeNodeOptions(
-                                            child: Text(e.name),
-                                          ),
-                                        ),
-                                      )
-                                      .toList(),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        value: element.sumValue,
-                      ),
-                    )
-                    .toList(),
-              ),
+          if (list.isEmpty) {
+            return const SizedBox.shrink();
+          }
+          final tree = TreemapNormalizer.normalize(
+            TreemapNode<String>(
+              key: 'market',
+              children: [
+                for (final sector in list)
+                  sectorNode(
+                    name: sector.name,
+                    children: sector.childeren,
+                    percentData: percentData,
+                  ),
+              ],
             ),
           );
-
-          return SingleChildScrollView(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              children: list.map((data) {
-                return Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 4.0),
-                  child: TitleWidget(
-                    gap: 0.0,
-                    title: Center(
-                      child: Text(
-                        data.name,
-                        style: Theme.of(context).textTheme.bodySmall,
-                      ),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: data.childeren
-                          .map(
-                            (sector) => sectorWidget(
-                              sector: sector,
-                              percentData: percentData,
-                              onTap: () {
-                                // TODO: (Future Work) make Sector Detail View
-                                // Get.to(
-                                //   SectorDetailView(
-                                //     sectorName: marketData.name,
-                                //     symbolList: symbolList,
-                                //   ),
-                                // );
-                              },
-                            ),
-                          )
-                          .toList(),
-                    ),
+          return RotatedBox(
+            quarterTurns: 1,
+            child: TreemapChart<String>(
+              tree: tree,
+              tiles: TreemapTiles<String>(
+                appearance: TreemapAppearanceResolver<String>(
+                  colorScale: TreemapColorScale.exact(
+                    const {},
+                    fallback: IVColor.blueGrey,
                   ),
-                );
-              }).toList(),
+                ),
+              ),
+              labels: TreemapCanvasLabels<String>(),
+              layout: const TreemapLayoutConfig(
+                innerSpacing: 1,
+                outerPadding: TreemapInsets.all(1),
+              ),
             ),
           );
         },

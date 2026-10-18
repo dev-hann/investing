@@ -25,7 +25,7 @@ class _SectorDetailViewState extends State<SectorDetailView> {
   @override
   void initState() {
     super.initState();
-    controller.requestMarketChartData(widget.symbolList).then(chartData);
+    controller.requestMarketChartData(widget.symbolList).then(chartData.call);
   }
 
   AppBar appBar() {
